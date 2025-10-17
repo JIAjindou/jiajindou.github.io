@@ -23,9 +23,9 @@ name: Jindou Jia
 position: PhD student
 email: jdjia@buaa.edu.cn
 description: >-
-  I am a Ph.D. student at the School of Automation Science and Electrical Engineering and Shenyuan Honors College, Beihang University, China. I am supervised by Prof. [Lei Guo](https://scholar.google.com/citations?user=IxO-SDwAAAAJ&hl=zh-CN), Prof. [Xiang Yu](https://scholar.google.com/citations?user=6UgtuZ8AAAAJ&hl=zh-CN&oi=ao), and Prof. [Kexin Guo](https://scholar.google.com/citations?hl=zh-CN&user=c0MaejIAAAAJ).
+  I am a postdoc in the School of Mechanical and Aerospace Engineering at Nanyang Technological University (NTU), working with [Jianfei Yang](https://marsyang.site/) at the [MARS](http://marslab.tech) Lab. I completed my Ph.D. in 2025 from the School of Automation Science and Electrical Engineering and Shenyuan Honors College, Beihang University, China. I am supervised by Prof. [Lei Guo](https://scholar.google.com/citations?user=IxO-SDwAAAAJ&hl=zh-CN), Prof. [Xiang Yu](https://scholar.google.com/citations?user=6UgtuZ8AAAAJ&hl=zh-CN&oi=ao), and Prof. [Kexin Guo](https://scholar.google.com/citations?hl=zh-CN&user=c0MaejIAAAAJ).
   
-  Robots deployed in the real world inevitably face uncertainties caused by internal model mismatch and external unmeasured disturbances. The topic of my Ph.D. research is learning and predicting uncertainties for robotic control and planning.
+  Robots deployed in the real world inevitably face uncertainties caused by internal model mismatch and external unmeasured disturbances. The topic of my Ph.D. research is learning and predicting uncertainties, aiming at enabling robots to generalize diverse unseen environments.
 
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://jiajindou.github.io" # the base hostname & protocol for your site, e.g. http://example.com
