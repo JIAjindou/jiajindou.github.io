@@ -1,12 +1,12 @@
 - id: FORESEER
   title: "FORESEER: Recognize and utilize uncertainties by integrating data-based learning and symbolic feedback"
-  venue: Accepted by The International Journal of Robotics Research (IJRR), 2025
+  venue: The International Journal of Robotics Research (IJRR), 2025
   description: "We present two converged uncertainty prediction frameworks, enabling accurate prediction of two general kinds of uncertainties, respectively."
   project_page: https://sites.google.com/view/buaa-foresser
   image: FORESEER_fig.jpg
   image_mouseover: IJRR_mini.mp4
   video: https://www.youtube.com/watch?v=1sLnpcTjXg4&list=PLaSQ4X8BD0X5O-QmBGUQ7n5tqOcbX2oiE
-  link_web: https://sites.google.com/view/buaa-foresser
+  link_web: https://journals.sagepub.com/doi/10.1177/02783649251364000
   authors:
     - jindou
     - kexin
