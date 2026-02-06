@@ -1,3 +1,31 @@
+- id: Learning_obs
+  title: "Learning-based observer for coupled disturbance"
+  venue: IEEE International Conference on Robotics and Automation (ICRA), 2026
+  description: "We present a learning-based observer, enabling accurate prediction of the coupled disturbance consisting of internal uncertainties and external disturbances."
+  image: ICRA_26_fig.jpg
+  link_web: https://arxiv.org/pdf/2407.13229
+  authors:
+    - jindou
+    - meng
+    - zihan
+    - bing
+    - yuhang
+    - kexin
+    - xiang
+
+- id: control_friendly
+  title: "Optimizing control-friendly trajectories with self-supervised residual learning"
+  venue: arXiv, 2026
+  description: "The present trajectory optimizer outputs trajectories that are friendly to the following control level."
+  image: TMEC_fig.jpg
+  link_web: https://arxiv.org/pdf/2601.02738
+  authors:
+    - kexin
+    - zihan
+    - yuhang
+    - jindou 
+    - xiang
+    
 - id: FORESEER
   title: "FORESEER: Recognize and utilize uncertainties by integrating data-based learning and symbolic feedback"
   venue: The International Journal of Robotics Research (IJRR), 2025
