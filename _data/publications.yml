@@ -23,7 +23,6 @@
   description: "We present a learning-based observer, enabling accurate prediction of the coupled disturbance consisting of internal uncertainties and external disturbances."
   image: ICRA_26_fig.png
   link_web: https://arxiv.org/pdf/2407.13229
-  equal_contri: true
   authors:
     - jindou
     - meng
