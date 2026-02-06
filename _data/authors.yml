@@ -76,4 +76,25 @@ zeshuai:
 weihua:
   first_name: Weihua
   last_name: Zhao
+bin:
+  first_name: Bin
+  last_name: Yang
+gen:
+  first_name: Gen
+  last_name: Li
+tuo:
+  first_name: Tuo
+  last_name: An
+jingliang:
+  first_name: Jingliang
+  last_name: Li
+xiangyu:
+  first_name: Xiangyu
+  last_name: Chen
+yuxuan:
+  first_name: Yuxuan
+  last_name: Hu
+xinying:
+  first_name: Xinying
+  last_name: Guo
   
