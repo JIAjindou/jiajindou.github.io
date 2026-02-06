@@ -3,7 +3,7 @@
   venue: arXiv, 2026
   description: "We introduces A2A, an efficient generative paradigm that replaces noise-based initialization with action-to-action transport."
   project_page: https://lorenzo-0-0.github.io/A2A_Flow_Matching
-  image: A2A6_fig.png
+  image: A2A_fig.png
   image_mouseover: A2A_mini.mp4
   video: https://lorenzo-0-0.github.io/A2A_Flow_Matching
   link_web: https://lorenzo-0-0.github.io/A2A_Flow_Matching
