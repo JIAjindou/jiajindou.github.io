@@ -39,7 +39,8 @@
   description: "The presented trajectory optimizer outputs trajectories that are friendly to the following control level."
   image: TMEC_fig.png
   link_web: https://arxiv.org/pdf/2601.02738
-  corresponding_author: true
+  corresponding_authors: 
+    - jindou 
   authors:
     - kexin
     - zihan
