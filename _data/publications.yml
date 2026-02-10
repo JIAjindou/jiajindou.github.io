@@ -1,9 +1,28 @@
+- id: A2A
+  title: "Action-to-action flow matching"
+  venue: arXiv, 2026
+  description: "We introduces A2A, an efficient generative paradigm that replaces noise-based initialization with action-to-action transport."
+  project_page: https://lorenzo-0-0.github.io/A2A_Flow_Matching
+  image: A2A_fig.png
+  image_mouseover: A2A_mini.mp4
+  video: https://lorenzo-0-0.github.io/A2A_Flow_Matching
+  arxiv: 2602.07322
+  authors:
+    - jindou
+    - gen
+    - xiangyu
+    - tuo
+    - yuxuan
+    - jingliang
+    - xinying
+    - jianfei
+
 - id: Learning_obs
   title: "Learning-based observer for coupled disturbance"
   venue: IEEE International Conference on Robotics and Automation (ICRA), 2026
   description: "We present a learning-based observer, enabling accurate prediction of the coupled disturbance consisting of internal uncertainties and external disturbances."
   image: ICRA_26_fig.png
-  link_web: https://arxiv.org/pdf/2407.13229
+  arxiv: 2407.13229
   authors:
     - jindou
     - meng
@@ -18,7 +37,7 @@
   venue: arXiv, 2026
   description: "The presented trajectory optimizer outputs trajectories that are friendly to the following control level."
   image: TMEC_fig.png
-  link_web: https://arxiv.org/pdf/2601.02738
+  arxiv: 2601.02738
   corresponding_authors: 
     - jindou 
   authors:
