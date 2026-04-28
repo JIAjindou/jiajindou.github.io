@@ -1,6 +1,6 @@
 - id: A2A
   title: "Action-to-action flow matching"
-  venue: Robotics: Science and Systems (RSS), 2026
+  venue: "Robotics: Science and Systems (RSS), 2026"
   description: "We introduces A2A, an efficient generative paradigm that replaces noise-based initialization with action-to-action transport."
   project_page: https://lorenzo-0-0.github.io/A2A_Flow_Matching
   image: A2A_fig.png
