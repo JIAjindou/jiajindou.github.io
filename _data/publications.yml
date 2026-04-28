@@ -7,6 +7,7 @@
   image_mouseover: A2A_mini.mp4
   video: https://lorenzo-0-0.github.io/A2A_Flow_Matching
   arxiv: 2602.07322
+  equal_contri: true
   authors:
     - jindou
     - gen
@@ -23,6 +24,7 @@
   description: "We present a learning-based observer, enabling accurate prediction of the coupled disturbance consisting of internal uncertainties and external disturbances."
   image: ICRA_26_fig.png
   arxiv: 2407.13229
+  equal_contri: true
   authors:
     - jindou
     - meng
