@@ -42,6 +42,14 @@
     margin-top: 0.75em;
 }
 
+.interests-list + .interests-list {
+    margin-top: 0.85em;
+}
+
+.interests-platforms .interest-chip i {
+    color: #c0392b;
+}
+
 .interest-chip {
     display: inline-flex;
     align-items: center;
