@@ -9,6 +9,7 @@ layout: null
 
   <meta content="width=device-width, initial-scale=1" name="viewport">
   <title>{{ site.title }}</title>
+  {% if site.google_analytics %}
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id={{ site.google_analytics }}"></script>
   <script>
@@ -22,6 +23,7 @@ layout: null
 
     gtag('config', '{{ site.google_analytics }}');
   </script>
+  {% endif %}
 
   <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
   <link href="./css/fontawesome.all.min.css" rel="stylesheet">
