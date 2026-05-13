@@ -1,3 +1,28 @@
+- id: PhyFilter
+  year: 2026
+  preprint: true
+  title: "Physics filtering favors the generalization of robot learning"
+  venue: Preprint, 2026
+  description: "We propose PhyFilter, which enhances both generalization and interpretability of robot learning. PhyFilter operates by correcting learning outcomes according to readily accessible physical differential structure and real-time state feedback."
+  image: PhyFilter_fig.png
+  link_web: https://www.researchsquare.com/article/rs-9460171/v1
+  equal_contri: 3
+  corresponding_authors:
+    - kexin
+    - jianfei
+  authors:
+    - jindou
+    - shixuan
+    - meng
+    - gen
+    - zihan
+    - sicheng
+    - kexin
+    - jianfei
+    - xiang
+    - weiwang
+    - lei
+
 - id: WorldModelSurvey
   year: 2026
   preprint: true
