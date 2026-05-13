@@ -19,13 +19,17 @@
 
 .visitor-map {
     display: inline-block;
-    max-width: 180px;
+    width: 160px;
+    height: 110px;
+    margin: 0.75em auto;
+    overflow: hidden;
+    line-height: 0;
 }
 
-.visitor-map img,
-.visitor-map iframe {
-    max-width: 100%;
-    height: auto;
+.visitor-map > * {
+    transform: scale(0.55);
+    transform-origin: top left;
+    display: block;
 }
 
 .year-heading {
