@@ -6,7 +6,7 @@
   description: "A comprehensive survey of world models for robot learning, covering world models as policies and as simulators across recent literature."
   image: WorldModel_fig.png
   arxiv: 2605.00080
-  equal_contri: true
+  equal_contri: 5
   authors:
     - bohan
     - gen
@@ -37,7 +37,7 @@
   image_mouseover: A2A_mini.mp4
   video: https://lorenzo-0-0.github.io/A2A_Flow_Matching
   arxiv: 2602.07322
-  equal_contri: true
+  equal_contri: 2
   authors:
     - jindou
     - gen
@@ -55,7 +55,7 @@
   description: "We present a learning-based observer, enabling accurate prediction of the coupled disturbance consisting of internal uncertainties and external disturbances."
   image: ICRA_26_fig.png
   arxiv: 2407.13229
-  equal_contri: true
+  equal_contri: 2
   authors:
     - jindou
     - meng
@@ -113,7 +113,7 @@
   image: feedbackNN_fig.png
   arxiv: 2410.10253
   link_web: https://openreview.net/forum?id=cmfyMV45XO
-  equal_contri: true
+  equal_contri: 2
   authors:
     - jindou
     - zihan
@@ -184,7 +184,7 @@
   description: "This paper presents a multiple observers-based anti-disturbance control scheme against multiple disturbances for a quadrotor unmanned aerial vehicle."
   video: https://www.youtube.com/watch?v=JW1uu8PoNPA
   link_web: https://www.sciencedirect.com/science/article/pii/S0967066120301544
-  equal_contri: true
+  equal_contri: 2
   image: CEP_fig.png
   image_mouseover: CEP_mini.mp4
   authors:
@@ -222,7 +222,7 @@
   link_web: https://ieeexplore.ieee.org/document/8997330
   image: CAC_fig.png
   image_mouseover: CAC_mini.mp4
-  equal_contri: true
+  equal_contri: 2
   authors:
     - kexin
     - jindou

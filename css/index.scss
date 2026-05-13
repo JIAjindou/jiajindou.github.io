@@ -17,6 +17,17 @@
     color: #000;
 }
 
+.visitor-map {
+    display: inline-block;
+    max-width: 180px;
+}
+
+.visitor-map img,
+.visitor-map iframe {
+    max-width: 100%;
+    height: auto;
+}
+
 .year-heading {
     margin-top: 1.5em !important;
     margin-bottom: 0.75em !important;
