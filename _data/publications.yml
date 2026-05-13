@@ -5,6 +5,8 @@
   venue: Preprint, 2026
   venue_short: Preprint
   description: "We propose PhyFilter, which enhances both generalization and interpretability of robot learning. PhyFilter operates by correcting learning outcomes according to readily accessible physical differential structure and real-time state feedback."
+  project_page: https://scoardyy.github.io/PhyFilter/
+  github: JIAjindou/PhyFilter
   image: PhyFilter_fig.png
   image_mouseover: PhyFilter_mini.mp4
   pdf_link: https://assets-eu.researchsquare.com/files/rs-9460171/v1_covered_6c69a8a0-86c1-42a1-9d38-38ca2291fede.pdf?c=1778255728
