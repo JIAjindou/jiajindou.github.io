@@ -1,3 +1,32 @@
+- id: WorldModelSurvey
+  year: 2026
+  preprint: true
+  title: "World model for robot learning: A comprehensive survey"
+  venue: arXiv, 2026
+  description: "A comprehensive survey of world models for robot learning, covering world models as policies and as simulators across recent literature."
+  image: WorldModel_fig.png
+  arxiv: 2605.00080
+  equal_contri: true
+  authors:
+    - bohan
+    - gen
+    - jindou
+    - tuo
+    - xinying
+    - sicong
+    - haoran
+    - yanjie
+    - tatsuya
+    - philip
+    - oier
+    - marc
+    - zhuang
+    - jiajun
+    - pieter
+    - jitendra
+    - yilun
+    - jianfei
+
 - id: A2A
   year: 2026
   title: "Action-to-action flow matching"
@@ -38,6 +67,7 @@
 
 - id: control_friendly
   year: 2026
+  preprint: true
   title: "Optimizing control-friendly trajectories with self-supervised residual learning"
   venue: arXiv, 2026
   description: "The presented trajectory optimizer outputs trajectories that are friendly to the following control level."

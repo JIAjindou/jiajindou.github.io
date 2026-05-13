@@ -94,4 +94,43 @@ yuxuan:
 xinying:
   first_name: Xinying
   last_name: Guo
-  
+bohan:
+  first_name: Bohan
+  last_name: Hou
+sicong:
+  first_name: Sicong
+  last_name: Leng
+haoran:
+  first_name: Haoran
+  last_name: Geng
+yanjie:
+  first_name: Yanjie
+  last_name: Ze
+tatsuya:
+  first_name: Tatsuya
+  last_name: Harada
+philip:
+  first_name: Philip
+  last_name: Torr
+oier:
+  first_name: Oier
+  last_name: Mees
+marc:
+  first_name: Marc
+  last_name: Pollefeys
+zhuang:
+  first_name: Zhuang
+  last_name: Liu
+jiajun:
+  first_name: Jiajun
+  last_name: Wu
+pieter:
+  first_name: Pieter
+  last_name: Abbeel
+jitendra:
+  first_name: Jitendra
+  last_name: Malik
+yilun:
+  first_name: Yilun
+  last_name: Du
+
