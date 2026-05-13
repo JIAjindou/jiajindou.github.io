@@ -1,4 +1,5 @@
 - id: A2A
+  year: 2026
   title: "Action-to-action flow matching"
   venue: "Robotics: Science and Systems (RSS), 2026"
   description: "We introduces A2A, an efficient generative paradigm that replaces noise-based initialization with action-to-action transport."
@@ -19,6 +20,7 @@
     - jianfei
 
 - id: Learning_obs
+  year: 2026
   title: "Learning-based observer for coupled disturbance"
   venue: IEEE International Conference on Robotics and Automation (ICRA), 2026
   description: "We present a learning-based observer, enabling accurate prediction of the coupled disturbance consisting of internal uncertainties and external disturbances."
@@ -35,6 +37,7 @@
     - xiang
 
 - id: control_friendly
+  year: 2026
   title: "Optimizing control-friendly trajectories with self-supervised residual learning"
   venue: arXiv, 2026
   description: "The presented trajectory optimizer outputs trajectories that are friendly to the following control level."
@@ -50,6 +53,7 @@
     - xiang
     
 - id: FORESEER
+  year: 2025
   title: "FORESEER: Recognize and utilize uncertainties by integrating data-based learning and symbolic feedback"
   venue: The International Journal of Robotics Research (IJRR), 2025
   description: "We present two converged uncertainty prediction frameworks, enabling accurate prediction of two general kinds of uncertainties, respectively."
@@ -70,6 +74,7 @@
     - lei
     
 - id: FeedbackNN
+  year: 2025
   title: "Feedback favors the generalization of neural ODEs"
   venue: International Conference on Learning Representations (ICLR), 2025
   description: "We present feedback neural networks, showing that a feedback loop can flexibly correct the learned latent dynamics of neural ordinary differential equations (neural ODEs), leading to a prominent generalization improvement."
@@ -89,7 +94,8 @@
     - lei
   awards:
     - "Oral Presentation"
-    
+
+      year: 2024
 - id: EVOLVER
   title: "EVOLVER: Online learning and prediction of disturbances for robot control"
   venue: IEEE Transactions on Robotics (T-RO), 2024
@@ -110,6 +116,7 @@
     - lei
   
 - id: Drag
+  year: 2022
   title: "Accurate high-maneuvering trajectory tracking for quadrotors: A drag utilization method"
   venue: IEEE Robotics and Automation Letters (R-AL), 2022
   description: "Different from standard approaches that achieve precise tracking by feedforward compensating the estimated drag, this work presents a scheme to appropriately utilize drag."
@@ -125,6 +132,7 @@
     - lei
 
 - id: Window
+  year: 2022
   title: "Agile flight control under multiple disturbances for quadrotor: Algorithms and evaluation"
   venue: IEEE Transactions on Aerospace and Electronic Systems (T-AES), 2022
   description: "A scheme of anti-disturbance agile flight control is developed for a maneuverable quadrotor unmanned aerial vehicle, subject to the aerodynamic drag, dynamic shift of center of gravity, and motor dynamics."
@@ -140,6 +148,7 @@
     - lihua
 
 - id: CEP
+  year: 2020
   title: "Multiple observers-based anti-disturbance control for a quadrotor UAV against payload and wind disturbance"
   venue: Control Engineering Practice, 2020
   description: "This paper presents a multiple observers-based anti-disturbance control scheme against multiple disturbances for a quadrotor unmanned aerial vehicle."
