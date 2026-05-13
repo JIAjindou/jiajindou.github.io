@@ -26,28 +26,37 @@ $(document).ready(function() {
     loadCitationCounts();
 });
 
-// Fetch citation counts from Semantic Scholar Graph API and fill in
-// .citation-badge elements. Cached in localStorage for 24h.
-// Lookup priority: arXiv ID -> DOI -> title match (search/match endpoint).
+// Fetch citation counts from OpenAlex and fill in .citation-badge
+// elements. Cached in localStorage for 24h.
+// Priority: explicit data-citations override -> DOI -> arXiv DOI -> title search.
 function loadCitationCounts() {
     var badges = document.querySelectorAll('.citation-badge');
     var ONE_DAY = 24 * 60 * 60 * 1000;
+    var POLITE = 'mailto=jindou.jia@ntu.edu.sg';
     var queue = Array.prototype.slice.call(badges);
 
     function next() {
         var badge = queue.shift();
         if (!badge) return;
 
+        // Manual override wins immediately.
+        if (badge.dataset.citations) {
+            renderCitationBadge(badge, parseInt(badge.dataset.citations, 10));
+            setTimeout(next, 0);
+            return;
+        }
+
         var url, cacheKey;
-        if (badge.dataset.arxiv) {
-            url = 'https://api.semanticscholar.org/graph/v1/paper/arXiv:' + encodeURIComponent(badge.dataset.arxiv) + '?fields=citationCount';
-            cacheKey = 'citation_arXiv:' + badge.dataset.arxiv;
-        } else if (badge.dataset.doi) {
-            url = 'https://api.semanticscholar.org/graph/v1/paper/DOI:' + encodeURIComponent(badge.dataset.doi) + '?fields=citationCount';
-            cacheKey = 'citation_DOI:' + badge.dataset.doi;
+        if (badge.dataset.doi) {
+            url = 'https://api.openalex.org/works/doi:' + encodeURIComponent(badge.dataset.doi) + '?select=cited_by_count&' + POLITE;
+            cacheKey = 'oa_doi:' + badge.dataset.doi;
+        } else if (badge.dataset.arxiv) {
+            // arXiv assigns DOIs of the form 10.48550/arXiv.<id> for recent papers.
+            url = 'https://api.openalex.org/works/doi:10.48550/arXiv.' + encodeURIComponent(badge.dataset.arxiv) + '?select=cited_by_count&' + POLITE;
+            cacheKey = 'oa_arxiv:' + badge.dataset.arxiv;
         } else if (badge.dataset.title) {
-            url = 'https://api.semanticscholar.org/graph/v1/paper/search/match?fields=citationCount&query=' + encodeURIComponent(badge.dataset.title);
-            cacheKey = 'citation_title:' + badge.dataset.title;
+            url = 'https://api.openalex.org/works?search=' + encodeURIComponent(badge.dataset.title) + '&per-page=1&select=cited_by_count&' + POLITE;
+            cacheKey = 'oa_title:' + badge.dataset.title;
         } else {
             setTimeout(next, 0);
             return;
@@ -62,19 +71,26 @@ function loadCitationCounts() {
         }
 
         fetch(url)
-            .then(function(r) { return r.ok ? r.json() : null; })
+            .then(function(r) {
+                // 404 on arXiv-DOI? Fall back to title search.
+                if (r.status === 404 && badge.dataset.arxiv && badge.dataset.title) {
+                    return fetch('https://api.openalex.org/works?search=' + encodeURIComponent(badge.dataset.title) + '&per-page=1&select=cited_by_count&' + POLITE)
+                        .then(function(r2) { return r2.ok ? r2.json() : null; });
+                }
+                return r.ok ? r.json() : null;
+            })
             .then(function(data) {
                 if (!data) return;
-                // search/match returns { data: [...] }; direct lookup returns the paper object.
-                var count = (data.data && data.data[0] && data.data[0].citationCount)
-                    || data.citationCount;
+                // Search results look like { results: [...] }; direct lookup returns the work.
+                var count = (data.results && data.results[0] && data.results[0].cited_by_count);
+                if (typeof count !== 'number') count = data.cited_by_count;
                 if (typeof count === 'number') {
                     try { localStorage.setItem(cacheKey, JSON.stringify({ count: count, ts: Date.now() })); } catch (e) {}
                     renderCitationBadge(badge, count);
                 }
             })
             .catch(function() {})
-            .finally(function() { setTimeout(next, 400); });
+            .finally(function() { setTimeout(next, 200); });
     }
 
     next();
