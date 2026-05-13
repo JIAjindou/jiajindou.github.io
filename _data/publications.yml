@@ -165,6 +165,7 @@
     - lihua
 
 - id: ICUAS
+  year: 2022
   title: "Flight control for quadrotor safety in the presence of CoG shift and loss of motor efficiency"
   venue:  International Conference on Unmanned Aircraft Systems (ICUAS), 2022
   description: "A safety control strategy based on a novel nonlinear disturbance observer and geometric control is developed for a quadrotor unmanned aerial vehicle, subject to the disturbances caused by center-of-gravity shift and loss of motor efficiency."
@@ -183,6 +184,7 @@
     - "Oral Presentation"
 
 - id: CAC
+  year: 2019
   title: "Dual-disturbance observers-based control of UAV subject to internal and external disturbances"
   venue: China Automation Conference, 2019
   description: "This paper presents an embedded micro loop to enhance the anti-disturbance performance for unmanned aerial vehicles."

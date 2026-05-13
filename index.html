@@ -119,7 +119,10 @@ layout: null
 
       <h2 class="subtitle is-5">First/co-first/corresponding author</h2>
 
-      {% for publication in site.data.publications %}
+      {% assign publications_by_year = site.data.publications | group_by: "year" | sort: "name" | reverse %}
+      {% for year_group in publications_by_year %}
+      <h3 class="title is-4 year-heading">{{ year_group.name }}</h3>
+      {% for publication in year_group.items %}
       <div class="publication-block columns">
 
         <div class="column is-4">
@@ -202,7 +205,8 @@ layout: null
         </div>
       </div>
       {% endfor %}
-                  
+      {% endfor %}
+
     </div>
   </section>
 
