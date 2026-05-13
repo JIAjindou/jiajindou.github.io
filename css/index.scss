@@ -44,6 +44,24 @@
     padding-bottom: 0.25em;
 }
 
+.venue-badge {
+    display: inline-block;
+    background: #1e3a5f;
+    color: #fff !important;
+    font-family: 'Google Sans', 'Noto Sans', sans-serif;
+    font-size: 80%;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    padding: 0.3em 0.85em;
+    border-radius: 0.35em;
+    margin-bottom: 0.6em;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+.venue-badge-preprint {
+    background: #6b7280;
+}
+
 .publication-block {
     .publication-title {
         width: fit-content;

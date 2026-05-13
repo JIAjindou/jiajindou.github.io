@@ -3,6 +3,7 @@
   preprint: true
   title: "Physics filtering favors the generalization of robot learning"
   venue: Preprint, 2026
+  venue_short: Preprint
   description: "We propose PhyFilter, which enhances both generalization and interpretability of robot learning. PhyFilter operates by correcting learning outcomes according to readily accessible physical differential structure and real-time state feedback."
   image: PhyFilter_fig.png
   pdf_link: https://assets-eu.researchsquare.com/files/rs-9460171/v1_covered_6c69a8a0-86c1-42a1-9d38-38ca2291fede.pdf?c=1778255728
@@ -28,6 +29,7 @@
   preprint: true
   title: "World model for robot learning: A comprehensive survey"
   venue: arXiv, 2026
+  venue_short: arXiv'26
   description: "A comprehensive survey of world models for robot learning, covering world models as policies and as simulators across recent literature."
   image: WorldModel_fig.png
   arxiv: "2605.00080"
@@ -56,6 +58,7 @@
   year: 2026
   title: "Action-to-action flow matching"
   venue: "Robotics: Science and Systems (RSS), 2026"
+  venue_short: RSS'26
   description: "We introduces A2A, an efficient generative paradigm that replaces noise-based initialization with action-to-action transport."
   project_page: https://lorenzo-0-0.github.io/A2A_Flow_Matching
   image: A2A_fig.png
@@ -77,6 +80,7 @@
   year: 2026
   title: "Learning-based observer for coupled disturbance"
   venue: IEEE International Conference on Robotics and Automation (ICRA), 2026
+  venue_short: ICRA'26
   description: "We present a learning-based observer, enabling accurate prediction of the coupled disturbance consisting of internal uncertainties and external disturbances."
   image: ICRA_26_fig.png
   arxiv: 2407.13229
@@ -95,6 +99,7 @@
   preprint: true
   title: "Optimizing control-friendly trajectories with self-supervised residual learning"
   venue: arXiv, 2026
+  venue_short: arXiv'26
   description: "The presented trajectory optimizer outputs trajectories that are friendly to the following control level."
   image: TMEC_fig.png
   arxiv: 2601.02738
@@ -111,6 +116,7 @@
   year: 2025
   title: "FORESEER: Recognize and utilize uncertainties by integrating data-based learning and symbolic feedback"
   venue: The International Journal of Robotics Research (IJRR), 2025
+  venue_short: IJRR'25
   description: "We present two converged uncertainty prediction frameworks, enabling accurate prediction of two general kinds of uncertainties, respectively."
   project_page: https://sites.google.com/view/buaa-foresser
   image: FORESEER_fig.jpg
@@ -132,6 +138,7 @@
   year: 2025
   title: "Feedback favors the generalization of neural ODEs"
   venue: International Conference on Learning Representations (ICLR), 2025
+  venue_short: ICLR'25
   description: "We present feedback neural networks, showing that a feedback loop can flexibly correct the learned latent dynamics of neural ordinary differential equations (neural ODEs), leading to a prominent generalization improvement."
   project_page: https://sites.google.com/view/feedbacknn
   github: JIAjindou/Feedback-neural-network
@@ -154,6 +161,7 @@
   year: 2024
   title: "EVOLVER: Online learning and prediction of disturbances for robot control"
   venue: IEEE Transactions on Robotics (T-RO), 2024
+  venue_short: T-RO'24
   description: "We present a framework, namely EVOLVER, to mimic the bio-behavior for robotics to achieve rapid transient reaction ability and high precision steady-state performance simultaneously."
   project_page: https://sites.google.com/view/buaa-evolver
   github: JIAjindou/EVOLVER
@@ -174,6 +182,7 @@
   year: 2022
   title: "Accurate high-maneuvering trajectory tracking for quadrotors: A drag utilization method"
   venue: IEEE Robotics and Automation Letters (R-AL), 2022
+  venue_short: R-AL'22
   description: "Different from standard approaches that achieve precise tracking by feedforward compensating the estimated drag, this work presents a scheme to appropriately utilize drag."
   video: https://www.youtube.com/watch?v=qO8A6lwCxMU
   link_web: https://ieeexplore.ieee.org/document/9779449
@@ -190,6 +199,7 @@
   year: 2022
   title: "Agile flight control under multiple disturbances for quadrotor: Algorithms and evaluation"
   venue: IEEE Transactions on Aerospace and Electronic Systems (T-AES), 2022
+  venue_short: T-AES'22
   description: "A scheme of anti-disturbance agile flight control is developed for a maneuverable quadrotor unmanned aerial vehicle, subject to the aerodynamic drag, dynamic shift of center of gravity, and motor dynamics."
   video: https://www.youtube.com/watch?v=XTn65xUlLwk
   link_web: https://ieeexplore.ieee.org/document/9684676
@@ -206,6 +216,7 @@
   year: 2020
   title: "Multiple observers-based anti-disturbance control for a quadrotor UAV against payload and wind disturbance"
   venue: Control Engineering Practice, 2020
+  venue_short: CEP'20
   description: "This paper presents a multiple observers-based anti-disturbance control scheme against multiple disturbances for a quadrotor unmanned aerial vehicle."
   video: https://www.youtube.com/watch?v=JW1uu8PoNPA
   link_web: https://www.sciencedirect.com/science/article/pii/S0967066120301544
@@ -223,6 +234,7 @@
   year: 2022
   title: "Flight control for quadrotor safety in the presence of CoG shift and loss of motor efficiency"
   venue:  International Conference on Unmanned Aircraft Systems (ICUAS), 2022
+  venue_short: ICUAS'22
   description: "A safety control strategy based on a novel nonlinear disturbance observer and geometric control is developed for a quadrotor unmanned aerial vehicle, subject to the disturbances caused by center-of-gravity shift and loss of motor efficiency."
   video: https://www.youtube.com/watch?v=lHA8qYbLiac
   link_web: https://ieeexplore.ieee.org/document/9836202
@@ -242,6 +254,7 @@
   year: 2019
   title: "Dual-disturbance observers-based control of UAV subject to internal and external disturbances"
   venue: China Automation Conference, 2019
+  venue_short: CAC'19
   description: "This paper presents an embedded micro loop to enhance the anti-disturbance performance for unmanned aerial vehicles."
   video: https://www.youtube.com/watch?v=jDj2mIrms-A
   link_web: https://ieeexplore.ieee.org/document/8997330
