@@ -21,34 +21,18 @@
     margin-bottom: 0.5rem !important;
 }
 
-.footer .visitor-map-wrap {
-    margin: 0.25rem 0;
-}
-
-.footer .footer-credits {
-    margin-top: 0.5rem !important;
+.footer .footer-bottom-row {
+    margin-top: 0.25rem;
     margin-bottom: 0 !important;
-}
-
-.visitor-map-wrap {
-    text-align: center;
 }
 
 .visitor-map {
     display: inline-block;
-    width: 220px;
-    height: 155px;
-    overflow: hidden;
     line-height: 0;
-    text-align: left;
 }
 
 .visitor-map > a,
-.visitor-map > #clustrmaps-widget-v2,
-.visitor-map > div {
-    transform: scale(0.7);
-    transform-origin: top left;
-    display: block !important;
+.visitor-map > #clustrmaps-widget-v2 {
     margin: 0 !important;
 }
 
