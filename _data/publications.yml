@@ -5,7 +5,7 @@
   venue: Preprint, 2026
   description: "We propose PhyFilter, which enhances both generalization and interpretability of robot learning. PhyFilter operates by correcting learning outcomes according to readily accessible physical differential structure and real-time state feedback."
   image: PhyFilter_fig.png
-  link_web: https://www.researchsquare.com/article/rs-9460171/v1
+  pdf_link: https://assets-eu.researchsquare.com/files/rs-9460171/v1_covered_6c69a8a0-86c1-42a1-9d38-38ca2291fede.pdf?c=1778255728
   equal_contri: 3
   corresponding_authors:
     - kexin

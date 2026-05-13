@@ -26,10 +26,14 @@
       </div>
       <div class="publication-venue">
         <span>{{ publication.venue }}</span>
+      </div>
+      {% if publication.awards %}
+      <div class="publication-awards-row">
         {% for award in publication.awards %}
-          <span class="publication-venue-emph">{{ award }}<span>
+          <span class="award-badge">{{ award }}</span>
         {% endfor %}
       </div>
+      {% endif %}
       <p class="publication-description">{{ publication.description }}</p>
       <!-- Publication Links. -->
       <div class="publication-links buttons field has-addons">
@@ -47,6 +51,11 @@
         {% endif %}
         {% if publication.arxiv %}
         <a class="external-link button is-small is-ghost" href="https://arxiv.org/pdf/{{ publication.arxiv }}.pdf">
+          <span class="icon"><i class="fas fa-file-pdf"></i></span>
+          <span>PDF</span>
+        </a>
+        {% elsif publication.pdf_link %}
+        <a class="external-link button is-small is-ghost" href="{{ publication.pdf_link }}">
           <span class="icon"><i class="fas fa-file-pdf"></i></span>
           <span>PDF</span>
         </a>
