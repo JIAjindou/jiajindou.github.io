@@ -7,12 +7,11 @@
     {% endif %}
     <div class="publication-image {% if publication.image_mouseover %}publication-mousecell{% endif %}">
       {% if publication.image_mouseover contains "mp4" %}
-      <video autoplay preload playsinline class="" height="100%" loop muted width="100%">
-        <source src="./images/{{ publication.image_mouseover }}" type="video/mp4">
+      <video preload="none" playsinline loop muted height="100%" width="100%" data-src="./images/{{ publication.image_mouseover }}">
         Your browser does not support the video tag.
       </video>
       {% endif %}
-      <img alt="{{ publication.title }}" src="./images/{{ publication.image }}"/>
+      <img alt="{{ publication.title }}" loading="lazy" src="./images/{{ publication.image }}"/>
     </div>
   </div>
 
@@ -29,6 +28,9 @@
       </div>
       <div class="publication-venue">
         <span>{{ publication.venue }}</span>
+        {% if publication.arxiv or publication.doi %}
+        <span class="citation-badge"{% if publication.arxiv %} data-arxiv="{{ publication.arxiv }}"{% endif %}{% if publication.doi %} data-doi="{{ publication.doi }}"{% endif %}></span>
+        {% endif %}
       </div>
       {% if publication.awards %}
       <div class="publication-awards-row">
