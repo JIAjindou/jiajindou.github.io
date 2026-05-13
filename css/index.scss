@@ -30,18 +30,26 @@
     margin-bottom: 0 !important;
 }
 
-.visitor-map {
-    display: inline-block;
-    width: 200px;
-    height: 140px;
-    overflow: hidden;
-    line-height: 0;
+.visitor-map-wrap {
+    text-align: center;
 }
 
-.visitor-map > * {
+.visitor-map {
+    display: inline-block;
+    width: 220px;
+    height: 155px;
+    overflow: hidden;
+    line-height: 0;
+    text-align: left;
+}
+
+.visitor-map > a,
+.visitor-map > #clustrmaps-widget-v2,
+.visitor-map > div {
     transform: scale(0.7);
     transform-origin: top left;
-    display: block;
+    display: block !important;
+    margin: 0 !important;
 }
 
 .year-heading {
