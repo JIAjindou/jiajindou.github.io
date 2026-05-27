@@ -105,7 +105,8 @@
 .platforms-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 1.25rem;
+    gap: 1.75rem 1.4rem;
+    padding: 0.5rem 0.25rem 1rem;
 }
 
 @media (max-width: 900px) {
@@ -117,7 +118,7 @@
 @media (max-width: 600px) {
     .platforms-grid {
         grid-template-columns: repeat(2, 1fr);
-        gap: 0.9rem;
+        gap: 1.25rem 1rem;
     }
 }
 
@@ -134,12 +135,18 @@
     border-radius: 10px;
     background: #fafbfc;
     border: 1px solid rgba(0, 0, 0, 0.05);
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.35s ease;
+    cursor: default;
+}
+
+a.platform-image {
+    cursor: pointer;
+    text-decoration: none;
 }
 
 .platform-image img {
@@ -149,9 +156,20 @@
     transition: transform 0.4s ease;
 }
 
+// Subtle artistic chaos: per-card tilt + offset, varied by position.
+// Hover straightens the card and lifts it, like picking a photo off a stack.
+.platforms-grid .platform-card:nth-child(7n+1) .platform-image { transform: rotate(-2.2deg) translateY(2px); }
+.platforms-grid .platform-card:nth-child(7n+2) .platform-image { transform: rotate(1.4deg) translateY(-6px); }
+.platforms-grid .platform-card:nth-child(7n+3) .platform-image { transform: rotate(-1deg) translateY(8px); }
+.platforms-grid .platform-card:nth-child(7n+4) .platform-image { transform: rotate(2.3deg) translateY(-3px); }
+.platforms-grid .platform-card:nth-child(7n+5) .platform-image { transform: rotate(-1.7deg) translateY(5px); }
+.platforms-grid .platform-card:nth-child(7n+6) .platform-image { transform: rotate(0.9deg) translateY(-7px); }
+.platforms-grid .platform-card:nth-child(7n) .platform-image    { transform: rotate(-2.6deg) translateY(4px); }
+
 .platform-card:hover .platform-image {
-    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
-    transform: translateY(-3px);
+    transform: rotate(0deg) translateY(-8px) !important;
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.16);
+    z-index: 2;
 }
 
 .platform-card:hover .platform-image img {
