@@ -164,6 +164,37 @@
     transform: scale(1.04);
 }
 
+// "What's next?" ghost cell — no frame, just centered text in a grid slot.
+.platform-card-next {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 1 / 1;
+}
+
+.platform-next-text {
+    color: #888;
+    font-family: 'Google Sans', 'Noto Sans', sans-serif;
+    font-style: italic;
+    font-size: 105%;
+    letter-spacing: 0.01em;
+    user-select: none;
+}
+
+.platform-next-arrow {
+    display: inline-block;
+    margin-left: 0.35em;
+    transition: transform 0.3s ease;
+}
+
+.platform-card-next:hover .platform-next-text {
+    color: #1e3a5f;
+}
+
+.platform-card-next:hover .platform-next-arrow {
+    transform: translateX(5px);
+}
+
 // Venue badges that are anchor links — clickable, hover-lift.
 .platform-venues a.venue-badge {
     text-decoration: none;
