@@ -90,23 +90,11 @@
     font-size: 95%;
 }
 
-.platforms-category {
-    margin-top: 1.75em !important;
-    margin-bottom: 1em !important;
-    color: #555;
-    border-bottom: 1px solid #ddd;
-    padding-bottom: 0.25em;
-}
-
-.platforms-category:first-of-type {
-    margin-top: 1.25em !important;
-}
-
 .platforms-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 1.75rem 1.4rem;
-    padding: 0.5rem 0.25rem 1rem;
+    gap: 2rem 1.5rem;
+    padding: 0.75rem 0.25rem 1rem;
 }
 
 @media (max-width: 900px) {
@@ -118,7 +106,7 @@
 @media (max-width: 600px) {
     .platforms-grid {
         grid-template-columns: repeat(2, 1fr);
-        gap: 1.25rem 1rem;
+        gap: 1.4rem 1rem;
     }
 }
 
@@ -141,12 +129,6 @@
     justify-content: center;
     overflow: hidden;
     transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.35s ease;
-    cursor: default;
-}
-
-a.platform-image {
-    cursor: pointer;
-    text-decoration: none;
 }
 
 .platform-image img {
@@ -157,14 +139,20 @@ a.platform-image {
 }
 
 // Subtle artistic chaos: per-card tilt + offset, varied by position.
-// Hover straightens the card and lifts it, like picking a photo off a stack.
-.platforms-grid .platform-card:nth-child(7n+1) .platform-image { transform: rotate(-2.2deg) translateY(2px); }
-.platforms-grid .platform-card:nth-child(7n+2) .platform-image { transform: rotate(1.4deg) translateY(-6px); }
-.platforms-grid .platform-card:nth-child(7n+3) .platform-image { transform: rotate(-1deg) translateY(8px); }
-.platforms-grid .platform-card:nth-child(7n+4) .platform-image { transform: rotate(2.3deg) translateY(-3px); }
-.platforms-grid .platform-card:nth-child(7n+5) .platform-image { transform: rotate(-1.7deg) translateY(5px); }
-.platforms-grid .platform-card:nth-child(7n+6) .platform-image { transform: rotate(0.9deg) translateY(-7px); }
-.platforms-grid .platform-card:nth-child(7n) .platform-image    { transform: rotate(-2.6deg) translateY(4px); }
+// 13 distinct patterns so no two adjacent cards match across reflow.
+.platforms-grid .platform-card:nth-child(13n+1)  .platform-image { transform: rotate(-2.4deg) translateY(3px); }
+.platforms-grid .platform-card:nth-child(13n+2)  .platform-image { transform: rotate(1.6deg)  translateY(-7px); }
+.platforms-grid .platform-card:nth-child(13n+3)  .platform-image { transform: rotate(-0.9deg) translateY(8px); }
+.platforms-grid .platform-card:nth-child(13n+4)  .platform-image { transform: rotate(2.5deg)  translateY(-2px); }
+.platforms-grid .platform-card:nth-child(13n+5)  .platform-image { transform: rotate(-1.8deg) translateY(6px); }
+.platforms-grid .platform-card:nth-child(13n+6)  .platform-image { transform: rotate(1.1deg)  translateY(-5px); }
+.platforms-grid .platform-card:nth-child(13n+7)  .platform-image { transform: rotate(-2.7deg) translateY(4px); }
+.platforms-grid .platform-card:nth-child(13n+8)  .platform-image { transform: rotate(0.7deg)  translateY(-8px); }
+.platforms-grid .platform-card:nth-child(13n+9)  .platform-image { transform: rotate(-1.3deg) translateY(2px); }
+.platforms-grid .platform-card:nth-child(13n+10) .platform-image { transform: rotate(2deg)    translateY(-4px); }
+.platforms-grid .platform-card:nth-child(13n+11) .platform-image { transform: rotate(-2.1deg) translateY(7px); }
+.platforms-grid .platform-card:nth-child(13n+12) .platform-image { transform: rotate(1.8deg)  translateY(-6px); }
+.platforms-grid .platform-card:nth-child(13n)    .platform-image { transform: rotate(-1.5deg) translateY(5px); }
 
 .platform-card:hover .platform-image {
     transform: rotate(0deg) translateY(-8px) !important;
@@ -175,6 +163,23 @@ a.platform-image {
 .platform-card:hover .platform-image img {
     transform: scale(1.04);
 }
+
+// Venue badges that are anchor links — clickable, hover-lift.
+.platform-venues a.venue-badge {
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.platform-venues a.venue-badge:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    background: #15263f;
+}
+
+// Smooth scroll + breathing room when anchor-jumping to a publication.
+html { scroll-behavior: smooth; }
+.publication-block { scroll-margin-top: 24px; }
 
 .platform-venues {
     margin-top: 0.65em;
