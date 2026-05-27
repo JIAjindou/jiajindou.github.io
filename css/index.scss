@@ -93,20 +93,21 @@
 .platforms-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 2rem 1.5rem;
-    padding: 0.75rem 0.25rem 1rem;
+    gap: 3rem 2.4rem;
+    padding: 1.5rem 0.5rem 2rem;
 }
 
 @media (max-width: 900px) {
     .platforms-grid {
         grid-template-columns: repeat(3, 1fr);
+        gap: 2.4rem 2rem;
     }
 }
 
 @media (max-width: 600px) {
     .platforms-grid {
         grid-template-columns: repeat(2, 1fr);
-        gap: 1.4rem 1rem;
+        gap: 1.8rem 1.4rem;
     }
 }
 
@@ -123,12 +124,14 @@
     border-radius: 10px;
     background: #fafbfc;
     border: 1px solid rgba(0, 0, 0, 0.05);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.10);
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
     transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.35s ease;
+    transform-origin: center center;
+    will-change: transform;
 }
 
 .platform-image img {
@@ -138,30 +141,33 @@
     transition: transform 0.4s ease;
 }
 
-// Subtle artistic chaos: per-card tilt + offset, varied by position.
-// 13 distinct patterns so no two adjacent cards match across reflow.
-.platforms-grid .platform-card:nth-child(13n+1)  .platform-image { transform: rotate(-2.4deg) translateY(3px); }
-.platforms-grid .platform-card:nth-child(13n+2)  .platform-image { transform: rotate(1.6deg)  translateY(-7px); }
-.platforms-grid .platform-card:nth-child(13n+3)  .platform-image { transform: rotate(-0.9deg) translateY(8px); }
-.platforms-grid .platform-card:nth-child(13n+4)  .platform-image { transform: rotate(2.5deg)  translateY(-2px); }
-.platforms-grid .platform-card:nth-child(13n+5)  .platform-image { transform: rotate(-1.8deg) translateY(6px); }
-.platforms-grid .platform-card:nth-child(13n+6)  .platform-image { transform: rotate(1.1deg)  translateY(-5px); }
-.platforms-grid .platform-card:nth-child(13n+7)  .platform-image { transform: rotate(-2.7deg) translateY(4px); }
-.platforms-grid .platform-card:nth-child(13n+8)  .platform-image { transform: rotate(0.7deg)  translateY(-8px); }
-.platforms-grid .platform-card:nth-child(13n+9)  .platform-image { transform: rotate(-1.3deg) translateY(2px); }
-.platforms-grid .platform-card:nth-child(13n+10) .platform-image { transform: rotate(2deg)    translateY(-4px); }
-.platforms-grid .platform-card:nth-child(13n+11) .platform-image { transform: rotate(-2.1deg) translateY(7px); }
-.platforms-grid .platform-card:nth-child(13n+12) .platform-image { transform: rotate(1.8deg)  translateY(-6px); }
-.platforms-grid .platform-card:nth-child(13n)    .platform-image { transform: rotate(-1.5deg) translateY(5px); }
+// Photo-wall chaos: rotation + 2D offset + scale variation, 13 patterns
+// so no two adjacent cards ever match. Cards no longer align to columns.
+.platforms-grid .platform-card:nth-child(13n+1)  { z-index: 2; .platform-image { transform: rotate(-3.6deg) translate(-10px, 6px)  scale(0.96); } }
+.platforms-grid .platform-card:nth-child(13n+2)  { z-index: 4; .platform-image { transform: rotate(2.4deg)  translate(12px, -14px) scale(1.05); } }
+.platforms-grid .platform-card:nth-child(13n+3)  { z-index: 1; .platform-image { transform: rotate(-1.2deg) translate(-4px, 14px)  scale(0.9);  } }
+.platforms-grid .platform-card:nth-child(13n+4)  { z-index: 3; .platform-image { transform: rotate(3.8deg)  translate(8px, -4px)   scale(1.02); } }
+.platforms-grid .platform-card:nth-child(13n+5)  { z-index: 5; .platform-image { transform: rotate(-2.6deg) translate(-14px, 10px) scale(1.06); } }
+.platforms-grid .platform-card:nth-child(13n+6)  { z-index: 2; .platform-image { transform: rotate(1.5deg)  translate(6px, -10px)  scale(0.94); } }
+.platforms-grid .platform-card:nth-child(13n+7)  { z-index: 4; .platform-image { transform: rotate(-4deg)   translate(10px, 8px)   scale(1.04); } }
+.platforms-grid .platform-card:nth-child(13n+8)  { z-index: 1; .platform-image { transform: rotate(0.8deg)  translate(-8px, -12px) scale(0.92); } }
+.platforms-grid .platform-card:nth-child(13n+9)  { z-index: 3; .platform-image { transform: rotate(-1.9deg) translate(14px, 4px)   scale(1.01); } }
+.platforms-grid .platform-card:nth-child(13n+10) { z-index: 5; .platform-image { transform: rotate(2.9deg)  translate(-6px, -8px)  scale(1.05); } }
+.platforms-grid .platform-card:nth-child(13n+11) { z-index: 2; .platform-image { transform: rotate(-3.1deg) translate(4px, 12px)   scale(0.95); } }
+.platforms-grid .platform-card:nth-child(13n+12) { z-index: 4; .platform-image { transform: rotate(2deg)    translate(-12px, -6px) scale(1.03); } }
+.platforms-grid .platform-card:nth-child(13n)    { z-index: 3; .platform-image { transform: rotate(-2.2deg) translate(8px, 10px)   scale(0.98); } }
+
+.platform-card:hover {
+    z-index: 10 !important;
+}
 
 .platform-card:hover .platform-image {
-    transform: rotate(0deg) translateY(-8px) !important;
-    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.16);
-    z-index: 2;
+    transform: rotate(0deg) translate(0, -10px) scale(1.08) !important;
+    box-shadow: 0 22px 40px rgba(0, 0, 0, 0.20);
 }
 
 .platform-card:hover .platform-image img {
-    transform: scale(1.04);
+    transform: scale(1.03);
 }
 
 // Venue badges that are anchor links — clickable, hover-lift.
