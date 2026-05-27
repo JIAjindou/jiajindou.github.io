@@ -90,30 +90,86 @@
     font-size: 95%;
 }
 
-.platforms-figure {
-    overflow: hidden;
-    border-radius: 8px;
-    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.10);
-    border: 1px solid rgba(0, 0, 0, 0.05);
-    transition: transform 0.4s ease, box-shadow 0.4s ease;
-    background: #fff;
-    max-width: 520px;
-    margin: 0 auto;
+.platforms-category {
+    margin-top: 1.75em !important;
+    margin-bottom: 1em !important;
+    color: #555;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 0.25em;
 }
 
-.platforms-figure img {
-    display: block;
+.platforms-category:first-of-type {
+    margin-top: 1.25em !important;
+}
+
+.platforms-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.25rem;
+}
+
+@media (max-width: 900px) {
+    .platforms-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .platforms-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.9rem;
+    }
+}
+
+.platform-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.platform-image {
     width: 100%;
-    height: auto;
-    transition: transform 0.5s ease;
+    aspect-ratio: 1 / 1;
+    border-radius: 10px;
+    background: #fafbfc;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
-.platforms-figure:hover {
-    box-shadow: 0 14px 32px rgba(0, 0, 0, 0.14);
+.platform-image img {
+    max-width: 88%;
+    max-height: 88%;
+    object-fit: contain;
+    transition: transform 0.4s ease;
 }
 
-.platforms-figure:hover img {
-    transform: scale(1.02);
+.platform-card:hover .platform-image {
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+    transform: translateY(-3px);
+}
+
+.platform-card:hover .platform-image img {
+    transform: scale(1.04);
+}
+
+.platform-venues {
+    margin-top: 0.65em;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.35em;
+}
+
+.platform-venues .venue-badge {
+    margin-bottom: 0;
+    font-size: 72%;
+    padding: 0.25em 0.65em;
 }
 
 .footer .footer-links a {
