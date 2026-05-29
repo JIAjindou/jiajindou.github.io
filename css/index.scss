@@ -288,10 +288,11 @@ html { scroll-behavior: smooth; }
     background: #6b7280;
 }
 
-// "Featured" highlight for pinned publications.
+// "Featured" highlight for pinned publications. Matches the wine-red
+// palette used by .award-badge for visual consistency.
 .featured-badge {
     display: inline-block;
-    background: linear-gradient(135deg, #d4a017, #b8881a);
+    background: #c0392b;
     color: #fff !important;
     font-family: 'Google Sans', 'Noto Sans', sans-serif;
     font-size: 78%;
@@ -301,7 +302,7 @@ html { scroll-behavior: smooth; }
     border-radius: 0.35em;
     margin-bottom: 0.5em;
     margin-right: 0.4em;
-    box-shadow: 0 1px 3px rgba(184, 136, 26, 0.25);
+    box-shadow: 0 1px 3px rgba(192, 57, 43, 0.25);
 }
 
 
