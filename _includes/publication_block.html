@@ -16,7 +16,7 @@
         Your browser does not support the video tag.
       </video>
       {% endif %}
-      <img alt="{{ publication.title }}" loading="lazy" src="./images/{{ publication.image }}"/>
+      <img alt="{{ publication.title }}" loading="lazy" src="./images/{{ publication.image }}?v={{ site.time | date: '%s' }}"/>
     </div>
   </div>
 
