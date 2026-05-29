@@ -145,9 +145,12 @@ layout: null
     <div class="container is-max-desktop">
 
       <h2 class="title is-3">Publications</h2>
-
-      <h2 class="subtitle is-5">First/co-first/corresponding author</h2>
-      <p class="author-legend"><sup>*</sup> Co-first author &nbsp;&middot;&nbsp; <sup>&dagger;</sup> Corresponding author</p>
+      <p class="publications-intro">
+        Showing first, co-first<sup>*</sup>, or corresponding<sup>&dagger;</sup> author papers only.
+        <a class="publications-full-link" href="https://scholar.google.com/citations?user={{ site.google_scholar }}" target="_blank" rel="noopener">
+          Full list on <i class="ai ai-google-scholar"></i> Google Scholar&nbsp;&rarr;
+        </a>
+      </p>
 
       {% assign preprints = site.data.publications | where: "preprint", true %}
       {% assign published = site.data.publications | where_exp: "p", "p.preprint != true" %}

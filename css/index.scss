@@ -270,6 +270,38 @@ html { scroll-behavior: smooth; }
     }
 }
 
+// Compact Publications intro: filter explanation + symbol legend + Scholar link.
+.publications-intro {
+    color: #555;
+    font-size: 95%;
+    margin-top: -0.25em;
+    margin-bottom: 1.4em;
+    line-height: 1.75;
+
+    sup {
+        color: #1e3a5f;
+        font-weight: 600;
+    }
+}
+
+.publications-full-link {
+    color: #1e3a5f;
+    font-weight: 600;
+    text-decoration: none;
+    margin-left: 0.45em;
+    white-space: nowrap;
+    transition: color 0.2s ease;
+
+    i {
+        margin: 0 0.18em;
+    }
+
+    &:hover {
+        text-decoration: underline;
+        color: #15263f;
+    }
+}
+
 .venue-badge {
     display: inline-block;
     background: #1e3a5f;
