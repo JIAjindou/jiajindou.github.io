@@ -84,6 +84,20 @@ layout: null
         </div>
         {% endfor %}
 
+        <h2>Internship</h2>
+
+        {% for intern in site.data.internship %}
+        <div class="columns">
+          <div class="column is-four-fifths">
+            <b>{{ intern.name }}</b><br />
+            {{ intern.description }}
+          </div>
+          <div class="column is-one-fifths has-text-right">
+            {{ intern.dates }}
+          </div>
+        </div>
+        {% endfor %}
+
         <h2>Main Awards and Honors</h2>
 
         {% for job in site.data.employment %}
