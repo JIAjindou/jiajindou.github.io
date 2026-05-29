@@ -1,3 +1,27 @@
+- id: FLASH
+  year: 2026
+  preprint: true
+  title: "FLASH: Efficient visuomotor policy via sparse sampling"
+  venue: arXiv, 2026
+  venue_short: arXiv'26
+  description: "We present FLASH, an efficient visuomotor policy that replaces iterative denoising with continuous Legendre polynomial trajectories, enabling single-step inference for real-time robot control."
+  project_page: https://b1ue-jay.github.io/FLASH/
+  github: B1ue-Jay/FLASH
+  image: FLASH_fig.png
+  image_mouseover: FLASH_mini.mp4
+  video: https://b1ue-jay.github.io/FLASH/
+  arxiv: "2605.15492"
+  equal_contri: 2
+  authors:
+    - jiaqi
+    - jindou
+    - yuxuan
+    - gen
+    - xiangyu
+    - tuo
+    - kuangji
+    - jianfei
+
 - id: PhyFilter
   year: 2026
   preprint: true
