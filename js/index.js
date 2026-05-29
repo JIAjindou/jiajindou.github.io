@@ -7,6 +7,7 @@ $(document).ready(function() {
             var v = $video[0];
             if (v.dataset.src && !v.src) {
                 v.src = v.dataset.src;
+                v.dataset.playingSecond = '0';
             }
             $video.css('display', 'inline-block');
             $(this).find('img').css('display', 'none');
@@ -21,6 +22,19 @@ $(document).ready(function() {
             $video.css('display', 'none');
             $(this).find('img').css('display', 'inline-block');
         }
+    });
+
+    // Chain two preview videos: when src1 ends, swap to src2; when src2
+    // ends, swap back to src1 — gives an infinite loop across both clips.
+    // Single-clip videos keep the native HTML5 `loop` attribute (no `ended`).
+    $('.publication-mousecell video').on('ended', function() {
+        var src2 = this.dataset.src2;
+        if (!src2) return;
+        var playingSecond = this.dataset.playingSecond === '1';
+        this.src = playingSecond ? this.dataset.src : src2;
+        this.dataset.playingSecond = playingSecond ? '0' : '1';
+        var p = this.play();
+        if (p && typeof p.catch === 'function') p.catch(function() {});
     });
 
 });
