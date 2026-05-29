@@ -138,21 +138,23 @@
     transition: transform 0.4s ease;
 }
 
-// Subtle artistic chaos: per-card tilt + offset, varied by position.
-// 13 distinct patterns so no two adjacent cards match across reflow.
-.platforms-grid .platform-card:nth-child(13n+1)  .platform-image { transform: rotate(-2.4deg) translateY(3px); }
-.platforms-grid .platform-card:nth-child(13n+2)  .platform-image { transform: rotate(1.6deg)  translateY(-7px); }
-.platforms-grid .platform-card:nth-child(13n+3)  .platform-image { transform: rotate(-0.9deg) translateY(8px); }
-.platforms-grid .platform-card:nth-child(13n+4)  .platform-image { transform: rotate(2.5deg)  translateY(-2px); }
-.platforms-grid .platform-card:nth-child(13n+5)  .platform-image { transform: rotate(-1.8deg) translateY(6px); }
-.platforms-grid .platform-card:nth-child(13n+6)  .platform-image { transform: rotate(1.1deg)  translateY(-5px); }
-.platforms-grid .platform-card:nth-child(13n+7)  .platform-image { transform: rotate(-2.7deg) translateY(4px); }
-.platforms-grid .platform-card:nth-child(13n+8)  .platform-image { transform: rotate(0.7deg)  translateY(-8px); }
-.platforms-grid .platform-card:nth-child(13n+9)  .platform-image { transform: rotate(-1.3deg) translateY(2px); }
-.platforms-grid .platform-card:nth-child(13n+10) .platform-image { transform: rotate(2deg)    translateY(-4px); }
-.platforms-grid .platform-card:nth-child(13n+11) .platform-image { transform: rotate(-2.1deg) translateY(7px); }
-.platforms-grid .platform-card:nth-child(13n+12) .platform-image { transform: rotate(1.8deg)  translateY(-6px); }
-.platforms-grid .platform-card:nth-child(13n)    .platform-image { transform: rotate(-1.5deg) translateY(5px); }
+// Photo-wall chaos: 13 distinct patterns, designed so each grid column
+// (at 4-, 3-, or 2-col widths) contains a mix of tilt directions AND
+// vertical offsets — no column ends up all "leaning left and dropped".
+// Quadrants: A=(-rot,-Y) B=(-rot,+Y) C=(+rot,-Y) D=(+rot,+Y)
+.platforms-grid .platform-card:nth-child(13n+1)  .platform-image { transform: rotate(-2.6deg) translateY(-7px); } // A
+.platforms-grid .platform-card:nth-child(13n+2)  .platform-image { transform: rotate(1.4deg)  translateY(-3px); } // C
+.platforms-grid .platform-card:nth-child(13n+3)  .platform-image { transform: rotate(-0.9deg) translateY(8px);  } // B
+.platforms-grid .platform-card:nth-child(13n+4)  .platform-image { transform: rotate(2.5deg)  translateY(4px);  } // D
+.platforms-grid .platform-card:nth-child(13n+5)  .platform-image { transform: rotate(1.7deg)  translateY(6px);  } // D
+.platforms-grid .platform-card:nth-child(13n+6)  .platform-image { transform: rotate(-2.1deg) translateY(-5px); } // A
+.platforms-grid .platform-card:nth-child(13n+7)  .platform-image { transform: rotate(0.8deg)  translateY(-7px); } // C
+.platforms-grid .platform-card:nth-child(13n+8)  .platform-image { transform: rotate(-2.7deg) translateY(3px);  } // B
+.platforms-grid .platform-card:nth-child(13n+9)  .platform-image { transform: rotate(-1.5deg) translateY(5px);  } // B
+.platforms-grid .platform-card:nth-child(13n+10) .platform-image { transform: rotate(2.3deg)  translateY(2px);  } // D
+.platforms-grid .platform-card:nth-child(13n+11) .platform-image { transform: rotate(-1deg)   translateY(-4px); } // A
+.platforms-grid .platform-card:nth-child(13n+12) .platform-image { transform: rotate(2deg)    translateY(-6px); } // C
+.platforms-grid .platform-card:nth-child(13n)    .platform-image { transform: rotate(0.6deg)  translateY(-2px); } // C
 
 .platform-card:hover .platform-image {
     transform: rotate(0deg) translateY(-8px) !important;
