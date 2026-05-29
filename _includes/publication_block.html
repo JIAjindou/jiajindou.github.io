@@ -10,7 +10,7 @@
     {% endif %}
     <div class="publication-image {% if publication.image_mouseover %}publication-mousecell{% endif %}">
       {% if publication.image_mouseover contains "mp4" %}
-      <video preload="none" playsinline muted height="100%" width="100%"
+      <video preload="none" playsinline muted
              data-src="./images/{{ publication.image_mouseover }}"
              {% if publication.image_mouseover2 %}data-src2="./images/{{ publication.image_mouseover2 }}"{% else %}loop{% endif %}>
         Your browser does not support the video tag.
