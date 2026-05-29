@@ -5,7 +5,7 @@
   title: "MARS policy: Multimodality only when it matters"
   venue: arXiv, 2026
   venue_short: arXiv'26
-  description: "We present MARS, a generative policy that adaptively invokes stochasticity only when behavioral branching truly matters and reverts to deterministic learning otherwise — yielding 16.67% higher success and 83.20% lower inference latency in real-world tests."
+  description: "We present MARS, a generative policy that adaptively invokes stochasticity only when behavioral branching truly matters and reverts to deterministic learning otherwise, yielding 16.67% higher success and 83.20% lower inference latency in real-world tests."
   project_page: https://lorenzo-0-0.github.io/MARS_Policy/
   image: MARS_fig.png
   image_mouseover: MARS_mini.mp4
