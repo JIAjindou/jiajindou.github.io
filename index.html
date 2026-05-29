@@ -188,6 +188,7 @@ layout: null
       <h2 class="title is-3">Publications</h2>
 
       <h2 class="subtitle is-5">First/co-first/corresponding author</h2>
+      <p class="author-legend"><sup>*</sup> Co-first author &nbsp;&middot;&nbsp; <sup>&dagger;</sup> Corresponding author</p>
 
       {% assign preprints = site.data.publications | where: "preprint", true %}
       {% assign published = site.data.publications | where_exp: "p", "p.preprint != true" %}

@@ -256,6 +256,20 @@ html { scroll-behavior: smooth; }
     padding-bottom: 0.25em;
 }
 
+.author-legend {
+    color: #777;
+    font-size: 88%;
+    margin-top: -0.5em;
+    margin-bottom: 0.5em;
+    font-style: italic;
+
+    sup {
+        font-style: normal;
+        color: #1e3a5f;
+        font-weight: 600;
+    }
+}
+
 .venue-badge {
     display: inline-block;
     background: #1e3a5f;
