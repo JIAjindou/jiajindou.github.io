@@ -108,6 +108,7 @@
 - id: WorldModelSurvey
   year: 2026
   preprint: true
+  zoom_on_hover: true
   title: "World model for robot learning: A comprehensive survey"
   venue: arXiv, 2026
   venue_short: arXiv'26

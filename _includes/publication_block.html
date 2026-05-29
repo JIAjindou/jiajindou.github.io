@@ -8,7 +8,7 @@
     {% if publication.venue_short %}
     <div class="venue-badge{% if publication.preprint %} venue-badge-preprint{% endif %}">{{ publication.venue_short }}</div>
     {% endif %}
-    <div class="publication-image {% if publication.image_mouseover %}publication-mousecell{% endif %}">
+    <div class="publication-image {% if publication.image_mouseover %}publication-mousecell{% endif %}{% if publication.zoom_on_hover %} publication-zoom{% endif %}">
       {% if publication.image_mouseover contains "mp4" %}
       <video preload="none" playsinline muted
              data-src="./images/{{ publication.image_mouseover }}"
