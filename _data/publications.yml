@@ -31,7 +31,7 @@
   title: "Feedback world model enables precise guidance of diffusion policy"
   venue: arXiv, 2026
   venue_short: arXiv'26
-  description: "We close the prediction–observation loop in world models with a lightweight feedback state that corrects future predictions online, paired with action-aware guidance to emphasize controllable dimensions — reducing prediction error by up to 76.4% and improving OOD success by 30%."
+  description: "We close the prediction–observation loop in world models with a lightweight feedback state that corrects future predictions online, paired with action-aware guidance to emphasize controllable dimensions, reducing prediction error by up to 76.4% and improving OOD success by 30%."
   project_page: https://lorenzo-0-0.github.io/Feedback_World_Model/
   github: Lorenzo-0-0/Feedback_World_Model
   image: FWM_fig.png
