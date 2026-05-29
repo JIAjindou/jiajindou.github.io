@@ -139,6 +139,7 @@
 
 - id: A2A
   year: 2026
+  featured: true
   title: "Action-to-action flow matching"
   venue: "Robotics: Science and Systems (RSS), 2026"
   venue_short: RSS'26

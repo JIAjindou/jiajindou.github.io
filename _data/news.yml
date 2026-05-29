@@ -1,5 +1,5 @@
 - date: May 2026
-  description: ⭐ Released [MARS policy](https://arxiv.org/abs/2605.29766), a generative policy that turns on multimodality only when it matters &mdash; **16.67% higher success** and **83.20% lower inference latency** in real-world tests.
+  description: ⭐ Released [MARS policy](https://arxiv.org/abs/2605.29766) &mdash; multimodality only when it matters.
 
 - date: May 2026
   description: 📚 Released our [World Model survey for robot learning](https://arxiv.org/abs/2605.00080).
