@@ -71,7 +71,7 @@ layout: null
       </div>
 
       <div class="content">
-        <h2>Education/Appointments</h2>
+        <h2>Education</h2>
         {% for school in site.data.education %}
         <div class="columns">
           <div class="column is-four-fifths">
@@ -84,16 +84,15 @@ layout: null
         </div>
         {% endfor %}
 
-        <h2>Internship</h2>
-
-        {% for intern in site.data.internship %}
+        <h2>Appointments</h2>
+        {% for appt in site.data.appointments %}
         <div class="columns">
           <div class="column is-four-fifths">
-            <b>{{ intern.name }}</b><br />
-            {{ intern.description }}
+            <b>{{ appt.name }}</b><br />
+            {{ appt.description }}
           </div>
           <div class="column is-one-fifths has-text-right">
-            {{ intern.dates }}
+            {{ appt.dates }}
           </div>
         </div>
         {% endfor %}
