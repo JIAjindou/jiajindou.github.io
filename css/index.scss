@@ -397,6 +397,22 @@ html { scroll-behavior: smooth; }
         }
     }
 
+    // For cover images without a preview video (e.g. survey thumbnails
+    // with small text), hovering the image scales it up in place so the
+    // content becomes readable without leaving the page.
+    .publication-image:not(.publication-mousecell) {
+        transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s ease;
+        cursor: zoom-in;
+        transform-origin: center center;
+    }
+
+    .publication-image:not(.publication-mousecell):hover {
+        transform: scale(1.7);
+        position: relative;
+        z-index: 50;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+    }
+
     .publication-description {
         color: #333;
         margin: 0.5em 0;
