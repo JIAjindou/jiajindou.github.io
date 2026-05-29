@@ -8,6 +8,11 @@ $(document).ready(function() {
             if (v.dataset.src && !v.src) {
                 v.src = v.dataset.src;
                 v.dataset.playingSecond = '0';
+                // Warm browser cache for the optional second clip so the
+                // src1 -> src2 swap on `ended` feels seamless.
+                if (v.dataset.src2) {
+                    fetch(v.dataset.src2).catch(function() {});
+                }
             }
             $video.css('display', 'inline-block');
             $(this).find('img').css('display', 'none');
