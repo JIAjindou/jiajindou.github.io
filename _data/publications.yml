@@ -186,7 +186,7 @@
   venue: arXiv, 2026
   venue_short: arXiv'26
   description: "The presented trajectory optimizer outputs trajectories that are friendly to the following control level."
-  image: TMEC_fig.png
+  image: residual_fig.png
   arxiv: 2601.02738
   corresponding_authors: 
     - jindou 
