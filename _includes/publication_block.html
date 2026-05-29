@@ -1,7 +1,10 @@
 {% assign publication = include.publication %}
-<div class="publication-block columns" id="pub-{{ publication.id }}">
+<div class="publication-block columns{% if publication.featured %} publication-featured{% endif %}" id="pub-{{ publication.id }}">
 
   <div class="column is-4">
+    {% if publication.featured %}
+    <div class="featured-badge">&#9733; Featured</div>
+    {% endif %}
     {% if publication.venue_short %}
     <div class="venue-badge{% if publication.preprint %} venue-badge-preprint{% endif %}">{{ publication.venue_short }}</div>
     {% endif %}
