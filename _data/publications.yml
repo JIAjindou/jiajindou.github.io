@@ -200,6 +200,7 @@
     
 - id: FORESEER
   year: 2025
+  featured: true
   title: "FORESEER: Recognize and utilize uncertainties by integrating data-based learning and symbolic feedback"
   venue: The International Journal of Robotics Research (IJRR), 2025
   venue_short: IJRR'25
@@ -222,6 +223,7 @@
     
 - id: FeedbackNN
   year: 2025
+  featured: true
   title: "Feedback favors the generalization of neural ODEs"
   venue: International Conference on Learning Representations (ICLR), 2025
   venue_short: ICLR'25
@@ -245,6 +247,7 @@
 
 - id: EVOLVER
   year: 2024
+  featured: true
   title: "EVOLVER: Online learning and prediction of disturbances for robot control"
   venue: IEEE Transactions on Robotics (T-RO), 2024
   venue_short: T-RO'24
@@ -266,6 +269,7 @@
   
 - id: Drag
   year: 2022
+  featured: true
   title: "Accurate high-maneuvering trajectory tracking for quadrotors: A drag utilization method"
   venue: IEEE Robotics and Automation Letters (R-AL), 2022
   venue_short: R-AL'22
