@@ -64,3 +64,27 @@ $(document).ready(function() {
     });
 
 });
+
+// Background-preload every hover-preview video so first hover plays
+// instantly. We wait for `window.load` (all initial assets done) plus a
+// small buffer so the critical resources (cover images, fonts, CSS)
+// finish on the user's network before we start pulling the heavy mp4s.
+$(window).on('load', function() {
+    setTimeout(function() {
+        $('.publication-mousecell video').each(function() {
+            var v = this;
+            if (v.dataset.src && !v.src) {
+                v.preload = 'auto';
+                v.src = v.dataset.src;
+                v.dataset.playingSecond = '0';
+                // Setting src on an element with preload=auto triggers the
+                // browser's media loader, which fetches and decodes the
+                // first frame even before any play() call.
+            }
+            // Warm the HTTP cache for the optional second clip (MARS).
+            if (v.dataset.src2) {
+                fetch(v.dataset.src2).catch(function() {});
+            }
+        });
+    }, 500);
+});
