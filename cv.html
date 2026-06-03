@@ -33,6 +33,12 @@ layout: null
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <script defer src="./js/fontawesome.all.min.js"></script>
+
+  {% if site.goatcounter %}
+  <!-- GoatCounter privacy-friendly analytics -->
+  <script data-goatcounter="https://{{ site.goatcounter }}.goatcounter.com/count"
+          async src="//gc.zgo.at/count.js"></script>
+  {% endif %}
 </head>
 
 <body>

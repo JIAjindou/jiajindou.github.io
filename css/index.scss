@@ -248,6 +248,31 @@ html { scroll-behavior: smooth; }
     max-width: 100%;
 }
 
+// GoatCounter total-views badge. Sits above ClustrMaps in the footer
+// right column and gives a privacy-friendly fallback when ClustrMaps
+// (still wired up) fails to load on the visitor's side.
+.visitor-counter {
+    display: inline-block;
+    margin-bottom: 0.5rem;
+    max-width: 100%;
+
+    a {
+        display: inline-block;
+        text-decoration: none;
+        transition: opacity 0.2s ease;
+    }
+
+    a:hover {
+        opacity: 0.75;
+    }
+
+    img {
+        display: block;
+        max-width: 100%;
+        height: auto;
+    }
+}
+
 .year-heading {
     margin-top: 1.5em !important;
     margin-bottom: 0.75em !important;

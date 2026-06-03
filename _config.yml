@@ -33,6 +33,10 @@ twitter_username: # KeunhongP
 github_username: JIAjindou # keunhong
 google_scholar: 3gFYDFAAAAAJ&hl=zh-CN&oi=ao # HVZb-5oAAAAJ
 google_analytics: # G-MFWSBLRKG0
+# GoatCounter site code — privacy-friendly visitor analytics.
+# Sign up at https://www.goatcounter.com/ (30 sec), pick a code, then
+# put it here. Leave empty to disable. Example: "jindou"
+goatcounter:
 
 # Build settings
 theme: minima
