@@ -1,4 +1,6 @@
 $(document).ready(function() {
+    loadCitationCounts();
+
     // Hover-to-play preview videos. Videos use preload="none" and
     // load the actual file from data-src only on first hover.
     $('.publication-mousecell').mouseover(function() {
@@ -64,6 +66,73 @@ $(document).ready(function() {
     });
 
 });
+
+// Fetch citation counts from Semantic Scholar and fill in .citation-badge
+// spans. Cached in localStorage for 24h. Priority: DOI -> arXiv ID -> title.
+// Requests are spaced 350ms apart to stay polite under the public rate limit.
+function loadCitationCounts() {
+    var badges = document.querySelectorAll('.citation-badge');
+    var ONE_DAY = 24 * 60 * 60 * 1000;
+    var BASE = 'https://api.semanticscholar.org/graph/v1/paper/';
+    var queue = Array.prototype.slice.call(badges);
+
+    function next() {
+        var badge = queue.shift();
+        if (!badge) return;
+
+        var url, cacheKey;
+        if (badge.dataset.doi) {
+            url = BASE + 'DOI:' + encodeURIComponent(badge.dataset.doi) + '?fields=citationCount';
+            cacheKey = 'ss_doi:' + badge.dataset.doi;
+        } else if (badge.dataset.arxiv) {
+            url = BASE + 'arXiv:' + encodeURIComponent(badge.dataset.arxiv) + '?fields=citationCount';
+            cacheKey = 'ss_arxiv:' + badge.dataset.arxiv;
+        } else if (badge.dataset.title) {
+            url = BASE + 'search?query=' + encodeURIComponent(badge.dataset.title) + '&limit=1&fields=citationCount';
+            cacheKey = 'ss_title:' + badge.dataset.title;
+        } else {
+            setTimeout(next, 0);
+            return;
+        }
+
+        var cached = null;
+        try { cached = JSON.parse(localStorage.getItem(cacheKey) || 'null'); } catch (e) {}
+        if (cached && (Date.now() - cached.ts) < ONE_DAY) {
+            renderCitationBadge(badge, cached.count);
+            setTimeout(next, 0);
+            return;
+        }
+
+        fetch(url)
+            .then(function(r) {
+                // 404 from a direct lookup falls back to a title search.
+                if (r.status === 404 && badge.dataset.title && !cacheKey.startsWith('ss_title:')) {
+                    return fetch(BASE + 'search?query=' + encodeURIComponent(badge.dataset.title) + '&limit=1&fields=citationCount')
+                        .then(function(r2) { return r2.ok ? r2.json() : null; });
+                }
+                return r.ok ? r.json() : null;
+            })
+            .then(function(data) {
+                if (!data) return;
+                // search returns { data: [...] }; direct lookup returns the paper.
+                var count = (data.data && data.data[0] && data.data[0].citationCount);
+                if (typeof count !== 'number') count = data.citationCount;
+                if (typeof count === 'number') {
+                    try { localStorage.setItem(cacheKey, JSON.stringify({ count: count, ts: Date.now() })); } catch (e) {}
+                    renderCitationBadge(badge, count);
+                }
+            })
+            .catch(function() {})
+            .finally(function() { setTimeout(next, 350); });
+    }
+
+    next();
+}
+
+function renderCitationBadge(el, count) {
+    el.innerHTML = '<i class="fas fa-quote-right"></i> ' + count;
+    el.classList.add('has-count');
+}
 
 // Background-preload every hover-preview video so first hover plays
 // instantly. We wait for `window.load` (all initial assets done) plus a

@@ -398,6 +398,31 @@ html { scroll-behavior: smooth; }
         margin-top: 0;
     }
 
+    // Semantic Scholar citation count — hidden until JS fills it in,
+    // shown as a tiny pill next to the venue.
+    .citation-badge {
+        display: none;
+
+        &.has-count {
+            display: inline-block;
+            margin-left: 0.55em;
+            padding: 0.05em 0.55em;
+            font-size: 78%;
+            font-weight: 600;
+            color: #1e3a5f;
+            background: rgba(30, 58, 95, 0.08);
+            border-radius: 0.35em;
+            line-height: 1.6;
+            vertical-align: middle;
+
+            i {
+                font-size: 85%;
+                margin-right: 0.25em;
+                opacity: 0.7;
+            }
+        }
+    }
+
     .publication-awards-row {
         margin-top: 0.35em;
         line-height: 1.6;
