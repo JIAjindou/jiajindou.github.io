@@ -140,86 +140,6 @@ layout: null
     </div>
   </section>
 
-  <!-- Publications. -->
-  <div class="hr">
-    <div class="container">
-      <hr>
-    </div>
-  </div>
-
-  <section class="section">
-    <div class="container is-max-desktop">
-
-      <h2 class="title is-3">Publications</h2>
-      <p class="publications-intro">
-        Showing first, co-first<sup>*</sup>, or corresponding<sup>&dagger;</sup> author papers only.
-        <a class="publications-full-link" href="https://scholar.google.com/citations?user={{ site.google_scholar }}" target="_blank" rel="noopener">
-          Full list on <i class="ai ai-google-scholar"></i> Google Scholar&nbsp;&rarr;
-        </a>
-      </p>
-
-      {% assign preprints = site.data.publications | where: "preprint", true %}
-      {% assign published = site.data.publications | where_exp: "p", "p.preprint != true" %}
-      {% assign publications_by_year = published | group_by: "year" | sort: "name" | reverse %}
-
-      {% if preprints.size > 0 %}
-      <h3 class="title is-4 year-heading">Preprint</h3>
-      {% for publication in preprints %}
-        {% include publication_block.html publication=publication %}
-      {% endfor %}
-      {% endif %}
-
-      {% for year_group in publications_by_year %}
-      <h3 class="title is-4 year-heading">{{ year_group.name }}</h3>
-      {% for publication in year_group.items %}
-        {% include publication_block.html publication=publication %}
-      {% endfor %}
-      {% endfor %}
-
-    </div>
-  </section>
-
-  <!-- Research Interests. -->
-  <div class="hr">
-    <div class="container">
-      <hr>
-    </div>
-  </div>
-
-  <section class="section interests-section">
-    <div class="container is-max-desktop">
-      <h2 class="title is-3">Research Interests</h2>
-      <div class="interests-list">
-        <span class="interest-chip">
-          <i class="fas fa-robot"></i><span>Robot learning</span>
-        </span>
-        <span class="interest-chip">
-          <i class="fas fa-globe-asia"></i><span>World model</span>
-        </span>
-        <span class="interest-chip">
-          <i class="fas fa-magic"></i><span>Generative policy</span>
-        </span>
-        <span class="interest-chip">
-          <i class="fas fa-chart-line"></i><span>Uncertainty prediction</span>
-        </span>
-      </div>
-      <div class="interests-list interests-platforms">
-        <span class="interest-chip">
-          <span class="emoji-icon">🚁</span><span>Drone</span>
-        </span>
-        <span class="interest-chip">
-          <span class="emoji-icon">🐕</span><span>Quadruped robot</span>
-        </span>
-        <span class="interest-chip">
-          <span class="emoji-icon">🦾</span><span>Robotic arm</span>
-        </span>
-        <span class="interest-chip">
-          <span class="emoji-icon">🤖</span><span>Humanoid robot</span>
-        </span>
-      </div>
-    </div>
-  </section>
-
   <!-- Robotic Platforms. -->
   <div class="hr">
     <div class="container">
@@ -323,6 +243,85 @@ layout: null
     </div>
   </section>
 
+  <!-- Publications. -->
+  <div class="hr">
+    <div class="container">
+      <hr>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container is-max-desktop">
+
+      <h2 class="title is-3">Publications</h2>
+      <p class="publications-intro">
+        Showing first, co-first<sup>*</sup>, or corresponding<sup>&dagger;</sup> author papers only.
+        <a class="publications-full-link" href="https://scholar.google.com/citations?user={{ site.google_scholar }}" target="_blank" rel="noopener">
+          Full list on <i class="ai ai-google-scholar"></i> Google Scholar&nbsp;&rarr;
+        </a>
+      </p>
+
+      {% assign preprints = site.data.publications | where: "preprint", true %}
+      {% assign published = site.data.publications | where_exp: "p", "p.preprint != true" %}
+      {% assign publications_by_year = published | group_by: "year" | sort: "name" | reverse %}
+
+      {% if preprints.size > 0 %}
+      <h3 class="title is-4 year-heading">Preprint</h3>
+      {% for publication in preprints %}
+        {% include publication_block.html publication=publication %}
+      {% endfor %}
+      {% endif %}
+
+      {% for year_group in publications_by_year %}
+      <h3 class="title is-4 year-heading">{{ year_group.name }}</h3>
+      {% for publication in year_group.items %}
+        {% include publication_block.html publication=publication %}
+      {% endfor %}
+      {% endfor %}
+
+    </div>
+  </section>
+
+  <!-- Research Interests. -->
+  <div class="hr">
+    <div class="container">
+      <hr>
+    </div>
+  </div>
+
+  <section class="section interests-section">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3">Research Interests</h2>
+      <div class="interests-list">
+        <span class="interest-chip">
+          <i class="fas fa-robot"></i><span>Robot learning</span>
+        </span>
+        <span class="interest-chip">
+          <i class="fas fa-globe-asia"></i><span>World model</span>
+        </span>
+        <span class="interest-chip">
+          <i class="fas fa-magic"></i><span>Generative policy</span>
+        </span>
+        <span class="interest-chip">
+          <i class="fas fa-chart-line"></i><span>Uncertainty prediction</span>
+        </span>
+      </div>
+      <div class="interests-list interests-platforms">
+        <span class="interest-chip">
+          <span class="emoji-icon">🚁</span><span>Drone</span>
+        </span>
+        <span class="interest-chip">
+          <span class="emoji-icon">🐕</span><span>Quadruped robot</span>
+        </span>
+        <span class="interest-chip">
+          <span class="emoji-icon">🦾</span><span>Robotic arm</span>
+        </span>
+        <span class="interest-chip">
+          <span class="emoji-icon">🤖</span><span>Humanoid robot</span>
+        </span>
+      </div>
+    </div>
+  </section>
 
   <footer class="footer">
     <div class="container">
