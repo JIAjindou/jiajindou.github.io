@@ -98,7 +98,7 @@ function loadCitationCounts() {
         var cached = null;
         try { cached = JSON.parse(localStorage.getItem(cacheKey) || 'null'); } catch (e) {}
         if (cached && (Date.now() - cached.ts) < ONE_DAY) {
-            renderCitationBadge(badge, cached.count);
+            if (cached.count > 0) renderCitationBadge(badge, cached.count);
             setTimeout(next, 0);
             return;
         }
@@ -119,7 +119,10 @@ function loadCitationCounts() {
                 if (typeof count !== 'number') count = data.citationCount;
                 if (typeof count === 'number') {
                     try { localStorage.setItem(cacheKey, JSON.stringify({ count: count, ts: Date.now() })); } catch (e) {}
-                    renderCitationBadge(badge, count);
+                    // Hide the badge when the count is zero — Semantic
+                    // Scholar's "0" is mostly noise (uncited preprints,
+                    // unindexed venues) and clutters the page.
+                    if (count > 0) renderCitationBadge(badge, count);
                 }
             })
             .catch(function() {})
