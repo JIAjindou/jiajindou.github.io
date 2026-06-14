@@ -68,28 +68,49 @@ $(document).ready(function() {
 });
 
 // Fetch citation counts from Semantic Scholar and fill in .citation-badge
-// spans. Cached in localStorage for 24h. Priority: DOI -> arXiv ID -> title.
-// Requests are spaced 350ms apart to stay polite under the public rate limit.
+// spans. Cached in localStorage. Priority: DOI -> arXiv ID -> title.
+// Each request gets one auto-retry; the API is flaky from some networks.
 function loadCitationCounts() {
     var badges = document.querySelectorAll('.citation-badge');
-    var ONE_DAY = 24 * 60 * 60 * 1000;
+    var HIT_TTL = 7 * 24 * 60 * 60 * 1000;   // 7 days for successful hits
+    var MISS_TTL = 6 * 60 * 60 * 1000;        // 6 hours for failures (so we re-try sooner)
     var BASE = 'https://api.semanticscholar.org/graph/v1/paper/';
     var queue = Array.prototype.slice.call(badges);
+
+    function fetchWithRetry(url, attempt) {
+        return fetch(url).then(function(r) {
+            // Retry once on rate-limit or transient server error.
+            if ((r.status === 429 || r.status >= 500) && (attempt || 0) < 1) {
+                return new Promise(function(res) { setTimeout(res, 1200); })
+                    .then(function() { return fetchWithRetry(url, (attempt || 0) + 1); });
+            }
+            return r;
+        });
+    }
+
+    function tryTitleSearch(badge) {
+        if (!badge.dataset.title) return Promise.resolve(null);
+        return fetchWithRetry(BASE + 'search?query=' + encodeURIComponent(badge.dataset.title) + '&limit=1&fields=citationCount')
+            .then(function(r) { return r && r.ok ? r.json() : null; });
+    }
 
     function next() {
         var badge = queue.shift();
         if (!badge) return;
 
-        var url, cacheKey;
+        var url, cacheKey, lookupKind;
         if (badge.dataset.doi) {
             url = BASE + 'DOI:' + encodeURIComponent(badge.dataset.doi) + '?fields=citationCount';
             cacheKey = 'ss_doi:' + badge.dataset.doi;
+            lookupKind = 'doi';
         } else if (badge.dataset.arxiv) {
             url = BASE + 'arXiv:' + encodeURIComponent(badge.dataset.arxiv) + '?fields=citationCount';
             cacheKey = 'ss_arxiv:' + badge.dataset.arxiv;
+            lookupKind = 'arxiv';
         } else if (badge.dataset.title) {
             url = BASE + 'search?query=' + encodeURIComponent(badge.dataset.title) + '&limit=1&fields=citationCount';
             cacheKey = 'ss_title:' + badge.dataset.title;
+            lookupKind = 'title';
         } else {
             setTimeout(next, 0);
             return;
@@ -97,36 +118,44 @@ function loadCitationCounts() {
 
         var cached = null;
         try { cached = JSON.parse(localStorage.getItem(cacheKey) || 'null'); } catch (e) {}
-        if (cached && (Date.now() - cached.ts) < ONE_DAY) {
-            if (cached.count > 0) renderCitationBadge(badge, cached.count);
-            setTimeout(next, 0);
-            return;
+        if (cached) {
+            var ttl = cached.count != null ? HIT_TTL : MISS_TTL;
+            if ((Date.now() - cached.ts) < ttl) {
+                if (cached.count > 0) renderCitationBadge(badge, cached.count);
+                setTimeout(next, cached.count != null ? 0 : 200);
+                return;
+            }
         }
 
-        fetch(url)
+        fetchWithRetry(url)
             .then(function(r) {
-                // 404 from a direct lookup falls back to a title search.
-                if (r.status === 404 && badge.dataset.title && !cacheKey.startsWith('ss_title:')) {
-                    return fetch(BASE + 'search?query=' + encodeURIComponent(badge.dataset.title) + '&limit=1&fields=citationCount')
-                        .then(function(r2) { return r2.ok ? r2.json() : null; });
+                if (!r) return null;
+                // Direct lookup failed (404, 403, etc.) — try title search as fallback.
+                if (!r.ok && lookupKind !== 'title') {
+                    return tryTitleSearch(badge);
                 }
                 return r.ok ? r.json() : null;
             })
             .then(function(data) {
-                if (!data) return;
-                // search returns { data: [...] }; direct lookup returns the paper.
-                var count = (data.data && data.data[0] && data.data[0].citationCount);
-                if (typeof count !== 'number') count = data.citationCount;
+                var count;
+                if (data) {
+                    count = (data.data && data.data[0] && data.data[0].citationCount);
+                    if (typeof count !== 'number') count = data.citationCount;
+                }
                 if (typeof count === 'number') {
                     try { localStorage.setItem(cacheKey, JSON.stringify({ count: count, ts: Date.now() })); } catch (e) {}
-                    // Hide the badge when the count is zero — Semantic
-                    // Scholar's "0" is mostly noise (uncited preprints,
-                    // unindexed venues) and clutters the page.
                     if (count > 0) renderCitationBadge(badge, count);
+                } else {
+                    // Mark as a known miss so we don't hammer SS every page-load,
+                    // but with a shorter TTL than hits so we can recover.
+                    try { localStorage.setItem(cacheKey, JSON.stringify({ count: null, ts: Date.now() })); } catch (e) {}
+                    console.warn('[citations] no count for', badge.dataset.title || cacheKey);
                 }
             })
-            .catch(function() {})
-            .finally(function() { setTimeout(next, 350); });
+            .catch(function(err) {
+                console.warn('[citations] fetch failed for', cacheKey, err);
+            })
+            .finally(function() { setTimeout(next, 400); });
     }
 
     next();
