@@ -521,7 +521,7 @@ html { scroll-behavior: smooth; }
         }
     }
 
-    .publication-mousecell {
+    .publication-mediacell {
         position: relative;
         width: 100%;
         overflow: hidden;
@@ -530,6 +530,44 @@ html { scroll-behavior: smooth; }
         video {
             display: none;
         }
+    }
+
+    // "▶ Video" / "Image" toggle pinned to the cover's bottom-right.
+    // Clicking it lazily loads and plays the preview clip (so videos are
+    // only fetched on demand), then toggles back to the still image.
+    .media-toggle {
+        position: absolute;
+        bottom: 0.5em;
+        right: 0.5em;
+        z-index: 5;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35em;
+        padding: 0.3em 0.7em;
+        font-family: 'Google Sans', 'Noto Sans', sans-serif;
+        font-size: 0.72rem;
+        font-weight: 600;
+        line-height: 1;
+        color: #fff;
+        background: rgba(20, 30, 50, 0.72);
+        border: none;
+        border-radius: 999px;
+        cursor: pointer;
+        backdrop-filter: blur(2px);
+        opacity: 0.85;
+        transition: opacity 0.2s ease, background 0.2s ease, transform 0.2s ease;
+
+        i { font-size: 0.85em; }
+
+        &:hover {
+            opacity: 1;
+            background: #1e3a5f;
+            transform: translateY(-1px);
+        }
+    }
+
+    .publication-mediacell.is-playing .media-toggle {
+        background: rgba(20, 30, 50, 0.6);
     }
 
     // Opt-in hover-zoom for cover images flagged with `zoom_on_hover: true`

@@ -1,73 +1,101 @@
 $(document).ready(function() {
     loadCitationCounts();
     setupPublicationFilters();
+    setupVideoToggles();
+});
 
+// Click-to-play preview videos. Each cell with a clip shows a "▶ Video"
+// button; the mp4 is only fetched when the user actually clicks it, so we
+// never download videos the visitor doesn't ask for. Click again to swap
+// back to the still image. Two-clip entries (data-src2) loop across both.
+function setupVideoToggles() {
+    document.querySelectorAll('.publication-mediacell').forEach(function(cell) {
+        var video = cell.querySelector('video');
+        var img = cell.querySelector('img');
+        var btn = cell.querySelector('.media-toggle');
+        if (!video || !btn) return;
 
-    // Hover-to-play preview videos. Videos use preload="none" and
-    // load the actual file from data-src only on first hover.
-    $('.publication-mousecell').mouseover(function() {
-        var $cell = $(this);
-        var $video = $cell.find('video');
-        if (!$video.length) return;
-        var v = $video[0];
-        var $img = $cell.find('img');
+        var label = btn.querySelector('.media-toggle-label');
+        var icon = btn.querySelector('i');
 
-        var swapToVideo = function() {
-            $video.css('display', 'inline-block');
-            $img.css('display', 'none');
-            var p = v.play();
-            if (p && typeof p.catch === 'function') p.catch(function() {});
-        };
-
-        // First-time setup: kick off the load and warm cache for the
-        // optional second clip so the src1 -> src2 swap on `ended` feels
-        // seamless.
-        if (v.dataset.src && !v.src) {
-            v.src = v.dataset.src;
-            v.dataset.playingSecond = '0';
-            if (v.dataset.src2) {
-                fetch(v.dataset.src2).catch(function() {});
+        function setButton(state) {
+            // state: 'play' (show video), 'loading', or 'image' (show still)
+            if (state === 'loading') {
+                icon.className = 'fas fa-spinner fa-spin';
+                if (label) label.textContent = 'Loading';
+            } else if (state === 'playing') {
+                icon.className = 'fas fa-image';
+                if (label) label.textContent = 'Image';
+            } else {
+                icon.className = 'fas fa-play';
+                if (label) label.textContent = 'Video';
             }
         }
 
-        // Keep the still image visible until the video has at least one
-        // frame buffered, so the user never sees a white loading flash
-        // on first hover. readyState >= 2 means HAVE_CURRENT_DATA.
-        if (v.readyState >= 2) {
-            swapToVideo();
-        } else {
-            var onReady = function() {
-                v.removeEventListener('loadeddata', onReady);
-                // Only swap if the cursor is still over the cell — if the
-                // user moved away during the load, leave the image up.
-                if ($cell.is(':hover')) swapToVideo();
-            };
-            v.addEventListener('loadeddata', onReady);
+        function showVideo() {
+            video.style.display = 'inline-block';
+            img.style.display = 'none';
+            cell.classList.add('is-playing');
+            setButton('playing');
+            var p = video.play();
+            if (p && typeof p.catch === 'function') p.catch(function() {});
         }
-    });
-    $('.publication-mousecell').mouseout(function() {
-        var $video = $(this).find('video');
-        if ($video.length) {
-            $video[0].pause();
-            $video.css('display', 'none');
-            $(this).find('img').css('display', 'inline-block');
+
+        function showImage() {
+            video.pause();
+            video.style.display = 'none';
+            img.style.display = '';
+            cell.classList.remove('is-playing');
+            setButton('play');
         }
-    });
 
-    // Chain two preview videos: when src1 ends, swap to src2; when src2
-    // ends, swap back to src1 — gives an infinite loop across both clips.
-    // Single-clip videos keep the native HTML5 `loop` attribute (no `ended`).
-    $('.publication-mousecell video').on('ended', function() {
-        var src2 = this.dataset.src2;
-        if (!src2) return;
-        var playingSecond = this.dataset.playingSecond === '1';
-        this.src = playingSecond ? this.dataset.src : src2;
-        this.dataset.playingSecond = playingSecond ? '0' : '1';
-        var p = this.play();
-        if (p && typeof p.catch === 'function') p.catch(function() {});
-    });
+        // Chain two clips: src1 ends -> src2 -> src1 -> ... infinite loop.
+        // Single-clip videos use the native `loop` attribute, no `ended`.
+        video.addEventListener('ended', function() {
+            if (!video.dataset.src2) return;
+            var playingSecond = video.dataset.playingSecond === '1';
+            video.src = playingSecond ? video.dataset.src : video.dataset.src2;
+            video.dataset.playingSecond = playingSecond ? '0' : '1';
+            var p = video.play();
+            if (p && typeof p.catch === 'function') p.catch(function() {});
+        });
 
-});
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            // Already playing -> toggle back to the image.
+            if (cell.classList.contains('is-playing')) {
+                showImage();
+                return;
+            }
+
+            // First click: lazily assign src and wait for the first frame
+            // so we never flash a white blank.
+            if (video.dataset.src && !video.src) {
+                setButton('loading');
+                video.dataset.playingSecond = '0';
+                video.src = video.dataset.src;
+                video.addEventListener('loadeddata', function onReady() {
+                    video.removeEventListener('loadeddata', onReady);
+                    showVideo();
+                });
+                video.addEventListener('error', function onErr() {
+                    video.removeEventListener('error', onErr);
+                    setButton('play');
+                });
+            } else if (video.readyState >= 2) {
+                showVideo();
+            } else {
+                setButton('loading');
+                video.addEventListener('loadeddata', function onReady() {
+                    video.removeEventListener('loadeddata', onReady);
+                    showVideo();
+                });
+            }
+        });
+    });
+}
 
 // Fetch citation counts from Semantic Scholar and fill in .citation-badge
 // spans. Cached in localStorage. Priority: DOI -> arXiv ID -> title.
@@ -202,27 +230,3 @@ function setupPublicationFilters() {
         });
     });
 }
-
-// Background-preload every hover-preview video so first hover plays
-// instantly. We wait for `window.load` (all initial assets done) plus a
-// small buffer so the critical resources (cover images, fonts, CSS)
-// finish on the user's network before we start pulling the heavy mp4s.
-$(window).on('load', function() {
-    setTimeout(function() {
-        $('.publication-mousecell video').each(function() {
-            var v = this;
-            if (v.dataset.src && !v.src) {
-                v.preload = 'auto';
-                v.src = v.dataset.src;
-                v.dataset.playingSecond = '0';
-                // Setting src on an element with preload=auto triggers the
-                // browser's media loader, which fetches and decodes the
-                // first frame even before any play() call.
-            }
-            // Warm the HTTP cache for the optional second clip (MARS).
-            if (v.dataset.src2) {
-                fetch(v.dataset.src2).catch(function() {});
-            }
-        });
-    }, 500);
-});
