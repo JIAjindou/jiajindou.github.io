@@ -1,3 +1,27 @@
+- id: ADAPT
+  year: 2026
+  preprint: true
+  title: "ADAPT: Analytical disturbance-aware policy training for humanoid locomotion"
+  venue: arXiv, 2026
+  venue_short: arXiv'26
+  description: "We present ADAPT, an analytical disturbance-aware framework for humanoid locomotion that infers joint-level external disturbances from robot dynamics and proprioception alone, without specialized sensors, and feeds them back into policy training for robustness to pushes, payloads, and impacts."
+  project_page: https://blyu413.github.io/adapt-locomotion/
+  image: ADAPT_fig.png
+  image_mouseover: ADAPT_mini.mp4
+  arxiv: "2606.16542"
+  equal_contri: 2
+  authors:
+    - bofan
+    - jindou
+    - kuangji
+    - yanshuo
+    - shijia
+    - gen
+    - boyu
+    - jingliang
+    - geng
+    - jianfei
+
 - id: APEX
   year: 2026
   preprint: true
