@@ -32,7 +32,7 @@ function setupVideoToggles() {
                 if (label) label.textContent = 'Image';
             } else {
                 icon.className = 'fas fa-play';
-                if (label) label.textContent = 'Video';
+                if (label) label.textContent = 'GIF';
             }
         }
 
