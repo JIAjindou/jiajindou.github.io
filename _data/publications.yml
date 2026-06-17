@@ -125,6 +125,7 @@
 - id: PhyFilter
   year: 2026
   preprint: true
+  featured: true
   title: "Physics filtering favors the generalization of robot learning"
   venue: Preprint, 2026
   venue_short: Preprint
