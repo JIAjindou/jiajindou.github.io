@@ -1,3 +1,24 @@
+- id: APEX
+  year: 2026
+  preprint: true
+  title: "APEX: Adaptive policy execution for precise manipulation"
+  venue: arXiv, 2026
+  venue_short: arXiv'26
+  description: "APEX is a plug-and-play framework that bridges the execution gap of learned manipulation policies by reconstructing dynamically feasible references from policy outputs and adapting them online via state feedback."
+  project_page: https://murphyzhao04.github.io/apex-project-page/
+  image: APEX_fig.png
+  image_mouseover: APEX_mini.mp4
+  arxiv: "2606.16504"
+  corresponding_authors:
+    - jindou
+    - jianfei
+  authors:
+    - mengfei
+    - chenxi
+    - tuo
+    - jindou
+    - jianfei
+
 - id: MARS
   year: 2026
   preprint: true
