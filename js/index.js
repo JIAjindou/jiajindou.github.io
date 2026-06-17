@@ -1,5 +1,7 @@
 $(document).ready(function() {
     loadCitationCounts();
+    setupPublicationFilters();
+
 
     // Hover-to-play preview videos. Videos use preload="none" and
     // load the actual file from data-src only on first hover.
@@ -164,6 +166,41 @@ function loadCitationCounts() {
 function renderCitationBadge(el, count) {
     el.innerHTML = '<i class="fas fa-quote-right"></i> ' + count;
     el.classList.add('has-count');
+}
+
+// Publication filter buttons: All / arXiv / Published / Featured.
+// Filter is purely client-side — toggles visibility on .publication-block
+// elements based on the classes they carry (is-preprint, is-published,
+// is-featured), then hides any .pub-section heading whose group ended up
+// empty.
+function setupPublicationFilters() {
+    var buttons = document.querySelectorAll('.pub-filter');
+    if (!buttons.length) return;
+
+    function applyFilter(category) {
+        document.querySelectorAll('.publication-block').forEach(function(block) {
+            var show = (category === 'all') ||
+                (category === 'arxiv' && block.classList.contains('is-preprint')) ||
+                (category === 'published' && block.classList.contains('is-published')) ||
+                (category === 'featured' && block.classList.contains('is-featured'));
+            block.style.display = show ? '' : 'none';
+        });
+        // Hide section wrappers whose group has no visible blocks.
+        document.querySelectorAll('.pub-section').forEach(function(sec) {
+            var blocks = sec.querySelectorAll('.publication-block');
+            var anyVisible = false;
+            blocks.forEach(function(b) { if (b.style.display !== 'none') anyVisible = true; });
+            sec.style.display = anyVisible ? '' : 'none';
+        });
+    }
+
+    buttons.forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            buttons.forEach(function(b) { b.classList.remove('is-active'); });
+            btn.classList.add('is-active');
+            applyFilter(btn.dataset.filter);
+        });
+    });
 }
 
 // Background-preload every hover-preview video so first hover plays

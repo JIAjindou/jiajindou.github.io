@@ -1,5 +1,5 @@
 {% assign publication = include.publication %}
-<div class="publication-block columns{% if publication.featured %} publication-featured{% endif %}" id="pub-{{ publication.id }}">
+<div class="publication-block columns{% if publication.featured %} publication-featured{% endif %}{% if publication.preprint %} is-preprint{% else %} is-published{% endif %}{% if publication.featured %} is-featured{% endif %}" id="pub-{{ publication.id }}">
 
   <div class="column is-4">
     {% if publication.featured %}

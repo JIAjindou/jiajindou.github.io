@@ -313,6 +313,55 @@ html { scroll-behavior: smooth; }
     }
 }
 
+// Publication filter buttons (All / arXiv / Published / Featured).
+.pub-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55em;
+    margin-top: 0.25em;
+    margin-bottom: 1.5em;
+}
+
+.pub-filter {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35em;
+    padding: 0.4em 0.95em;
+    background: #f5f7fa;
+    border: 1px solid #e2e8f0;
+    border-radius: 999px;
+    font-family: 'Google Sans', 'Noto Sans', sans-serif;
+    font-size: 90%;
+    font-weight: 600;
+    color: #1f2937;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease,
+                background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+
+    &:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+        background: #fff;
+    }
+
+    &.is-active {
+        background: #1e3a5f;
+        color: #fff;
+        border-color: #1e3a5f;
+        box-shadow: 0 4px 10px rgba(30, 58, 95, 0.18);
+    }
+
+    &.is-active .pub-filter-count {
+        color: rgba(255, 255, 255, 0.75);
+    }
+}
+
+.pub-filter-count {
+    font-weight: 500;
+    color: #6b7280;
+    font-size: 92%;
+}
+
 .publications-full-link {
     color: #1e3a5f;
     font-weight: 600;

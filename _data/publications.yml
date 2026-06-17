@@ -46,6 +46,7 @@
 - id: MARS
   year: 2026
   preprint: true
+  pinned: true
   featured: true
   title: "MARS policy: Multimodality only when it matters"
   venue: arXiv, 2026

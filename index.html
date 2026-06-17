@@ -262,21 +262,39 @@ layout: null
       </p>
 
       {% assign preprints = site.data.publications | where: "preprint", true %}
+      {% assign pinned_preprints = preprints | where: "pinned", true %}
+      {% assign unpinned_preprints = preprints | where_exp: "p", "p.pinned != true" %}
       {% assign published = site.data.publications | where_exp: "p", "p.preprint != true" %}
+      {% assign featured_list = site.data.publications | where: "featured", true %}
       {% assign publications_by_year = published | group_by: "year" | sort: "name" | reverse %}
+      {% assign total_count = site.data.publications | size %}
+
+      <div class="pub-filters" role="tablist">
+        <button class="pub-filter is-active" data-filter="all" type="button">All <span class="pub-filter-count">({{ total_count }})</span></button>
+        <button class="pub-filter" data-filter="arxiv" type="button">arXiv <span class="pub-filter-count">({{ preprints.size }})</span></button>
+        <button class="pub-filter" data-filter="published" type="button">Published <span class="pub-filter-count">({{ published.size }})</span></button>
+        <button class="pub-filter" data-filter="featured" type="button">Featured <span class="pub-filter-count">({{ featured_list.size }})</span></button>
+      </div>
 
       {% if preprints.size > 0 %}
-      <h3 class="title is-4 year-heading">Preprint</h3>
-      {% for publication in preprints %}
-        {% include publication_block.html publication=publication %}
-      {% endfor %}
+      <div class="pub-section">
+        <h3 class="title is-4 year-heading">Preprint</h3>
+        {% for publication in pinned_preprints %}
+          {% include publication_block.html publication=publication %}
+        {% endfor %}
+        {% for publication in unpinned_preprints %}
+          {% include publication_block.html publication=publication %}
+        {% endfor %}
+      </div>
       {% endif %}
 
       {% for year_group in publications_by_year %}
-      <h3 class="title is-4 year-heading">{{ year_group.name }}</h3>
-      {% for publication in year_group.items %}
-        {% include publication_block.html publication=publication %}
-      {% endfor %}
+      <div class="pub-section">
+        <h3 class="title is-4 year-heading">{{ year_group.name }}</h3>
+        {% for publication in year_group.items %}
+          {% include publication_block.html publication=publication %}
+        {% endfor %}
+      </div>
       {% endfor %}
 
     </div>
