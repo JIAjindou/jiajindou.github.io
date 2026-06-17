@@ -9,11 +9,15 @@ $(document).ready(function() {
 // never download videos the visitor doesn't ask for. Click again to swap
 // back to the still image. Two-clip entries (data-src2) loop across both.
 function setupVideoToggles() {
-    document.querySelectorAll('.publication-mediacell').forEach(function(cell) {
+    document.querySelectorAll('.media-toggle').forEach(function(btn) {
+        // The button now lives in the badge row, a sibling of the image
+        // cell — walk up to the shared column to find the video/img.
+        var column = btn.closest('.column');
+        var cell = column ? column.querySelector('.publication-mediacell') : null;
+        if (!cell) return;
         var video = cell.querySelector('video');
         var img = cell.querySelector('img');
-        var btn = cell.querySelector('.media-toggle');
-        if (!video || !btn) return;
+        if (!video || !img) return;
 
         var label = btn.querySelector('.media-toggle-label');
         var icon = btn.querySelector('i');
@@ -32,13 +36,12 @@ function setupVideoToggles() {
             }
         }
 
-        function showVideo() {
+        // Reveal the (already-playing) video and hide the still image.
+        function revealVideo() {
             video.style.display = 'inline-block';
             img.style.display = 'none';
             cell.classList.add('is-playing');
             setButton('playing');
-            var p = video.play();
-            if (p && typeof p.catch === 'function') p.catch(function() {});
         }
 
         function showImage() {
@@ -70,27 +73,32 @@ function setupVideoToggles() {
                 return;
             }
 
-            // First click: lazily assign src and wait for the first frame
-            // so we never flash a white blank.
-            if (video.dataset.src && !video.src) {
-                setButton('loading');
+            setButton('loading');
+
+            // Lazily assign the source on first use. With preload="none",
+            // merely setting src does NOT start a download — only play()
+            // (or load()) does — so we drive everything off play() below.
+            if (video.dataset.src && !video.getAttribute('src')) {
+                video.preload = 'auto';
                 video.dataset.playingSecond = '0';
                 video.src = video.dataset.src;
-                video.addEventListener('loadeddata', function onReady() {
-                    video.removeEventListener('loadeddata', onReady);
-                    showVideo();
-                });
-                video.addEventListener('error', function onErr() {
-                    video.removeEventListener('error', onErr);
+            }
+
+            // Reveal the moment playback actually begins (first frame is
+            // on screen), so there's no white flash and no stuck spinner.
+            var onPlaying = function() {
+                video.removeEventListener('playing', onPlaying);
+                revealVideo();
+            };
+            video.addEventListener('playing', onPlaying);
+
+            // This click is a user gesture and the video is muted, so
+            // play() is allowed and will kick off loading + playback.
+            var p = video.play();
+            if (p && typeof p.catch === 'function') {
+                p.catch(function() {
+                    video.removeEventListener('playing', onPlaying);
                     setButton('play');
-                });
-            } else if (video.readyState >= 2) {
-                showVideo();
-            } else {
-                setButton('loading');
-                video.addEventListener('loadeddata', function onReady() {
-                    video.removeEventListener('loadeddata', onReady);
-                    showVideo();
                 });
             }
         });

@@ -415,6 +415,51 @@ html { scroll-behavior: smooth; }
     box-shadow: 0 1px 3px rgba(192, 57, 43, 0.25);
 }
 
+// Row above each cover holding the Featured badge, venue badge, and the
+// "▶ Video" toggle. The toggle is pushed to the right edge via margin.
+.pub-badge-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.45em;
+    margin-bottom: 0.6em;
+
+    // Badges sit flush in this flex row — drop their own outer margins.
+    .featured-badge,
+    .venue-badge {
+        margin-bottom: 0;
+        margin-right: 0;
+    }
+}
+
+.media-toggle {
+    margin-left: auto;   // push to the right edge of the badge row
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35em;
+    padding: 0.28em 0.8em;
+    font-family: 'Google Sans', 'Noto Sans', sans-serif;
+    font-size: 78%;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    line-height: 1.6;
+    color: #fff;
+    background: #2c3e50;
+    border: none;
+    border-radius: 0.35em;
+    cursor: pointer;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
+    transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+
+    i { font-size: 0.9em; }
+
+    &:hover {
+        background: #1e3a5f;
+        transform: translateY(-1px);
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.18);
+    }
+}
+
 
 .publication-block {
     transition: transform 0.25s ease;
@@ -530,44 +575,6 @@ html { scroll-behavior: smooth; }
         video {
             display: none;
         }
-    }
-
-    // "▶ Video" / "Image" toggle pinned to the cover's bottom-right.
-    // Clicking it lazily loads and plays the preview clip (so videos are
-    // only fetched on demand), then toggles back to the still image.
-    .media-toggle {
-        position: absolute;
-        bottom: 0.5em;
-        right: 0.5em;
-        z-index: 5;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.35em;
-        padding: 0.3em 0.7em;
-        font-family: 'Google Sans', 'Noto Sans', sans-serif;
-        font-size: 0.72rem;
-        font-weight: 600;
-        line-height: 1;
-        color: #fff;
-        background: rgba(20, 30, 50, 0.72);
-        border: none;
-        border-radius: 999px;
-        cursor: pointer;
-        backdrop-filter: blur(2px);
-        opacity: 0.85;
-        transition: opacity 0.2s ease, background 0.2s ease, transform 0.2s ease;
-
-        i { font-size: 0.85em; }
-
-        &:hover {
-            opacity: 1;
-            background: #1e3a5f;
-            transform: translateY(-1px);
-        }
-    }
-
-    .publication-mediacell.is-playing .media-toggle {
-        background: rgba(20, 30, 50, 0.6);
     }
 
     // Opt-in hover-zoom for cover images flagged with `zoom_on_hover: true`

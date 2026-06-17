@@ -2,12 +2,19 @@
 <div class="publication-block columns{% if publication.featured %} publication-featured{% endif %}{% if publication.preprint %} is-preprint{% else %} is-published{% endif %}{% if publication.featured %} is-featured{% endif %}" id="pub-{{ publication.id }}">
 
   <div class="column is-4">
-    {% if publication.featured %}
-    <div class="featured-badge">&#9733; Featured</div>
-    {% endif %}
-    {% if publication.venue_short %}
-    <div class="venue-badge{% if publication.preprint %} venue-badge-preprint{% endif %}">{{ publication.venue_short }}</div>
-    {% endif %}
+    <div class="pub-badge-row">
+      {% if publication.featured %}
+      <div class="featured-badge">&#9733; Featured</div>
+      {% endif %}
+      {% if publication.venue_short %}
+      <div class="venue-badge{% if publication.preprint %} venue-badge-preprint{% endif %}">{{ publication.venue_short }}</div>
+      {% endif %}
+      {% if publication.image_mouseover contains "mp4" %}
+      <button class="media-toggle" type="button" aria-label="Play preview video">
+        <i class="fas fa-play"></i><span class="media-toggle-label">Video</span>
+      </button>
+      {% endif %}
+    </div>
     <div class="publication-image {% if publication.image_mouseover %}publication-mediacell{% endif %}{% if publication.zoom_on_hover %} publication-zoom{% endif %}">
       {% if publication.image_mouseover contains "mp4" %}
       <video preload="none" playsinline muted
@@ -15,9 +22,6 @@
              {% if publication.image_mouseover2 %}data-src2="./images/{{ publication.image_mouseover2 }}"{% else %}loop{% endif %}>
         Your browser does not support the video tag.
       </video>
-      <button class="media-toggle" type="button" aria-label="Play preview video">
-        <i class="fas fa-play"></i><span class="media-toggle-label">Video</span>
-      </button>
       {% endif %}
       <img alt="{{ publication.title }}" loading="lazy" src="./images/{{ publication.image }}?v={{ site.time | date: '%s' }}"/>
     </div>
