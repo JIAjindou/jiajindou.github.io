@@ -136,6 +136,15 @@ function loadCitationCounts() {
         var badge = queue.shift();
         if (!badge) return;
 
+        // Show the YAML-provided count immediately so the number is stable
+        // even when the Semantic Scholar API is rate-limited. The API
+        // fetch below still runs and overwrites with a fresher value if it
+        // succeeds (and only when that value is > 0).
+        if (badge.dataset.citations) {
+            var manual = parseInt(badge.dataset.citations, 10);
+            if (manual > 0) renderCitationBadge(badge, manual);
+        }
+
         var url, cacheKey, lookupKind;
         if (badge.dataset.doi) {
             url = BASE + 'DOI:' + encodeURIComponent(badge.dataset.doi) + '?fields=citationCount';

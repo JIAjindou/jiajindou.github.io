@@ -84,6 +84,7 @@
   image_mouseover: FWM_mini.mp4
   video: https://lorenzo-0-0.github.io/Feedback_World_Model/
   arxiv: "2605.15705"
+  citations: 1
   equal_contri: 2
   authors:
     - tuo
@@ -111,6 +112,7 @@
   image_mouseover: FLASH_mini.mp4
   video: https://b1ue-jay.github.io/FLASH/
   arxiv: "2605.15492"
+  citations: 1
   equal_contri: 2
   authors:
     - jiaqi
@@ -164,6 +166,7 @@
   github: NTUMARS/Awesome-World-Model-for-Robotics-Policy
   image: WorldModel_fig.png
   arxiv: "2605.00080"
+  citations: 10
   equal_contri: 5
   authors:
     - bohan
@@ -197,6 +200,7 @@
   image_mouseover: A2A_mini.mp4
   video: https://lorenzo-0-0.github.io/A2A_Flow_Matching
   arxiv: 2602.07322
+  citations: 8
   equal_contri: 2
   authors:
     - jindou
@@ -217,6 +221,7 @@
   image: ICRA_26_fig.png
   image_mouseover: ICRA_26_mini.mp4
   arxiv: 2407.13229
+  citations: 1
   equal_contri: 2
   authors:
     - jindou
@@ -257,6 +262,7 @@
   image_mouseover: IJRR_mini.mp4
   video: https://www.youtube.com/watch?v=1sLnpcTjXg4&list=PLaSQ4X8BD0X5O-QmBGUQ7n5tqOcbX2oiE
   link_web: https://journals.sagepub.com/doi/10.1177/02783649251364000
+  citations: 4
   authors:
     - jindou
     - kexin
@@ -279,6 +285,7 @@
   github: JIAjindou/Feedback-neural-network
   image: feedbackNN_fig.png
   arxiv: 2410.10253
+  citations: 10
   link_web: https://openreview.net/forum?id=cmfyMV45XO
   equal_contri: 2
   authors:
@@ -303,6 +310,7 @@
   github: JIAjindou/EVOLVER
   video: https://www.youtube.com/watch?v=1t8NqQ5C3Co
   link_web: https://ieeexplore.ieee.org/document/10288520
+  citations: 39
   image: EVOLVER_fig2.png
   image_mouseover: TRO_mini.mp4
   authors:
@@ -323,6 +331,7 @@
   description: "Different from standard approaches that achieve precise tracking by feedforward compensating the estimated drag, this work presents a scheme to appropriately utilize drag."
   video: https://www.youtube.com/watch?v=qO8A6lwCxMU
   link_web: https://ieeexplore.ieee.org/document/9779449
+  citations: 41
   image: RAL_fig.png
   image_mouseover: RAL_mini.mp4
   authors:
@@ -340,6 +349,7 @@
   description: "A scheme of anti-disturbance agile flight control is developed for a maneuverable quadrotor unmanned aerial vehicle, subject to the aerodynamic drag, dynamic shift of center of gravity, and motor dynamics."
   video: https://www.youtube.com/watch?v=XTn65xUlLwk
   link_web: https://ieeexplore.ieee.org/document/9684676
+  citations: 44
   image: TAES_fig.jpg
   image_mouseover: TAES_mini.mp4
   authors:
@@ -357,6 +367,7 @@
   description: "This paper presents a multiple observers-based anti-disturbance control scheme against multiple disturbances for a quadrotor unmanned aerial vehicle."
   video: https://www.youtube.com/watch?v=JW1uu8PoNPA
   link_web: https://www.sciencedirect.com/science/article/pii/S0967066120301544
+  citations: 179
   equal_contri: 2
   image: CEP_fig.png
   image_mouseover: CEP_mini.mp4
@@ -375,6 +386,7 @@
   description: "A safety control strategy based on a novel nonlinear disturbance observer and geometric control is developed for a quadrotor unmanned aerial vehicle, subject to the disturbances caused by center-of-gravity shift and loss of motor efficiency."
   video: https://www.youtube.com/watch?v=lHA8qYbLiac
   link_web: https://ieeexplore.ieee.org/document/9836202
+  citations: 3
   image: ICUAS_fig.png
   image_mouseover: ICUAS_mini.mp4
   authors:
@@ -395,6 +407,7 @@
   description: "This paper presents an embedded micro loop to enhance the anti-disturbance performance for unmanned aerial vehicles."
   video: https://www.youtube.com/watch?v=jDj2mIrms-A
   link_web: https://ieeexplore.ieee.org/document/8997330
+  citations: 3
   image: CAC_fig.png
   image_mouseover: CAC_mini.mp4
   equal_contri: 2
