@@ -55,7 +55,6 @@
       </div>
       <div class="publication-venue">
         <span>{{ publication.venue }}</span>
-        <span class="citation-badge" data-title="{{ publication.title | escape }}"{% if publication.arxiv %} data-arxiv="{{ publication.arxiv }}"{% endif %}{% if publication.doi %} data-doi="{{ publication.doi }}"{% endif %}{% if publication.citations %} data-citations="{{ publication.citations }}"{% endif %}></span>
       </div>
       {% if publication.awards %}
       <div class="publication-awards-row">
