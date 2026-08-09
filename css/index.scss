@@ -78,6 +78,100 @@
 }
 
 
+.talks-section {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
+.talks-list {
+    list-style: none;
+    margin: 0.75em 0 0;
+    padding: 0;
+}
+
+.talk-item {
+    display: flex;
+    align-items: baseline;
+    gap: 0.9em;
+    padding: 0.7em 0;
+    border-bottom: 1px solid #eef0f3;
+}
+
+.talk-item:last-child {
+    border-bottom: none;
+}
+
+.talk-type {
+    flex: 0 0 auto;
+    display: inline-block;
+    min-width: 6.2em;
+    text-align: center;
+    font-family: 'Google Sans', 'Noto Sans', sans-serif;
+    font-size: 70%;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #fff;
+    background: #1e3a5f;
+    border-radius: 0.35em;
+    padding: 0.3em 0.6em;
+    position: relative;
+    top: -0.1em;
+}
+
+.talk-type-interview {
+    background: #0e7490;
+}
+
+.talk-type-invited-talk {
+    background: #1e3a5f;
+}
+
+.talk-body {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15em;
+    min-width: 0;
+}
+
+.talk-title {
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+a.talk-title:hover {
+    color: #1e3a5f;
+    text-decoration: underline;
+}
+
+.talk-host {
+    color: #666;
+    font-size: 90%;
+}
+
+.talk-date {
+    flex: 0 0 auto;
+    color: #888;
+    font-size: 88%;
+    white-space: nowrap;
+}
+
+@media (max-width: 600px) {
+    .talk-item {
+        flex-wrap: wrap;
+        gap: 0.4em 0.7em;
+    }
+    .talk-body {
+        flex-basis: 100%;
+        order: 3;
+    }
+    .talk-date {
+        margin-left: auto;
+    }
+}
+
+
 .platforms-section {
     padding-top: 2rem;
     padding-bottom: 4.5rem;

@@ -300,6 +300,35 @@ layout: null
     </div>
   </section>
 
+  <!-- Talks & Media. -->
+  <div class="hr">
+    <div class="container">
+      <hr>
+    </div>
+  </div>
+
+  <section class="section talks-section">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3">Talks &amp; Media</h2>
+      <ul class="talks-list">
+        {% for talk in site.data.talks %}
+        <li class="talk-item">
+          <span class="talk-type talk-type-{{ talk.type | slugify }}">{{ talk.type }}</span>
+          <span class="talk-body">
+            {% if talk.link %}
+            <a class="talk-title" href="{{ talk.link }}" target="_blank" rel="noopener">{{ talk.title }}</a>
+            {% else %}
+            <span class="talk-title">{{ talk.title }}</span>
+            {% endif %}
+            <span class="talk-host">{{ talk.host }}</span>
+          </span>
+          <span class="talk-date">{{ talk.date }}</span>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </section>
+
   <!-- Research Interests. -->
   <div class="hr">
     <div class="container">
