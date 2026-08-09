@@ -1,6 +1,6 @@
 - title: "Robopapers Podcast"
   type: Interview
-  host: Guest interview on efficient robot policy learning
+  host: Guest interview on A2A policy
   date: Aug 2026
   link: https://www.youtube.com/watch?v=5K2V6MWv3i0&t=2475s
 
@@ -9,8 +9,8 @@
   host: "Efficient robot policy learning &middot; SIMTech &amp; ARTC, Singapore"
   date: Jun 2026
 
-- title: "TechBeat (将门创投)"
+- title: "TechBeat"
   type: Interview
-  host: Invited technical talk and interview
+  host: Invited technical talk on feedback neural ODE
   date: Mar 2025
   link: https://www.techbeat.net/talk-info?id=952
