@@ -128,13 +128,16 @@ layout: null
 
       <h2 class="title is-3">News</h2>
       <div class="content">
-        <ul>
+        <ul class="news-list">
           {% for news in site.data.news %}
-          <li>
+          <li{% if forloop.index > 10 %} class="news-extra"{% endif %}>
             <b>{{ news.date }}</b>: {{ news.description | markdownify | remove: '<p>' | remove: '</p>' }}
           </li>
           {% endfor %}
         </ul>
+        {% if site.data.news.size > 10 %}
+        <button type="button" class="news-toggle" aria-expanded="false">Show more</button>
+        {% endif %}
       </div>
 
     </div>

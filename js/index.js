@@ -1,7 +1,20 @@
 $(document).ready(function() {
     setupPublicationFilters();
     setupVideoToggles();
+    setupNewsToggle();
 });
+
+// Expand/collapse News items beyond the first 10.
+function setupNewsToggle() {
+    var btn = document.querySelector('.news-toggle');
+    var list = document.querySelector('.news-list');
+    if (!btn || !list) return;
+    btn.addEventListener('click', function() {
+        var expanded = list.classList.toggle('is-expanded');
+        btn.textContent = expanded ? 'Show less' : 'Show more';
+        btn.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+    });
+}
 
 // Click-to-play preview videos. Each cell with a clip shows a "▶ Video"
 // button; the mp4 is only fetched when the user actually clicks it, so we

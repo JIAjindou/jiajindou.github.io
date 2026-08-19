@@ -78,6 +78,35 @@
 }
 
 
+// News list — extra items past the first 10 stay hidden until expanded.
+.news-list .news-extra {
+    display: none;
+}
+
+.news-list.is-expanded .news-extra {
+    display: list-item;
+}
+
+.news-toggle {
+    margin-top: 0.4em;
+    padding: 0.35em 1em;
+    font-family: 'Google Sans', 'Noto Sans', sans-serif;
+    font-size: 85%;
+    font-weight: 600;
+    color: #1e3a5f;
+    background: #f5f7fa;
+    border: 1px solid #e2e8f0;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.news-toggle:hover {
+    background: #fff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    transform: translateY(-1px);
+}
+
 .talks-section {
     padding-top: 2rem;
     padding-bottom: 2rem;
