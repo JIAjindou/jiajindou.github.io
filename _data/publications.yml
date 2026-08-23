@@ -124,11 +124,10 @@
 
 - id: PhyFilter
   year: 2026
-  preprint: true
   featured: true
   title: "Physics filtering favors the generalization of robot learning"
-  venue: Preprint, 2026
-  venue_short: Preprint
+  venue: npj Robotics (Nature), 2026
+  venue_short: npj Robotics'26
   description: "We propose PhyFilter, which enhances both generalization and interpretability of robot learning. PhyFilter operates by correcting learning outcomes according to readily accessible physical differential structure and real-time state feedback."
   project_page: https://scoardyy.github.io/PhyFilter/
   github: JIAjindou/PhyFilter
@@ -154,11 +153,10 @@
 
 - id: WorldModelSurvey
   year: 2026
-  preprint: true
   zoom_on_hover: true
   title: "World model for robot learning: A comprehensive survey"
-  venue: arXiv, 2026
-  venue_short: arXiv'26
+  venue: The International Journal of Robotics Research (IJRR), 2026
+  venue_short: IJRR'26
   description: "A comprehensive survey of world models for robot learning, covering world models as policies and as simulators across recent literature."
   project_page: https://ntumars.github.io/wm-robot-survey/
   github: NTUMARS/Awesome-World-Model-for-Robotics-Policy
