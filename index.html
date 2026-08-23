@@ -282,12 +282,15 @@ layout: null
       {% if preprints.size > 0 %}
       <div class="pub-section">
         <h3 class="title is-4 year-heading">Preprint</h3>
-        {% for publication in pinned_preprints %}
+        {% assign ordered_preprints = pinned_preprints | concat: unpinned_preprints %}
+        {% for publication in ordered_preprints %}
+          {% if forloop.index == 3 %}<div class="preprint-extra">{% endif %}
           {% include publication_block.html publication=publication %}
+          {% if forloop.last and ordered_preprints.size > 2 %}</div>{% endif %}
         {% endfor %}
-        {% for publication in unpinned_preprints %}
-          {% include publication_block.html publication=publication %}
-        {% endfor %}
+        {% if ordered_preprints.size > 2 %}
+        <button type="button" class="preprint-toggle" aria-expanded="false">Show more</button>
+        {% endif %}
       </div>
       {% endif %}
 

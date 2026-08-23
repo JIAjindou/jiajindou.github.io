@@ -87,7 +87,8 @@
     display: list-item;
 }
 
-.news-toggle {
+.news-toggle,
+.preprint-toggle {
     margin-top: 0.4em;
     padding: 0.35em 1em;
     font-family: 'Google Sans', 'Noto Sans', sans-serif;
@@ -101,10 +102,20 @@
     transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
 
-.news-toggle:hover {
+.news-toggle:hover,
+.preprint-toggle:hover {
     background: #fff;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
     transform: translateY(-1px);
+}
+
+// Preprint entries past the first two stay hidden until expanded.
+.preprint-extra {
+    display: none;
+}
+
+.preprint-extra.is-expanded {
+    display: block;
 }
 
 .talks-section {

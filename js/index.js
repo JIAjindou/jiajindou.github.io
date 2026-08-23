@@ -2,7 +2,20 @@ $(document).ready(function() {
     setupPublicationFilters();
     setupVideoToggles();
     setupNewsToggle();
+    setupPreprintToggle();
 });
+
+// Expand/collapse Preprint entries beyond the first two.
+function setupPreprintToggle() {
+    var btn = document.querySelector('.preprint-toggle');
+    var extra = document.querySelector('.preprint-extra');
+    if (!btn || !extra) return;
+    btn.addEventListener('click', function() {
+        var expanded = extra.classList.toggle('is-expanded');
+        btn.textContent = expanded ? 'Show less' : 'Show more';
+        btn.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+    });
+}
 
 // Expand/collapse News items beyond the first 10.
 function setupNewsToggle() {
@@ -148,6 +161,15 @@ function setupPublicationFilters() {
             buttons.forEach(function(b) { b.classList.remove('is-active'); });
             btn.classList.add('is-active');
             applyFilter(btn.dataset.filter);
+            // Reveal collapsed preprints so filtering shows every match,
+            // not just the first two.
+            var extra = document.querySelector('.preprint-extra');
+            var moreBtn = document.querySelector('.preprint-toggle');
+            if (extra) extra.classList.add('is-expanded');
+            if (moreBtn) {
+                moreBtn.textContent = 'Show less';
+                moreBtn.setAttribute('aria-expanded', 'true');
+            }
         });
     });
 }
