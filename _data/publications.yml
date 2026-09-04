@@ -1,9 +1,8 @@
 - id: ADAPT
   year: 2026
-  preprint: true
   title: "ADAPT: Analytical disturbance-aware policy training for humanoid locomotion"
-  venue: arXiv, 2026
-  venue_short: arXiv'26
+  venue: Conference on Robot Learning (CoRL), 2026
+  venue_short: CoRL'26
   description: "We present ADAPT, an analytical disturbance-aware framework for humanoid locomotion that infers joint-level external disturbances from robot dynamics and proprioception alone, without specialized sensors, and feeds them back into policy training for robustness to pushes, payloads, and impacts."
   project_page: https://blyu413.github.io/adapt-locomotion/
   image: ADAPT_fig.png
@@ -129,6 +128,7 @@
   venue: npj Robotics (Nature), 2026
   venue_short: npj Robotics'26
   description: "We propose PhyFilter, which enhances both generalization and interpretability of robot learning. PhyFilter operates by correcting learning outcomes according to readily accessible physical differential structure and real-time state feedback."
+  link_web: https://www.nature.com/articles/s44182-026-00114-y
   project_page: https://scoardyy.github.io/PhyFilter/
   github: JIAjindou/PhyFilter
   image: PhyFilter_fig.png
