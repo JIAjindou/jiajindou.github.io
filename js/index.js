@@ -3,7 +3,86 @@ $(document).ready(function() {
     setupVideoToggles();
     setupNewsToggle();
     setupPreprintToggle();
+    pingVisitor();
+    setupVisitorGlobe();
 });
+
+// Record this visit with the Cloudflare Worker (once per browser session).
+// The Worker reads the visitor's approximate lat/lon from Cloudflare's edge
+// (request.cf) — no data is sent from the page itself.
+function pingVisitor() {
+    var url = window.VISITOR_WORKER_URL;
+    if (!url) return;
+    try { if (sessionStorage.getItem('mv_pinged')) return; } catch (e) {}
+    fetch(url.replace(/\/$/, '') + '/collect', { method: 'POST', mode: 'cors', keepalive: true }).catch(function () {});
+    try { sessionStorage.setItem('mv_pinged', '1'); } catch (e) {}
+}
+
+// "Where are my visitors?" — a collapsed 3D globe that lazy-loads globe.gl
+// and the aggregated visitor points only when the button is first clicked.
+function setupVisitorGlobe() {
+    var url = window.VISITOR_WORKER_URL;
+    var btn = document.getElementById('globe-toggle');
+    var box = document.getElementById('globe-box');
+    if (!url || !btn || !box) return;
+    var loaded = false, world = null;
+
+    function sizeGlobe() {
+        if (world) { world.width(box.clientWidth).height(box.clientHeight); }
+    }
+
+    btn.addEventListener('click', function () {
+        if (!box.hidden) {
+            box.hidden = true;
+            btn.setAttribute('aria-expanded', 'false');
+            btn.textContent = '🌍 Where are my visitors?';
+            return;
+        }
+        box.hidden = false;
+        btn.setAttribute('aria-expanded', 'true');
+        btn.textContent = '✕ Hide visitor map';
+        if (loaded) { sizeGlobe(); return; }
+        loaded = true;
+        box.innerHTML = '<p class="globe-loading">Loading globe…</p>';
+
+        loadScript('https://cdn.jsdelivr.net/npm/globe.gl@2/dist/globe.gl.min.js', function () {
+            box.innerHTML = '';
+            world = Globe()(box)
+                .backgroundColor('rgba(0,0,0,0)')
+                .globeImageUrl('https://cdn.jsdelivr.net/npm/three-globe/example/img/earth-night.jpg')
+                .pointsMerge(true)
+                .pointAltitude(function (d) { return Math.min(0.04 + Math.log(d.count + 1) * 0.03, 0.4); })
+                .pointColor(function () { return '#12b5b0'; })
+                .pointRadius(0.55)
+                .pointLabel(function (d) { return (d.city ? d.city + ', ' : '') + (d.country || '') + ' — ' + d.count + (d.count > 1 ? ' visits' : ' visit'); });
+            sizeGlobe();
+            world.controls().autoRotate = true;
+            world.controls().autoRotateSpeed = 0.6;
+
+            fetch(url.replace(/\/$/, '') + '/points', { mode: 'cors' })
+                .then(function (r) { return r.ok ? r.json() : []; })
+                .then(function (pts) {
+                    world.pointsData((pts || []).map(function (p) {
+                        return { lat: p.lat, lng: p.lon, count: p.count, city: p.city, country: p.country };
+                    }));
+                })
+                .catch(function () {});
+        });
+
+        window.addEventListener('resize', sizeGlobe);
+    });
+}
+
+function loadScript(src, cb) {
+    var s = document.createElement('script');
+    s.src = src;
+    s.onload = cb;
+    s.onerror = function () {
+        var box = document.getElementById('globe-box');
+        if (box) box.innerHTML = '<p class="globe-loading">Could not load the globe library.</p>';
+    };
+    document.body.appendChild(s);
+}
 
 // Expand/collapse Preprint entries beyond the first two.
 function setupPreprintToggle() {

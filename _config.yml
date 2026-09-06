@@ -37,6 +37,10 @@ google_analytics: # G-MFWSBLRKG0
 # Sign up at https://www.goatcounter.com/ (30 sec), pick a code, then
 # put it here. Leave empty to disable. Example: "jindou"
 goatcounter: jindoujia
+# Cloudflare Worker URL for the visitor globe (no trailing slash).
+# Deploy visitor-worker.js to Cloudflare, then paste the Worker URL here,
+# e.g. https://visitor-globe.<your-subdomain>.workers.dev . Leave empty to disable.
+visitor_worker_url:
 
 # Build settings
 theme: minima

@@ -389,6 +389,48 @@ html { scroll-behavior: smooth; }
 // GoatCounter total-views badge. Sits above ClustrMaps in the footer
 // right column and gives a privacy-friendly fallback when ClustrMaps
 // (still wired up) fails to load on the visitor's side.
+// "Where are my visitors?" collapsible 3D globe.
+.visitor-globe-wrap {
+    margin-top: 1.25rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.globe-toggle {
+    padding: 0.4em 1.1em;
+    font-family: 'Google Sans', 'Noto Sans', sans-serif;
+    font-size: 88%;
+    font-weight: 600;
+    color: #0e7490;
+    background: #cffafe;
+    border: none;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.globe-toggle:hover {
+    background: #a5f3fc;
+    box-shadow: 0 4px 12px rgba(14, 116, 144, 0.18);
+    transform: translateY(-1px);
+}
+
+.globe-box {
+    width: 100%;
+    max-width: 520px;
+    height: 420px;
+    margin: 1rem auto 0;
+
+    canvas { display: block; margin: 0 auto; }
+}
+
+.globe-loading {
+    color: #888;
+    font-size: 90%;
+    text-align: center;
+    padding-top: 2.5rem;
+}
+
 .visitor-counter {
     display: inline-block;
     margin-bottom: 0.5rem;
