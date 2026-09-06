@@ -399,20 +399,13 @@ layout: null
             </p>
           </div>
         </div>
-        <div class="column is-4 has-text-right">
-          {% if site.goatcounter %}
-          <div class="visitor-counter">
-            <a href="https://{{ site.goatcounter }}.goatcounter.com" target="_blank" rel="noopener" title="Visitor stats on GoatCounter">
-              <img src="https://{{ site.goatcounter }}.goatcounter.com/counter/TOTAL.svg" alt="Total page views" />
-            </a>
-          </div>
-          {% endif %}
-        </div>
+        <div class="column is-4 has-text-right"></div>
       </div>
 
       {% if site.visitor_worker_url %}
       <div class="visitor-globe-wrap has-text-centered">
         <button type="button" id="globe-toggle" class="globe-toggle" aria-expanded="false">🌍 Where are my visitors?</button>
+        <p id="globe-stats" class="globe-stats" hidden></p>
         <div id="globe-box" class="globe-box" hidden></div>
       </div>
       {% endif %}

@@ -24,6 +24,7 @@ function setupVisitorGlobe() {
     var url = window.VISITOR_WORKER_URL;
     var btn = document.getElementById('globe-toggle');
     var box = document.getElementById('globe-box');
+    var stats = document.getElementById('globe-stats');
     if (!url || !btn || !box) return;
     var loaded = false, world = null;
 
@@ -34,11 +35,13 @@ function setupVisitorGlobe() {
     btn.addEventListener('click', function () {
         if (!box.hidden) {
             box.hidden = true;
+            if (stats) stats.hidden = true;
             btn.setAttribute('aria-expanded', 'false');
             btn.textContent = '🌍 Where are my visitors?';
             return;
         }
         box.hidden = false;
+        if (stats) stats.hidden = false;
         btn.setAttribute('aria-expanded', 'true');
         btn.textContent = '✕ Hide visitor map';
         if (loaded) { sizeGlobe(); return; }
@@ -49,10 +52,10 @@ function setupVisitorGlobe() {
             box.innerHTML = '';
             world = Globe()(box)
                 .backgroundColor('rgba(0,0,0,0)')
-                .globeImageUrl('https://cdn.jsdelivr.net/npm/three-globe/example/img/earth-night.jpg')
+                .globeImageUrl('https://cdn.jsdelivr.net/npm/three-globe/example/img/earth-blue-marble.jpg')
                 .pointsMerge(true)
                 .pointAltitude(function (d) { return Math.min(0.04 + Math.log(d.count + 1) * 0.03, 0.4); })
-                .pointColor(function () { return '#12b5b0'; })
+                .pointColor(function () { return '#ff4d4f'; })
                 .pointRadius(0.55)
                 .pointLabel(function (d) { return (d.city ? d.city + ', ' : '') + (d.country || '') + ' — ' + d.count + (d.count > 1 ? ' visits' : ' visit'); });
             sizeGlobe();
@@ -62,9 +65,16 @@ function setupVisitorGlobe() {
             fetch(url.replace(/\/$/, '') + '/points', { mode: 'cors' })
                 .then(function (r) { return r.ok ? r.json() : []; })
                 .then(function (pts) {
-                    world.pointsData((pts || []).map(function (p) {
+                    pts = pts || [];
+                    world.pointsData(pts.map(function (p) {
                         return { lat: p.lat, lng: p.lon, count: p.count, city: p.city, country: p.country };
                     }));
+                    if (stats) {
+                        var total = 0;
+                        pts.forEach(function (p) { total += p.count; });
+                        stats.textContent = total + (total === 1 ? ' visit' : ' visits') +
+                            ' from ' + pts.length + (pts.length === 1 ? ' place' : ' places');
+                    }
                 })
                 .catch(function () {});
         });

@@ -415,11 +415,19 @@ html { scroll-behavior: smooth; }
     transform: translateY(-1px);
 }
 
+.globe-stats {
+    margin: 0.75rem 0 0;
+    color: #555;
+    font-family: 'Google Sans', 'Noto Sans', sans-serif;
+    font-size: 92%;
+    font-weight: 600;
+}
+
 .globe-box {
     width: 100%;
     max-width: 520px;
     height: 420px;
-    margin: 1rem auto 0;
+    margin: 0.75rem auto 0;
 
     canvas { display: block; margin: 0 auto; }
 }
