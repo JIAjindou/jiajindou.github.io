@@ -65,6 +65,8 @@ layout: null
 
 <body>
 
+  {% include nav.html active="home" %}
+
   <section class="hero">
     <div class="hero-body container is-max-desktop">
       <div class="columns is-vcentered">
@@ -97,17 +99,6 @@ layout: null
               <a class="external-link button is-light" href="https://www.researchgate.net/profile/Jindou-Jia/research">
                 <span class="icon"><i class="fab fa-researchgate"></i></span>
                 <span>ResearchGate</span>
-              </a>
-
-              <a class="external-link button is-light" href="cv.html">
-                <span class="icon"><i class="fas fa-file"></i></span>
-                <span>CV</span>
-              </a>
-
-              <a class="external-link button is-light"
-                href="https://jiajindou.github.io/files/Research.pdf">
-                <span class="icon"><i class="fas fa-file"></i></span>
-                <span>Research</span>
               </a>
 
               <a class="external-link button is-light"
@@ -264,51 +255,17 @@ layout: null
   <section class="section">
     <div class="container is-max-desktop">
 
-      <h2 class="title is-3">Publications</h2>
+      <h2 class="title is-3">Selected Publications</h2>
       <p class="publications-intro">
-        Showing first, co-first<sup>*</sup>, or corresponding<sup>&dagger;</sup> author papers only.
-        <a class="publications-full-link" href="https://scholar.google.com/citations?user={{ site.google_scholar }}" target="_blank" rel="noopener">
-          Full list on <i class="ai ai-google-scholar"></i> Google Scholar&nbsp;&rarr;
+        Highlighted first, co-first<sup>*</sup>, or corresponding<sup>&dagger;</sup> author work.
+        <a class="publications-full-link" href="{{ '/publications.html' | relative_url }}">
+          All publications&nbsp;&rarr;
         </a>
       </p>
 
-      {% assign preprints = site.data.publications | where: "preprint", true %}
-      {% assign pinned_preprints = preprints | where: "pinned", true %}
-      {% assign unpinned_preprints = preprints | where_exp: "p", "p.pinned != true" %}
-      {% assign published = site.data.publications | where_exp: "p", "p.preprint != true" %}
       {% assign featured_list = site.data.publications | where: "featured", true %}
-      {% assign publications_by_year = published | group_by: "year" | sort: "name" | reverse %}
-      {% assign total_count = site.data.publications | size %}
-
-      <div class="pub-filters" role="tablist">
-        <button class="pub-filter is-active" data-filter="all" type="button">All <span class="pub-filter-count">({{ total_count }})</span></button>
-        <button class="pub-filter" data-filter="arxiv" type="button">arXiv <span class="pub-filter-count">({{ preprints.size }})</span></button>
-        <button class="pub-filter" data-filter="published" type="button">Published <span class="pub-filter-count">({{ published.size }})</span></button>
-        <button class="pub-filter" data-filter="featured" type="button">Featured <span class="pub-filter-count">({{ featured_list.size }})</span></button>
-      </div>
-
-      {% if preprints.size > 0 %}
-      <div class="pub-section">
-        <h3 class="title is-4 year-heading">Preprint</h3>
-        {% assign ordered_preprints = pinned_preprints | concat: unpinned_preprints %}
-        {% for publication in ordered_preprints %}
-          {% if forloop.index == 3 %}<div class="preprint-extra">{% endif %}
-          {% include publication_block.html publication=publication %}
-          {% if forloop.last and ordered_preprints.size > 2 %}</div>{% endif %}
-        {% endfor %}
-        {% if ordered_preprints.size > 2 %}
-        <button type="button" class="preprint-toggle" aria-expanded="false">Show more</button>
-        {% endif %}
-      </div>
-      {% endif %}
-
-      {% for year_group in publications_by_year %}
-      <div class="pub-section">
-        <h3 class="title is-4 year-heading">{{ year_group.name }}</h3>
-        {% for publication in year_group.items %}
-          {% include publication_block.html publication=publication %}
-        {% endfor %}
-      </div>
+      {% for publication in featured_list %}
+        {% include publication_block.html publication=publication %}
       {% endfor %}
 
     </div>
@@ -340,47 +297,6 @@ layout: null
         </li>
         {% endfor %}
       </ul>
-    </div>
-  </section>
-
-  <!-- Research Interests. -->
-  <div class="hr">
-    <div class="container">
-      <hr>
-    </div>
-  </div>
-
-  <section class="section interests-section">
-    <div class="container is-max-desktop">
-      <h2 class="title is-3">Research Interests</h2>
-      <div class="interests-list">
-        <span class="interest-chip">
-          <i class="fas fa-robot"></i><span>Robot learning</span>
-        </span>
-        <span class="interest-chip">
-          <i class="fas fa-globe-asia"></i><span>World model</span>
-        </span>
-        <span class="interest-chip">
-          <i class="fas fa-magic"></i><span>Generative policy</span>
-        </span>
-        <span class="interest-chip">
-          <i class="fas fa-chart-line"></i><span>Uncertainty prediction</span>
-        </span>
-      </div>
-      <div class="interests-list interests-platforms">
-        <span class="interest-chip">
-          <span class="emoji-icon">🚁</span><span>Drone</span>
-        </span>
-        <span class="interest-chip">
-          <span class="emoji-icon">🐕</span><span>Quadruped robot</span>
-        </span>
-        <span class="interest-chip">
-          <span class="emoji-icon">🦾</span><span>Robotic arm</span>
-        </span>
-        <span class="interest-chip">
-          <span class="emoji-icon">🤖</span><span>Humanoid robot</span>
-        </span>
-      </div>
     </div>
   </section>
 

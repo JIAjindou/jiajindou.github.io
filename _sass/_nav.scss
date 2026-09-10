@@ -1,0 +1,60 @@
+// Shared sticky top navigation (index / publications / cv).
+.site-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+}
+
+.site-nav-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.7rem 1.25rem;
+}
+
+.site-nav-brand {
+    font-family: 'Google Sans', 'Noto Sans', sans-serif;
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: #1a1a1a;
+    text-decoration: none;
+    transition: color 0.2s ease;
+
+    &:hover { color: #1e3a5f; }
+}
+
+.site-nav-links {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.site-nav-links a {
+    font-family: 'Google Sans', 'Noto Sans', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #444;
+    text-decoration: none;
+    padding: 0.15em 0;
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s ease, border-color 0.2s ease;
+
+    &:hover { color: #1e3a5f; }
+
+    &.is-active {
+        color: #1e3a5f;
+        border-bottom-color: #1e3a5f;
+    }
+}
+
+@media (max-width: 520px) {
+    .site-nav-inner {
+        flex-direction: column;
+        gap: 0.45rem;
+        padding: 0.6rem 1rem;
+    }
+    .site-nav-links { gap: 1.1rem; }
+}
