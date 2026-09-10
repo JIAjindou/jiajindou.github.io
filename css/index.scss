@@ -125,9 +125,62 @@
     display: block;
 }
 
-.talks-section {
+.talks-section,
+.service-section {
     padding-top: 2rem;
     padding-bottom: 2rem;
+}
+
+.service-list {
+    list-style: none;
+    margin: 0.75em 0 0;
+    padding: 0;
+}
+
+.service-item {
+    display: flex;
+    align-items: baseline;
+    gap: 0.9em;
+    padding: 0.7em 0;
+    border-bottom: 1px solid #eef0f3;
+}
+
+.service-item:last-child {
+    border-bottom: none;
+}
+
+.service-role {
+    flex: 0 0 auto;
+    min-width: 9.5em;
+    text-align: center;
+    font-family: 'Google Sans', 'Noto Sans', sans-serif;
+    font-size: 70%;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #fff;
+    background: #1e3a5f;
+    border-radius: 0.35em;
+    padding: 0.3em 0.6em;
+    position: relative;
+    top: -0.1em;
+}
+
+.service-role-associate-editor {
+    background: #c0392b;
+}
+
+.service-venue {
+    flex: 1 1 auto;
+    color: #333;
+    min-width: 0;
+}
+
+@media (max-width: 600px) {
+    .service-item {
+        flex-direction: column;
+        gap: 0.35em;
+    }
 }
 
 .talks-list {

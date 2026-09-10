@@ -384,6 +384,27 @@ layout: null
     </div>
   </section>
 
+  <!-- Professional Service. -->
+  <div class="hr">
+    <div class="container">
+      <hr>
+    </div>
+  </div>
+
+  <section class="section service-section">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3">Professional Service</h2>
+      <ul class="service-list">
+        {% for s in site.data.service %}
+        <li class="service-item">
+          <span class="service-role service-role-{{ s.role | slugify }}">{{ s.role }}</span>
+          <span class="service-venue">{{ s.venue }}</span>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </section>
+
   <footer class="footer">
     <div class="container">
       <div class="content footer-links has-text-centered">
