@@ -168,9 +168,9 @@ function setupVisitorGlobe() {
                         .hexPolygonMargin(0.32)
                         .hexPolygonUseDots(true)
                         .hexPolygonColor(function () { return 'rgba(38,88,148,0.8)'; })
-                        .pointAltitude(function (d) { return Math.min(0.04 + Math.log(d.count + 1) * 0.03, 0.4); })
+                        .pointAltitude(0.01)
                         .pointColor(function () { return '#ff4d4f'; })
-                        .pointRadius(0.5)
+                        .pointRadius(function (d) { return Math.min(0.35 + Math.log(d.count + 1) * 0.28, 1.6); })
                         .pointLabel(function (d) { return (d.city ? d.city + ', ' : '') + (d.country || '') + ' — ' + d.count + (d.count > 1 ? ' visits' : ' visit'); });
 
                     var m = world.globeMaterial();
