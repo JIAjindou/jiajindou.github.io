@@ -264,7 +264,9 @@ function renderPublicStats(agg, pts, stats) {
     var places = pts.length;
     var html = '<div class="vstat-summary">' + totalVisits + (totalVisits === 1 ? ' visit' : ' visits') +
         ' &middot; ' + places + ' place' + (places === 1 ? '' : 's') + '</div>';
-    if (agg) {
+    // The detailed breakdown only shows on the dedicated /visitors.html page;
+    // the homepage keeps just the one-line summary under the globe.
+    if (agg && document.body.getAttribute('data-globe-page') === '1') {
         html += '<div class="vstat-cols">' +
             vstatCol('Top countries', vstatTop(agg.countries, 5), true) +
             vstatCol('Top sources', vstatTop(agg.refs, 5), false) +
