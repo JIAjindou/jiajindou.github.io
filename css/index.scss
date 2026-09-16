@@ -501,6 +501,76 @@ html { scroll-behavior: smooth; }
     padding-top: 2.5rem;
 }
 
+// Owner-only visitor log overlay (opened via the #owner hash).
+.owner-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background: rgba(0, 0, 0, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+.owner-card {
+    background: #fff;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 780px;
+    max-height: 82vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+}
+
+.owner-head {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    padding: 0.8rem 1rem;
+    border-bottom: 1px solid #eee;
+    font-family: 'Google Sans', 'Noto Sans', sans-serif;
+
+    span { color: #888; font-weight: 400; font-size: 88%; }
+    .owner-close {
+        margin-left: auto;
+        border: none;
+        background: none;
+        font-size: 1.4rem;
+        line-height: 1;
+        color: #888;
+        cursor: pointer;
+    }
+    .owner-close:hover { color: #1a1a1a; }
+}
+
+.owner-table-wrap { overflow: auto; }
+
+.owner-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+
+    th, td {
+        text-align: left;
+        padding: 0.45em 0.8em;
+        border-bottom: 1px solid #f0f0f0;
+        white-space: nowrap;
+    }
+    th {
+        position: sticky;
+        top: 0;
+        background: #f7f9fb;
+        font-family: 'Google Sans', 'Noto Sans', sans-serif;
+        font-weight: 600;
+        color: #444;
+    }
+    td:nth-child(3) { max-width: 240px; overflow: hidden; text-overflow: ellipsis; }
+    tbody tr:hover { background: #fafbfc; }
+}
+
 .visitor-counter {
     display: inline-block;
     margin-bottom: 0.5rem;

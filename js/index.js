@@ -5,17 +5,88 @@ $(document).ready(function() {
     setupPreprintToggle();
     pingVisitor();
     setupVisitorGlobe();
+    setupOwnerPanel();
 });
 
 // Record this visit with the Cloudflare Worker (once per browser session).
 // The Worker reads the visitor's approximate lat/lon from Cloudflare's edge
-// (request.cf) — no data is sent from the page itself.
+// (request.cf) — the page only sends the referrer (which site linked here).
 function pingVisitor() {
     var url = window.VISITOR_WORKER_URL;
     if (!url) return;
     try { if (sessionStorage.getItem('mv_pinged')) return; } catch (e) {}
-    fetch(url.replace(/\/$/, '') + '/collect', { method: 'POST', mode: 'cors', keepalive: true }).catch(function () {});
+    var ref = '';
+    try { ref = document.referrer || ''; } catch (e) {}
+    fetch(url.replace(/\/$/, '') + '/collect?ref=' + encodeURIComponent(ref),
+        { method: 'POST', mode: 'cors', keepalive: true }).catch(function () {});
     try { sessionStorage.setItem('mv_pinged', '1'); } catch (e) {}
+}
+
+// Owner-only visitor log. Hidden from the public: it only activates when you
+// visit the site with the #owner hash. Prompts for the key set on the Worker,
+// fetches the private detail log, and shows it in an overlay table.
+function setupOwnerPanel() {
+    var url = window.VISITOR_WORKER_URL;
+    if (!url) return;
+    if ((location.hash || '').toLowerCase() !== '#owner') return;
+
+    var key = '';
+    try { key = sessionStorage.getItem('mv_key') || ''; } catch (e) {}
+    if (!key) key = window.prompt('Owner key:') || '';
+    if (!key) return;
+
+    fetch(url.replace(/\/$/, '') + '/log?key=' + encodeURIComponent(key), { mode: 'cors' })
+        .then(function (r) {
+            if (r.status === 401) {
+                try { sessionStorage.removeItem('mv_key'); } catch (e) {}
+                alert('Wrong owner key.');
+                return null;
+            }
+            return r.ok ? r.json() : null;
+        })
+        .then(function (log) {
+            if (!log) return;
+            try { sessionStorage.setItem('mv_key', key); } catch (e) {}
+            renderOwnerLog(log);
+        })
+        .catch(function () {});
+}
+
+function ownerBrowser(ua) {
+    ua = ua || '';
+    if (/Edg\//.test(ua)) return 'Edge';
+    if (/OPR\/|Opera/.test(ua)) return 'Opera';
+    if (/Chrome\//.test(ua)) return 'Chrome';
+    if (/Firefox\//.test(ua)) return 'Firefox';
+    if (/Safari\//.test(ua)) return 'Safari';
+    return 'Other';
+}
+
+function renderOwnerLog(log) {
+    var overlay = document.createElement('div');
+    overlay.className = 'owner-overlay';
+
+    var rows = log.map(function (e) {
+        var t = (e.ts || '').replace('T', ' ').replace(/\..*$/, '').replace('Z', ' UTC');
+        var place = [e.city, e.region, e.country].filter(Boolean).join(', ');
+        var ref = e.ref ? e.ref.replace(/^https?:\/\//, '') : '—';
+        return '<tr><td>' + t + '</td><td>' + (place || '—') + '</td><td>' + ref +
+            '</td><td>' + ownerBrowser(e.ua) + '</td></tr>';
+    }).join('');
+
+    overlay.innerHTML =
+        '<div class="owner-card">' +
+        '<div class="owner-head"><b>Visitor log</b> <span>(' + log.length + ' most recent)</span>' +
+        '<button class="owner-close" type="button">&times;</button></div>' +
+        '<div class="owner-table-wrap"><table class="owner-table"><thead><tr>' +
+        '<th>Time (UTC)</th><th>Location</th><th>From</th><th>Browser</th>' +
+        '</tr></thead><tbody>' + (rows || '<tr><td colspan="4">No records yet.</td></tr>') +
+        '</tbody></table></div></div>';
+
+    function close() { overlay.remove(); if (location.hash) history.replaceState(null, '', location.pathname); }
+    overlay.addEventListener('click', function (e) { if (e.target === overlay) close(); });
+    overlay.querySelector('.owner-close').addEventListener('click', close);
+    document.body.appendChild(overlay);
 }
 
 // "Where are my visitors?" — a collapsed 3D globe that lazy-loads globe.gl
