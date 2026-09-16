@@ -6,6 +6,7 @@ $(document).ready(function() {
     pingVisitor();
     setupVisitorGlobe();
     setupOwnerPanel();
+    window.addEventListener('hashchange', setupOwnerPanel);
 });
 
 // Record this visit with the Cloudflare Worker (once per browser session).
@@ -22,19 +23,24 @@ function pingVisitor() {
     try { sessionStorage.setItem('mv_pinged', '1'); } catch (e) {}
 }
 
-// Owner-only visitor log. Hidden from the public: it only activates when you
-// visit the site with the #owner hash. Prompts for the key set on the Worker,
-// fetches the private detail log, and shows it in an overlay table.
+// Owner-only visitor log. Hidden from the public: only activates when you
+// visit the site with the #owner hash. Prompts for the Worker key, then
+// shows the private detail log inline on the page (not a modal).
 function setupOwnerPanel() {
     var url = window.VISITOR_WORKER_URL;
     if (!url) return;
     if ((location.hash || '').toLowerCase() !== '#owner') return;
+    if (document.getElementById('owner-panel')) return;
 
     var key = '';
     try { key = sessionStorage.getItem('mv_key') || ''; } catch (e) {}
     if (!key) key = window.prompt('Owner key:') || '';
     if (!key) return;
+    fetchOwnerLog(key);
+}
 
+function fetchOwnerLog(key) {
+    var url = window.VISITOR_WORKER_URL;
     fetch(url.replace(/\/$/, '') + '/log?key=' + encodeURIComponent(key), { mode: 'cors' })
         .then(function (r) {
             if (r.status === 401) {
@@ -47,7 +53,7 @@ function setupOwnerPanel() {
         .then(function (log) {
             if (!log) return;
             try { sessionStorage.setItem('mv_key', key); } catch (e) {}
-            renderOwnerLog(log);
+            renderOwnerLog(log, key);
         })
         .catch(function () {});
 }
@@ -62,9 +68,9 @@ function ownerBrowser(ua) {
     return 'Other';
 }
 
-function renderOwnerLog(log) {
-    var overlay = document.createElement('div');
-    overlay.className = 'owner-overlay';
+function renderOwnerLog(log, key) {
+    var old = document.getElementById('owner-panel');
+    if (old) old.remove();
 
     var rows = log.map(function (e) {
         var t = (e.ts || '').replace('T', ' ').replace(/\..*$/, '').replace('Z', ' UTC');
@@ -74,19 +80,31 @@ function renderOwnerLog(log) {
             '</td><td>' + ownerBrowser(e.ua) + '</td></tr>';
     }).join('');
 
-    overlay.innerHTML =
-        '<div class="owner-card">' +
+    var sec = document.createElement('section');
+    sec.id = 'owner-panel';
+    sec.className = 'owner-panel';
+    sec.innerHTML =
+        '<div class="container is-max-desktop"><div class="owner-card">' +
         '<div class="owner-head"><b>Visitor log</b> <span>(' + log.length + ' most recent)</span>' +
-        '<button class="owner-close" type="button">&times;</button></div>' +
+        '<button class="owner-refresh" type="button">Refresh</button>' +
+        '<button class="owner-close" type="button">Close</button></div>' +
         '<div class="owner-table-wrap"><table class="owner-table"><thead><tr>' +
         '<th>Time (UTC)</th><th>Location</th><th>From</th><th>Browser</th>' +
         '</tr></thead><tbody>' + (rows || '<tr><td colspan="4">No records yet.</td></tr>') +
-        '</tbody></table></div></div>';
+        '</tbody></table></div></div></div>';
 
-    function close() { overlay.remove(); if (location.hash) history.replaceState(null, '', location.pathname); }
-    overlay.addEventListener('click', function (e) { if (e.target === overlay) close(); });
-    overlay.querySelector('.owner-close').addEventListener('click', close);
-    document.body.appendChild(overlay);
+    var nav = document.querySelector('.site-nav');
+    if (nav && nav.parentNode) nav.parentNode.insertBefore(sec, nav.nextSibling);
+    else document.body.insertBefore(sec, document.body.firstChild);
+    sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    sec.querySelector('.owner-close').addEventListener('click', function () {
+        sec.remove();
+        if (location.hash) history.replaceState(null, '', location.pathname);
+    });
+    sec.querySelector('.owner-refresh').addEventListener('click', function () {
+        fetchOwnerLog(key);
+    });
 }
 
 // "Where are my visitors?" — a collapsed 3D globe that lazy-loads globe.gl
