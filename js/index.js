@@ -50,36 +50,61 @@ function setupVisitorGlobe() {
 
         loadScript('/js/globe.gl.min.js', function () {
             box.innerHTML = '';
-            world = Globe()(box)
-                .backgroundColor('rgba(0,0,0,0)')
-                .globeImageUrl('/images/earth-blue-marble.jpg')
-                .pointsMerge(true)
-                .pointAltitude(function (d) { return Math.min(0.04 + Math.log(d.count + 1) * 0.03, 0.4); })
-                .pointColor(function () { return '#ff4d4f'; })
-                .pointRadius(0.55)
-                .pointLabel(function (d) { return (d.city ? d.city + ', ' : '') + (d.country || '') + ' — ' + d.count + (d.count > 1 ? ' visits' : ' visit'); });
-            sizeGlobe();
-            world.controls().autoRotate = true;
-            world.controls().autoRotateSpeed = 0.6;
+            // Vendor-only, no external CDN/texture (works in mainland China):
+            // a flat light-blue sphere with dotted continents (hex polygons),
+            // graticules and atmosphere — plus our own city-level visitor dots.
+            fetch('/data/countries.geojson')
+                .then(function (r) { return r.ok ? r.json() : { features: [] }; })
+                .catch(function () { return { features: [] }; })
+                .then(function (countries) {
+                    world = Globe()(box)
+                        .backgroundColor('rgba(0,0,0,0)')
+                        .globeImageUrl(null)
+                        .showGraticules(true)
+                        .showAtmosphere(true)
+                        .atmosphereColor('#acd6ef')
+                        .atmosphereAltitude(0.2)
+                        .hexPolygonsData((countries && countries.features) || [])
+                        .hexPolygonResolution(3)
+                        .hexPolygonMargin(0.32)
+                        .hexPolygonUseDots(true)
+                        .hexPolygonColor(function () { return 'rgba(38,88,148,0.8)'; })
+                        .pointAltitude(function (d) { return Math.min(0.04 + Math.log(d.count + 1) * 0.03, 0.4); })
+                        .pointColor(function () { return '#ff4d4f'; })
+                        .pointRadius(0.5)
+                        .pointLabel(function (d) { return (d.city ? d.city + ', ' : '') + (d.country || '') + ' — ' + d.count + (d.count > 1 ? ' visits' : ' visit'); });
 
-            fetch(url.replace(/\/$/, '') + '/points', { mode: 'cors' })
-                .then(function (r) { return r.ok ? r.json() : []; })
-                .then(function (pts) {
-                    pts = pts || [];
-                    world.pointsData(pts.map(function (p) {
-                        return { lat: p.lat, lng: p.lon, count: p.count, city: p.city, country: p.country };
-                    }));
-                    if (stats) {
-                        var total = 0;
-                        pts.forEach(function (p) { total += p.count; });
-                        stats.textContent = total + (total === 1 ? ' visit' : ' visits') +
-                            ' from ' + pts.length + (pts.length === 1 ? ' place' : ' places');
-                    }
-                })
-                .catch(function () {});
+                    // Light-blue ocean sphere (mutate the existing material).
+                    var m = world.globeMaterial();
+                    m.color.set('#cfe7f5');
+                    m.emissive.set('#2e6bb0');
+                    m.emissiveIntensity = 0.10;
+                    m.shininess = 6;
+
+                    sizeGlobe();
+                    var c = world.controls();
+                    c.autoRotate = true;
+                    c.autoRotateSpeed = 0.7;
+                    c.enableZoom = false;
+                    window.addEventListener('resize', sizeGlobe);
+
+                    fetch(url.replace(/\/$/, '') + '/points', { mode: 'cors' })
+                        .then(function (r) { return r.ok ? r.json() : []; })
+                        .then(function (pts) {
+                            pts = pts || [];
+                            world.pointsData(pts.map(function (p) {
+                                return { lat: p.lat, lng: p.lon, count: p.count, city: p.city, country: p.country };
+                            }));
+                            if (stats) {
+                                var total = 0;
+                                pts.forEach(function (p) { total += p.count; });
+                                stats.textContent = total + (total === 1 ? ' visit' : ' visits') +
+                                    ' from ' + pts.length + (pts.length === 1 ? ' place' : ' places');
+                            }
+                        })
+                        .catch(function () {});
+                });
         });
-
-        window.addEventListener('resize', sizeGlobe);
     });
 }
 
