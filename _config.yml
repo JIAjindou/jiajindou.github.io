@@ -40,7 +40,7 @@ goatcounter: jindoujia
 # Cloudflare Worker URL for the visitor globe (no trailing slash).
 # Deploy visitor-worker.js to Cloudflare, then paste the Worker URL here,
 # e.g. https://visitor-globe.<your-subdomain>.workers.dev . Leave empty to disable.
-visitor_worker_url: https://visitor-globe.jdjia0508.workers.dev
+visitor_worker_url: https://stats.jiajindou.com
 
 # Build settings
 theme: minima
