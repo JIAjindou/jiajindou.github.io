@@ -177,21 +177,18 @@ function setupVisitorGlobe() {
                     c.enableZoom = false;
                     window.addEventListener('resize', sizeGlobe);
 
-                    fetch(url.replace(/\/$/, '') + '/points', { mode: 'cors' })
-                        .then(function (r) { return r.ok ? r.json() : []; })
-                        .then(function (pts) {
-                            pts = pts || [];
-                            world.pointsData(pts.map(function (p) {
-                                return { lat: p.lat, lng: p.lon, count: p.count, city: p.city, country: p.country };
-                            }));
-                            if (stats) {
-                                var total = 0;
-                                pts.forEach(function (p) { total += p.count; });
-                                stats.textContent = total + (total === 1 ? ' visit' : ' visits') +
-                                    ' from ' + pts.length + (pts.length === 1 ? ' place' : ' places');
-                            }
-                        })
-                        .catch(function () {});
+                    var base = url.replace(/\/$/, '');
+                    Promise.all([
+                        fetch(base + '/points', { mode: 'cors' }).then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; }),
+                        fetch(base + '/stats', { mode: 'cors' }).then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; })
+                    ]).then(function (res) {
+                        var pts = res[0] || [];
+                        var agg = res[1];
+                        world.pointsData(pts.map(function (p) {
+                            return { lat: p.lat, lng: p.lon, count: p.count, city: p.city, country: p.country };
+                        }));
+                        renderPublicStats(agg, pts, stats);
+                    });
                 });
         });
     });
@@ -206,6 +203,46 @@ function loadScript(src, cb) {
         if (box) box.innerHTML = '<p class="globe-loading">Could not load the globe library.</p>';
     };
     document.body.appendChild(s);
+}
+
+// Public visitor analytics shown under the globe: total, top countries,
+// top referrers, browser split. All aggregate (no PII).
+function vstatTop(obj, n) {
+    obj = obj || {};
+    return Object.keys(obj).map(function (k) { return [k, obj[k]]; })
+        .sort(function (a, b) { return b[1] - a[1]; }).slice(0, n);
+}
+
+function vstatFlag(cc) {
+    if (!cc || cc.length !== 2) return '';
+    return String.fromCodePoint.apply(null, cc.toUpperCase().split('').map(function (c) {
+        return 127397 + c.charCodeAt(0);
+    }));
+}
+
+function vstatCol(title, rows, isCountry) {
+    var items = rows.map(function (r) {
+        var label = isCountry ? (vstatFlag(r[0]) + ' ' + r[0]) : r[0];
+        return '<li><span>' + label + '</span><b>' + r[1] + '</b></li>';
+    }).join('') || '<li class="vstat-empty">—</li>';
+    return '<div class="vstat-col"><h4>' + title + '</h4><ul>' + items + '</ul></div>';
+}
+
+function renderPublicStats(agg, pts, stats) {
+    if (!stats) return;
+    var totalVisits = (agg && agg.total) ? agg.total :
+        pts.reduce(function (a, p) { return a + (p.count || 0); }, 0);
+    var places = pts.length;
+    var html = '<div class="vstat-summary">' + totalVisits + (totalVisits === 1 ? ' visit' : ' visits') +
+        ' &middot; ' + places + ' place' + (places === 1 ? '' : 's') + '</div>';
+    if (agg) {
+        html += '<div class="vstat-cols">' +
+            vstatCol('Top countries', vstatTop(agg.countries, 5), true) +
+            vstatCol('Top sources', vstatTop(agg.refs, 5), false) +
+            vstatCol('Browsers', vstatTop(agg.browsers, 5), false) +
+            '</div>';
+    }
+    stats.innerHTML = html;
 }
 
 // Expand/collapse Preprint entries beyond the first two.

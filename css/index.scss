@@ -478,11 +478,52 @@ html { scroll-behavior: smooth; }
 }
 
 .globe-stats {
-    margin: 0.75rem 0 0;
+    margin: 0.75rem auto 0;
+    max-width: 520px;
     color: #555;
     font-family: 'Google Sans', 'Noto Sans', sans-serif;
-    font-size: 92%;
+}
+
+.vstat-summary {
+    font-size: 95%;
     font-weight: 600;
+    margin-bottom: 0.9em;
+}
+
+.vstat-cols {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+    text-align: left;
+}
+
+.vstat-col {
+    flex: 1 1 140px;
+    min-width: 130px;
+
+    h4 {
+        margin: 0 0 0.4em;
+        font-size: 72%;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: #1e3a5f;
+    }
+    ul { list-style: none; margin: 0; padding: 0; }
+    li {
+        display: flex;
+        justify-content: space-between;
+        gap: 0.6em;
+        font-size: 84%;
+        font-weight: 400;
+        color: #444;
+        padding: 0.15em 0;
+        border-bottom: 1px solid #f0f2f5;
+    }
+    li span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    li b { color: #1e3a5f; }
+    .vstat-empty { justify-content: center; color: #aaa; }
 }
 
 .globe-box {
