@@ -259,18 +259,25 @@ function vstatCol(title, rows, isCountry) {
 
 function renderPublicStats(agg, pts, stats) {
     if (!stats) return;
-    var totalVisits = (agg && agg.total) ? agg.total :
-        pts.reduce(function (a, p) { return a + (p.count || 0); }, 0);
+    // Total + country breakdown come from `points`, which holds the FULL
+    // history (each city bucket keeps its cumulative count). Referrers and
+    // browsers come from `agg`, which only accrues after the Worker upgrade.
+    var totalVisits = pts.reduce(function (a, p) { return a + (p.count || 0); }, 0);
     var places = pts.length;
+    var byCountry = {};
+    pts.forEach(function (p) {
+        if (p.country) byCountry[p.country] = (byCountry[p.country] || 0) + (p.count || 0);
+    });
+
     var html = '<div class="vstat-summary">' + totalVisits + (totalVisits === 1 ? ' visit' : ' visits') +
         ' &middot; ' + places + ' place' + (places === 1 ? '' : 's') + '</div>';
     // The detailed breakdown only shows on the dedicated /visitors.html page;
     // the homepage keeps just the one-line summary under the globe.
-    if (agg && document.body.getAttribute('data-globe-page') === '1') {
+    if (document.body.getAttribute('data-globe-page') === '1') {
         html += '<div class="vstat-cols">' +
-            vstatCol('Top countries', vstatTop(agg.countries, 5), true) +
-            vstatCol('Top sources', vstatTop(agg.refs, 5), false) +
-            vstatCol('Browsers', vstatTop(agg.browsers, 5), false) +
+            vstatCol('Top countries', vstatTop(byCountry, 5), true) +
+            vstatCol('Top sources', vstatTop(agg && agg.refs, 5), false) +
+            vstatCol('Browsers', vstatTop(agg && agg.browsers, 5), false) +
             '</div>';
     }
     stats.innerHTML = html;
