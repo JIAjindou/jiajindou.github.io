@@ -275,7 +275,7 @@ function renderPublicStats(agg, pts, stats) {
     // the homepage keeps just the one-line summary under the globe.
     if (document.body.getAttribute('data-globe-page') === '1') {
         html += '<div class="vstat-cols">' +
-            vstatCol('Top countries', vstatTop(byCountry, 5), true) +
+            vstatCol('Countries', vstatTop(byCountry, Infinity), true) +
             vstatCol('Top sources', vstatTop(agg && agg.refs, 5), false) +
             vstatCol('Browsers', vstatTop(agg && agg.browsers, 5), false) +
             '</div>';
