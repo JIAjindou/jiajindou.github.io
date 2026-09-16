@@ -48,11 +48,11 @@ function setupVisitorGlobe() {
         loaded = true;
         box.innerHTML = '<p class="globe-loading">Loading globe…</p>';
 
-        loadScript('https://cdn.jsdelivr.net/npm/globe.gl@2/dist/globe.gl.min.js', function () {
+        loadScript('/js/globe.gl.min.js', function () {
             box.innerHTML = '';
             world = Globe()(box)
                 .backgroundColor('rgba(0,0,0,0)')
-                .globeImageUrl('https://cdn.jsdelivr.net/npm/three-globe/example/img/earth-blue-marble.jpg')
+                .globeImageUrl('/images/earth-blue-marble.jpg')
                 .pointsMerge(true)
                 .pointAltitude(function (d) { return Math.min(0.04 + Math.log(d.count + 1) * 0.03, 0.4); })
                 .pointColor(function () { return '#ff4d4f'; })
