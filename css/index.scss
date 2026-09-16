@@ -535,6 +535,21 @@ html { scroll-behavior: smooth; }
     canvas { display: block; margin: 0 auto; }
 }
 
+// Larger globe on the dedicated /visitors.html page.
+.globe-box-lg {
+    max-width: 620px;
+    height: 520px;
+}
+
+.visitors-intro {
+    color: #666;
+    font-size: 95%;
+    margin-top: -0.25em;
+    margin-bottom: 1em;
+}
+
+.visitor-globe-page .globe-stats { margin-top: 1.25rem; }
+
 .globe-loading {
     color: #888;
     font-size: 90%;

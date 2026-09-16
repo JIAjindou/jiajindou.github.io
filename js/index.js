@@ -107,32 +107,42 @@ function renderOwnerLog(log, key) {
     });
 }
 
-// "Where are my visitors?" — a collapsed 3D globe that lazy-loads globe.gl
-// and the aggregated visitor points only when the button is first clicked.
+// "Where are my visitors?" — a 3D globe that lazy-loads globe.gl and the
+// aggregated visitor points. On the homepage it's collapsed behind a button
+// and a tap navigates to the full /visitors.html page; on that page (body
+// data-globe-page="1") it auto-opens and shows the full analytics.
 function setupVisitorGlobe() {
     var url = window.VISITOR_WORKER_URL;
     var btn = document.getElementById('globe-toggle');
     var box = document.getElementById('globe-box');
     var stats = document.getElementById('globe-stats');
-    if (!url || !btn || !box) return;
+    if (!url || !box) return;
+    var isGlobePage = document.body.getAttribute('data-globe-page') === '1';
     var loaded = false, world = null;
 
     function sizeGlobe() {
         if (world) { world.width(box.clientWidth).height(box.clientHeight); }
     }
 
-    btn.addEventListener('click', function () {
-        if (!box.hidden) {
-            box.hidden = true;
-            if (stats) stats.hidden = true;
-            btn.setAttribute('aria-expanded', 'false');
-            btn.textContent = '🌍 Where are my visitors?';
-            return;
-        }
+    function addTapNav() {
+        // Tap (not a rotate-drag) navigates to the full analytics page.
+        box.style.cursor = 'pointer';
+        box.title = 'View full visitor analytics';
+        var dn = null;
+        box.addEventListener('pointerdown', function (e) { dn = { x: e.clientX, y: e.clientY, t: Date.now() }; });
+        box.addEventListener('pointerup', function (e) {
+            if (!dn) return;
+            var moved = Math.abs(e.clientX - dn.x) + Math.abs(e.clientY - dn.y);
+            var quick = Date.now() - dn.t < 400;
+            dn = null;
+            if (moved < 6 && quick) window.location.href = '/visitors.html';
+        });
+    }
+
+    function openGlobe() {
         box.hidden = false;
         if (stats) stats.hidden = false;
-        btn.setAttribute('aria-expanded', 'true');
-        btn.textContent = '✕ Hide visitor map';
+        if (btn) { btn.setAttribute('aria-expanded', 'true'); btn.textContent = '✕ Hide visitor map'; }
         if (loaded) { sizeGlobe(); return; }
         loaded = true;
         box.innerHTML = '<p class="globe-loading">Loading globe…</p>';
@@ -163,7 +173,6 @@ function setupVisitorGlobe() {
                         .pointRadius(0.5)
                         .pointLabel(function (d) { return (d.city ? d.city + ', ' : '') + (d.country || '') + ' — ' + d.count + (d.count > 1 ? ' visits' : ' visit'); });
 
-                    // Light-blue ocean sphere (mutate the existing material).
                     var m = world.globeMaterial();
                     m.color.set('#cfe7f5');
                     m.emissive.set('#2e6bb0');
@@ -176,6 +185,7 @@ function setupVisitorGlobe() {
                     c.autoRotateSpeed = 0.7;
                     c.enableZoom = false;
                     window.addEventListener('resize', sizeGlobe);
+                    if (!isGlobePage) addTapNav();
 
                     var base = url.replace(/\/$/, '');
                     Promise.all([
@@ -191,7 +201,26 @@ function setupVisitorGlobe() {
                     });
                 });
         });
-    });
+    }
+
+    if (btn) {
+        btn.addEventListener('click', function () {
+            if (!box.hidden) {
+                box.hidden = true;
+                if (stats) stats.hidden = true;
+                btn.setAttribute('aria-expanded', 'false');
+                btn.textContent = '🌍 Where are my visitors?';
+                return;
+            }
+            openGlobe();
+        });
+    }
+
+    // Full analytics page: open immediately, hide the toggle button.
+    if (isGlobePage) {
+        if (btn) btn.style.display = 'none';
+        openGlobe();
+    }
 }
 
 function loadScript(src, cb) {
