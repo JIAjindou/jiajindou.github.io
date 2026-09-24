@@ -72,10 +72,9 @@
 
 - id: FWM
   year: 2026
-  preprint: true
   title: "Feedback world model enables precise guidance of diffusion policy"
-  venue: arXiv, 2026
-  venue_short: arXiv'26
+  venue: Conference on Neural Information Processing Systems (NeurIPS), 2026
+  venue_short: NeurIPS'26
   description: "We close the prediction–observation loop in world models with a lightweight feedback state that corrects future predictions online, paired with action-aware guidance to emphasize controllable dimensions, reducing prediction error by up to 76.4% and improving OOD success by 30%."
   project_page: https://lorenzo-0-0.github.io/Feedback_World_Model/
   github: Lorenzo-0-0/Feedback_World_Model
@@ -99,10 +98,9 @@
 
 - id: FLASH
   year: 2026
-  preprint: true
   title: "FLASH: Efficient visuomotor policy via sparse sampling"
-  venue: arXiv, 2026
-  venue_short: arXiv'26
+  venue: Conference on Neural Information Processing Systems (NeurIPS), 2026
+  venue_short: NeurIPS'26
   description: "We present FLASH, an efficient visuomotor policy that replaces iterative denoising with continuous Legendre polynomial trajectories, enabling single-step inference for real-time robot control."
   project_page: https://b1ue-jay.github.io/FLASH/
   github: B1ue-Jay/FLASH
