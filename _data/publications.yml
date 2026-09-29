@@ -157,6 +157,7 @@
   venue: The International Journal of Robotics Research (IJRR), 2026
   venue_short: IJRR'26
   description: "A comprehensive survey of world models for robot learning, covering world models as policies and as simulators across recent literature."
+  link_web: https://journals.sagepub.com/doi/full/10.1177/02783649261488980
   project_page: https://ntumars.github.io/wm-robot-survey/
   github: NTUMARS/Awesome-World-Model-for-Robotics-Policy
   image: WorldModel_fig.png
