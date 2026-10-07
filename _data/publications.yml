@@ -21,6 +21,27 @@
     - geng
     - jianfei
 
+- id: TUCO
+  year: 2026
+  preprint: true
+  title: "TUCO: Curating simulation demonstrations for sim-to-real robot policy co-training"
+  venue: arXiv, 2026
+  venue_short: arXiv'26
+  description: "TUCO curates simulation demonstrations for sim-to-real policy co-training, using influence functions to score each demonstration's trajectory utility and set coverage."
+  image: TUCO_fig.png
+  arxiv: "2610.05407"
+  corresponding_authors:
+    - jindou
+  authors:
+    - ningzhu
+    - mengfei
+    - yikai
+    - zhangyujie
+    - peihao
+    - dongyue
+    - jindou
+    - jianfei
+
 - id: APEX
   year: 2026
   preprint: true
