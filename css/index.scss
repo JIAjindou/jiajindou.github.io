@@ -742,12 +742,13 @@ html { scroll-behavior: smooth; }
 }
 
 .pub-sidebar {
-    flex: 0 0 148px;
+    flex: 0 0 172px;
     position: sticky;
     top: 70px;
     align-self: flex-start;
-    max-height: calc(100vh - 86px);
+    max-height: 58vh;
     overflow-y: auto;
+    padding-right: 6px;
 }
 
 .pub-filter-list {
@@ -756,11 +757,12 @@ html { scroll-behavior: smooth; }
     padding: 0;
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
     gap: 0.28em;
 
     .pub-filter {
-        width: 100%;
         justify-content: flex-start;
+        text-align: left;
     }
 }
 

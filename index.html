@@ -262,33 +262,35 @@ layout: null
 
       <h2 class="title is-3">Publications</h2>
       <p class="publications-intro">
+        All papers below are first, co-first<sup>*</sup>, or corresponding<sup>&dagger;</sup> author work.
         <a class="publications-full-link" href="https://scholar.google.com/citations?user={{ site.google_scholar }}" target="_blank" rel="noopener">
           Full list on <i class="ai ai-google-scholar"></i> Google Scholar&nbsp;&rarr;
         </a>
       </p>
 
-      {%- comment -%} Venue abbreviations in first-appearance order, and the year list. {%- endcomment -%}
-      {% assign venue_keys = "" %}
-      {% for p in site.data.publications %}
-        {% assign vk = p.venue_short | split: "'" | first | strip %}
-        {% unless venue_keys contains vk %}{% assign venue_keys = venue_keys | append: vk | append: "||" %}{% endunless %}
-      {% endfor %}
-      {% assign venue_list = venue_keys | split: "||" %}
+      {%- comment -%} Years (desc) and a manual venue order: journals first, conferences next, arXiv last. {%- endcomment -%}
       {% assign year_list = site.data.publications | map: "year" | uniq | sort | reverse %}
+      {% assign featured_count = site.data.publications | where: "featured", true | size %}
+      {% assign venue_order = "npj Robotics|IJRR|T-RO|ICLR|RSS|R-AL|CoRL|NeurIPS|T-AES|CEP|ICRA|ICUAS|CAC|arXiv" | split: "|" %}
 
       <div class="pub-layout">
         <aside class="pub-sidebar">
           <ul class="pub-filter-list">
-            <li><button type="button" class="pub-filter is-active" data-filter="featured">Featured</button></li>
-
-            <li class="pub-filter-group">By venue</li>
-            {% for v in venue_list %}
-            <li><button type="button" class="pub-filter" data-filter="venue:{{ v }}">{{ v }}</button></li>
-            {% endfor %}
+            <li><button type="button" class="pub-filter is-active" data-filter="featured">Featured <span class="pub-filter-count">({{ featured_count }})</span></button></li>
 
             <li class="pub-filter-group">By year</li>
             {% for y in year_list %}
-            <li><button type="button" class="pub-filter" data-filter="year:{{ y }}">{{ y }}</button></li>
+            {% assign yc = site.data.publications | where: "year", y | size %}
+            <li><button type="button" class="pub-filter" data-filter="year:{{ y }}">{{ y }} <span class="pub-filter-count">({{ yc }})</span></button></li>
+            {% endfor %}
+
+            <li class="pub-filter-group">By venue</li>
+            {% for v in venue_order %}
+            {% assign vc = site.data.publications | where_exp: "p", "p.venue_short contains v" | size %}
+            {% if vc > 0 %}
+            {% if v == "ICLR" %}{% assign vlabel = "ICLR Oral" %}{% else %}{% assign vlabel = v %}{% endif %}
+            <li><button type="button" class="pub-filter" data-filter="venue:{{ v }}">{{ vlabel }} <span class="pub-filter-count">({{ vc }})</span></button></li>
+            {% endif %}
             {% endfor %}
           </ul>
         </aside>
