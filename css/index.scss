@@ -732,6 +732,82 @@ html { scroll-behavior: smooth; }
     font-size: 92%;
 }
 
+// Publications: left filter sidebar + list.
+#publications { scroll-margin-top: 70px; }
+
+.pub-layout {
+    display: flex;
+    gap: 1.75rem;
+    align-items: flex-start;
+}
+
+.pub-sidebar {
+    flex: 0 0 148px;
+    position: sticky;
+    top: 70px;
+    align-self: flex-start;
+    max-height: calc(100vh - 86px);
+    overflow-y: auto;
+}
+
+.pub-filter-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.28em;
+
+    .pub-filter {
+        width: 100%;
+        justify-content: flex-start;
+    }
+}
+
+.pub-filter-group {
+    font-family: 'Google Sans', 'Noto Sans', sans-serif;
+    font-size: 70%;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #9aa5b1;
+    margin: 0.95em 0 0.1em;
+    padding-left: 0.3em;
+}
+
+.pub-list {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.pub-empty {
+    color: #888;
+    font-style: italic;
+    margin-top: 0.5em;
+}
+
+@media (max-width: 768px) {
+    .pub-layout { flex-direction: column; gap: 0.6rem; }
+    .pub-sidebar {
+        position: static;
+        flex: none;
+        width: 100%;
+        max-height: none;
+        overflow: visible;
+    }
+    .pub-filter-list {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 0.4em;
+
+        .pub-filter { width: auto; }
+    }
+    .pub-filter-group {
+        width: 100%;
+        margin: 0.5em 0 0;
+    }
+}
+
 .publications-full-link {
     color: #1e3a5f;
     font-weight: 600;

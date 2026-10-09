@@ -257,20 +257,49 @@ layout: null
     </div>
   </div>
 
-  <section class="section">
+  <section class="section" id="publications">
     <div class="container is-max-desktop">
 
-      <h2 class="title is-3">Selected Publications</h2>
+      <h2 class="title is-3">Publications</h2>
       <p class="publications-intro">
-        <a class="publications-full-link" href="{{ '/publications.html' | relative_url }}">
-          All publications&nbsp;&rarr;
+        <a class="publications-full-link" href="https://scholar.google.com/citations?user={{ site.google_scholar }}" target="_blank" rel="noopener">
+          Full list on <i class="ai ai-google-scholar"></i> Google Scholar&nbsp;&rarr;
         </a>
       </p>
 
-      {% assign featured_list = site.data.publications | where: "featured", true %}
-      {% for publication in featured_list %}
-        {% include publication_block.html publication=publication %}
+      {%- comment -%} Venue abbreviations in first-appearance order, and the year list. {%- endcomment -%}
+      {% assign venue_keys = "" %}
+      {% for p in site.data.publications %}
+        {% assign vk = p.venue_short | split: "'" | first | strip %}
+        {% unless venue_keys contains vk %}{% assign venue_keys = venue_keys | append: vk | append: "||" %}{% endunless %}
       {% endfor %}
+      {% assign venue_list = venue_keys | split: "||" %}
+      {% assign year_list = site.data.publications | map: "year" | uniq | sort | reverse %}
+
+      <div class="pub-layout">
+        <aside class="pub-sidebar">
+          <ul class="pub-filter-list">
+            <li><button type="button" class="pub-filter is-active" data-filter="featured">Featured</button></li>
+
+            <li class="pub-filter-group">By venue</li>
+            {% for v in venue_list %}
+            <li><button type="button" class="pub-filter" data-filter="venue:{{ v }}">{{ v }}</button></li>
+            {% endfor %}
+
+            <li class="pub-filter-group">By year</li>
+            {% for y in year_list %}
+            <li><button type="button" class="pub-filter" data-filter="year:{{ y }}">{{ y }}</button></li>
+            {% endfor %}
+          </ul>
+        </aside>
+
+        <div class="pub-list">
+          {% for publication in site.data.publications %}
+            {% include publication_block.html publication=publication %}
+          {% endfor %}
+          <p class="pub-empty" hidden>No publications in this category.</p>
+        </div>
+      </div>
 
     </div>
   </section>

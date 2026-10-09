@@ -408,30 +408,29 @@ function setupVideoToggles() {
     });
 }
 
-// Publication filter buttons: All / arXiv / Published / Featured.
-// Filter is purely client-side — toggles visibility on .publication-block
-// elements based on the classes they carry (is-preprint, is-published,
-// is-featured), then hides any .pub-section heading whose group ended up
-// empty.
+// Publication sidebar filters. Each button carries a data-filter of
+// "featured", "venue:<abbr>" (e.g. venue:NeurIPS) or "year:<yyyy>".
+// Purely client-side: show/hide .publication-block by its is-featured
+// class or its data-venue / data-year attributes. Defaults to Featured.
 function setupPublicationFilters() {
     var buttons = document.querySelectorAll('.pub-filter');
     if (!buttons.length) return;
+    var empty = document.querySelector('.pub-empty');
 
-    function applyFilter(category) {
+    function applyFilter(filter) {
+        var sep = filter.indexOf(':');
+        var kind = sep === -1 ? filter : filter.slice(0, sep);
+        var val = sep === -1 ? '' : filter.slice(sep + 1);
+        var anyVisible = false;
         document.querySelectorAll('.publication-block').forEach(function(block) {
-            var show = (category === 'all') ||
-                (category === 'arxiv' && block.classList.contains('is-preprint')) ||
-                (category === 'published' && block.classList.contains('is-published')) ||
-                (category === 'featured' && block.classList.contains('is-featured'));
+            var show = (kind === 'featured') ? block.classList.contains('is-featured')
+                : (kind === 'venue') ? block.getAttribute('data-venue') === val
+                : (kind === 'year') ? block.getAttribute('data-year') === val
+                : true;
             block.style.display = show ? '' : 'none';
+            if (show) anyVisible = true;
         });
-        // Hide section wrappers whose group has no visible blocks.
-        document.querySelectorAll('.pub-section').forEach(function(sec) {
-            var blocks = sec.querySelectorAll('.publication-block');
-            var anyVisible = false;
-            blocks.forEach(function(b) { if (b.style.display !== 'none') anyVisible = true; });
-            sec.style.display = anyVisible ? '' : 'none';
-        });
+        if (empty) empty.hidden = anyVisible;
     }
 
     buttons.forEach(function(btn) {
@@ -439,15 +438,9 @@ function setupPublicationFilters() {
             buttons.forEach(function(b) { b.classList.remove('is-active'); });
             btn.classList.add('is-active');
             applyFilter(btn.dataset.filter);
-            // Reveal collapsed preprints so filtering shows every match,
-            // not just the first two.
-            var extra = document.querySelector('.preprint-extra');
-            var moreBtn = document.querySelector('.preprint-toggle');
-            if (extra) extra.classList.add('is-expanded');
-            if (moreBtn) {
-                moreBtn.textContent = 'Show less';
-                moreBtn.setAttribute('aria-expanded', 'true');
-            }
         });
     });
+
+    // Default view: the Featured list.
+    applyFilter('featured');
 }
