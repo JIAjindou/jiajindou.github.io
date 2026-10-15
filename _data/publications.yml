@@ -21,6 +21,33 @@
     - geng
     - jianfei
 
+- id: DeltaFlow
+  year: 2026
+  preprint: true
+  featured: true
+  title: "Δ-Flow matching for robot foundation models"
+  venue: arXiv, 2026
+  venue_short: arXiv'26
+  description: "Scaling A2A to robot foundation models: Δ-flow starts flow matching from recent history instead of Gaussian noise, enabling single-step inference, faster training, and smoother actions."
+  image: DeltaFlow_fig.png
+  arxiv: "2610.15794"
+  corresponding_authors:
+    - jindou
+    - jianfei
+  authors:
+    - kuangji
+    - tuo
+    - xinying
+    - gen
+    - mengfei
+    - jiaqi
+    - bofan
+    - zhuoyuan
+    - jinghan
+    - jiayili
+    - jindou
+    - jianfei
+
 - id: TUCO
   year: 2026
   preprint: true
