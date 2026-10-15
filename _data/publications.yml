@@ -29,6 +29,7 @@
   venue: arXiv, 2026
   venue_short: arXiv'26
   description: "Scaling A2A to robot foundation models: Δ-flow starts flow matching from recent history instead of Gaussian noise, enabling single-step inference, faster training, and smoother actions."
+  project_page: https://zuo-kuangji.github.io/delta-flow/
   image: DeltaFlow_fig.png
   arxiv: "2610.15794"
   corresponding_authors:
