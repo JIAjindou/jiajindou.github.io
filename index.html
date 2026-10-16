@@ -316,19 +316,22 @@ layout: null
   <section class="section talks-section">
     <div class="container is-max-desktop">
       <h2 class="title is-3">Talks &amp; Media</h2>
-      <ul class="talks-list">
+      <ul class="timeline">
         {% for talk in site.data.talks %}
-        <li class="talk-item">
-          <span class="talk-type talk-type-{{ talk.type | slugify }}">{{ talk.type }}</span>
-          <span class="talk-body">
+        <li class="timeline-item talk-type-{{ talk.type | slugify }}">
+          <span class="timeline-marker"></span>
+          <div class="timeline-content">
+            <div class="timeline-meta">
+              <span class="timeline-date">{{ talk.date }}</span>
+              <span class="timeline-tag">{{ talk.type }}</span>
+            </div>
             {% if talk.link %}
-            <a class="talk-title" href="{{ talk.link }}" target="_blank" rel="noopener">{{ talk.title }}</a>
+            <a class="timeline-title" href="{{ talk.link }}" target="_blank" rel="noopener">{{ talk.title }}</a>
             {% else %}
-            <span class="talk-title">{{ talk.title }}</span>
+            <span class="timeline-title">{{ talk.title }}</span>
             {% endif %}
-            <span class="talk-host">{{ talk.host }}</span>
-          </span>
-          <span class="talk-date">{{ talk.date }}</span>
+            <div class="timeline-sub">{{ talk.host }}</div>
+          </div>
         </li>
         {% endfor %}
       </ul>
@@ -345,14 +348,17 @@ layout: null
   <section class="section service-section">
     <div class="container is-max-desktop">
       <h2 class="title is-3">Professional Service</h2>
-      <ul class="service-list">
+      <div class="service-cards">
         {% for s in site.data.service %}
-        <li class="service-item">
-          <span class="service-role service-role-{{ s.role | slugify }}">{{ s.role }}</span>
-          <span class="service-venue">{{ s.venue }}</span>
-        </li>
+        <div class="service-card service-role-{{ s.role | slugify }}">
+          <span class="service-card-icon"><i class="fas {{ s.icon | default: 'fa-circle-check' }}"></i></span>
+          <div class="service-card-body">
+            <div class="service-card-role">{{ s.role }}</div>
+            <div class="service-card-venue">{{ s.venue }}</div>
+          </div>
+        </div>
         {% endfor %}
-      </ul>
+      </div>
     </div>
   </section>
 

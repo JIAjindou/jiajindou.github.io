@@ -133,144 +133,164 @@
     padding-bottom: 2rem;
 }
 
-.service-list {
-    list-style: none;
-    margin: 0.75em 0 0;
-    padding: 0;
-}
-
-.service-item {
+// Professional Service — cards.
+.service-cards {
     display: flex;
-    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1.25em;
+}
+
+.service-card {
+    flex: 1 1 260px;
+    display: flex;
+    align-items: flex-start;
     gap: 0.9em;
-    padding: 0.7em 0;
-    border-bottom: 1px solid #eef0f3;
+    padding: 1.05em 1.2em;
+    background: #f7f9fc;
+    border: 1px solid #e7ecf3;
+    border-left: 4px solid #1e3a5f;
+    border-radius: 14px;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
-.service-item:last-child {
-    border-bottom: none;
-}
-
-.service-role {
-    flex: 0 0 auto;
-    min-width: 9.5em;
-    text-align: center;
-    font-family: 'Google Sans', 'Noto Sans', sans-serif;
-    font-size: 70%;
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    color: #fff;
-    background: #1e3a5f;
-    border-radius: 0.35em;
-    padding: 0.3em 0.6em;
-    position: relative;
-    top: -0.1em;
+.service-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(30, 58, 95, 0.08);
 }
 
 .service-role-associate-editor {
+    border-left-color: #c0392b;
+}
+
+.service-card-icon {
+    flex: 0 0 auto;
+    width: 2.4em;
+    height: 2.4em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #1e3a5f;
+    color: #fff;
+    font-size: 1.02em;
+}
+
+.service-role-associate-editor .service-card-icon {
     background: #c0392b;
 }
 
-.service-venue {
-    flex: 1 1 auto;
-    color: #333;
-    min-width: 0;
-}
-
-@media (max-width: 600px) {
-    .service-item {
-        flex-direction: column;
-        gap: 0.35em;
-    }
-}
-
-.talks-list {
-    list-style: none;
-    margin: 0.75em 0 0;
-    padding: 0;
-}
-
-.talk-item {
-    display: flex;
-    align-items: baseline;
-    gap: 0.9em;
-    padding: 0.7em 0;
-    border-bottom: 1px solid #eef0f3;
-}
-
-.talk-item:last-child {
-    border-bottom: none;
-}
-
-.talk-type {
-    flex: 0 0 auto;
-    display: inline-block;
-    min-width: 6.2em;
-    text-align: center;
+.service-card-role {
     font-family: 'Google Sans', 'Noto Sans', sans-serif;
-    font-size: 70%;
     font-weight: 700;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    color: #fff;
-    background: #1e3a5f;
-    border-radius: 0.35em;
-    padding: 0.3em 0.6em;
+    color: #1a2d45;
+    margin-bottom: 0.15em;
+}
+
+.service-card-venue {
+    color: #55606e;
+    font-size: 92%;
+    line-height: 1.5;
+}
+
+// Talks & Media — timeline.
+.timeline {
+    list-style: none;
+    margin: 1.3em 0 0;
+    padding: 0;
     position: relative;
-    top: -0.1em;
 }
 
-.talk-type-interview {
-    background: #0e7490;
+.timeline::before {
+    content: "";
+    position: absolute;
+    left: 7px;
+    top: 6px;
+    bottom: 6px;
+    width: 2px;
+    background: linear-gradient(#cfd9e6, #eef1f5);
 }
 
-.talk-type-invited-talk {
-    background: #1e3a5f;
+.timeline-item {
+    position: relative;
+    padding: 0 0 1.5em 2.2em;
 }
 
-.talk-body {
-    flex: 1 1 auto;
+.timeline-item:last-child {
+    padding-bottom: 0.2em;
+}
+
+.timeline-marker {
+    position: absolute;
+    left: 0;
+    top: 0.3em;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #fff;
+    border: 3px solid #1e3a5f;
+    box-shadow: 0 0 0 4px #fff;
+    transition: transform 0.15s ease;
+}
+
+.talk-type-interview .timeline-marker {
+    border-color: #0e7490;
+}
+
+.timeline-item:hover .timeline-marker {
+    transform: scale(1.18);
+}
+
+.timeline-meta {
     display: flex;
-    flex-direction: column;
-    gap: 0.15em;
-    min-width: 0;
+    align-items: center;
+    gap: 0.55em;
+    margin-bottom: 0.25em;
 }
 
-.talk-title {
+.timeline-date {
+    font-family: 'Google Sans', 'Noto Sans', sans-serif;
+    font-size: 82%;
     font-weight: 600;
+    color: #1e3a5f;
+}
+
+.timeline-tag {
+    font-family: 'Google Sans', 'Noto Sans', sans-serif;
+    font-size: 66%;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #5b6b7f;
+    background: #eef2f7;
+    border-radius: 999px;
+    padding: 0.2em 0.7em;
+}
+
+.talk-type-interview .timeline-tag {
+    color: #0e7490;
+    background: #e0f1f6;
+}
+
+.timeline-title {
+    font-weight: 600;
+    font-size: 1.04em;
     color: #1a1a1a;
 }
 
-a.talk-title:hover {
+a.timeline-title:hover {
     color: #1e3a5f;
     text-decoration: underline;
 }
 
-.talk-host {
+.timeline-sub {
     color: #666;
-    font-size: 90%;
-}
-
-.talk-date {
-    flex: 0 0 auto;
-    color: #888;
-    font-size: 88%;
-    white-space: nowrap;
+    font-size: 91%;
+    margin-top: 0.12em;
 }
 
 @media (max-width: 600px) {
-    .talk-item {
-        flex-wrap: wrap;
-        gap: 0.4em 0.7em;
-    }
-    .talk-body {
-        flex-basis: 100%;
-        order: 3;
-    }
-    .talk-date {
-        margin-left: auto;
-    }
+    .service-card { flex: 1 1 100%; }
 }
 
 

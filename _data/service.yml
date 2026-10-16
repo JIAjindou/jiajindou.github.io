@@ -1,5 +1,7 @@
 - role: Associate Editor
-  venue: RA-L
+  venue: IEEE Robotics and Automation Letters (RA-L)
+  icon: fa-pen-fancy
 
 - role: Reviewer
   venue: T-RO, IJRR, RA-L, ICRA, and other robotics venues
+  icon: fa-clipboard-check
