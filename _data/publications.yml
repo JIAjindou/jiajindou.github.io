@@ -49,6 +49,25 @@
     - jindou
     - jianfei
 
+- id: MOSS
+  year: 2026
+  preprint: true
+  title: "MOSS: Mode-oriented source shaping for robot flow matching policies"
+  venue: arXiv, 2026
+  venue_short: arXiv'26
+  description: "MOSS makes behavior-mode selection controllable in robot flow matching policies by shaping mode-specific source distributions, separating modes only where the situation is truly multimodal."
+  project_page: https://mmmmazr.github.io/moss/
+  image: MOSS_fig.png
+  arxiv: "2610.22193"
+  equal_contri: 2
+  authors:
+    - zirun
+    - jindou
+    - tuo
+    - jiaqi
+    - jiahua
+    - jianfei
+
 - id: TUCO
   year: 2026
   preprint: true
