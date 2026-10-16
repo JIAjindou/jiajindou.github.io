@@ -762,13 +762,14 @@ html { scroll-behavior: smooth; }
 }
 
 .pub-sidebar {
+    order: 2;
     flex: 0 0 172px;
     position: sticky;
     top: 70px;
     align-self: flex-start;
     max-height: 58vh;
     overflow-y: auto;
-    padding-right: 6px;
+    padding-left: 6px;
 }
 
 .pub-filter-list {
@@ -798,6 +799,7 @@ html { scroll-behavior: smooth; }
 }
 
 .pub-list {
+    order: 1;
     flex: 1 1 auto;
     min-width: 0;
 }
@@ -811,11 +813,13 @@ html { scroll-behavior: smooth; }
 @media (max-width: 768px) {
     .pub-layout { flex-direction: column; gap: 0.6rem; }
     .pub-sidebar {
+        order: 0;
         position: static;
         flex: none;
         width: 100%;
         max-height: none;
         overflow: visible;
+        padding-left: 0;
     }
     .pub-filter-list {
         flex-direction: row;
