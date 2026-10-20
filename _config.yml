@@ -47,6 +47,9 @@ visitor_worker_url: /mv
 # mainland China, so it catches visits the Cloudflare globe may miss. The
 # displayed number = busuanzi_base (in js/index.js) + busuanzi's own count.
 busuanzi: false   # footer counter turned off at the owner's request (2026-10-20); set true to restore
+# Homepage "Robotic Platforms" grid: hidden for now (the research roadmap
+# shows the same robots); set true to bring it back.
+show_platforms: false
 
 # Build settings
 theme: minima
