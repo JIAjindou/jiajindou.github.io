@@ -29,7 +29,12 @@
 
     var trackByKey = {};
     tracks.forEach(function (t) { trackByKey[t.key] = t; });
-    var trunk = tracks.filter(function (t) { return !t.side; })[0] || tracks[0];
+    // A side-0 track is a trunk running the whole way. Otherwise the trunk is
+    // implicit: only the shared start (before the tracks split) and the end
+    // (after they merge), so the directions read as equals.
+    var trunk = tracks.filter(function (t) { return !t.side; })[0] ||
+        { key: 'trunk', color: (data.trunk && data.trunk.color) || '#5b6b7f', side: 0, implicit: true };
+    var trunkLabeled = !trunk.implicit;
     function trackOf(st) { return trackByKey[st.track] || trunk; }
 
     function tr(o, k) { return (zh && o[k + '_zh']) || o[k] || ''; }
@@ -156,22 +161,33 @@
     function buildRoutes() {
         routes = [];
         var mEnd = col[last].r - 4, mMerge = col[last].c;
+        function branchAt(t) { return col[Math.min(t.from || 1, last)].l - 16; }
+        // fadeIn / fadeOut: px over which particles appear at a route's start
+        // and vanish at its end (short where they continue into another route).
+        if (trunk.implicit) {
+            var split = Math.min.apply(null, tracks.map(branchAt).concat([mMerge - 12]));
+            routes.push({ track: trunk, trunk: true, off: 0, fadeIn: 24, fadeOut: 10,
+                          pts: [[col[0].l + 4, 0], [split, 0]] });
+            routes.push({ track: trunk, trunk: true, off: 0, fadeIn: 6, fadeOut: 60,
+                          pts: [[mMerge - 12, 0], [mEnd, 0]] });
+        }
         tracks.forEach(function (t) {
-            var off = (t.side || 0) * D, pts;
+            var off = (t.side || 0) * D;
             if (!t.side) {
-                pts = [[col[0].l + 4, 0], [mEnd, 0]];
+                routes.push({ track: t, trunk: true, off: 0, fadeIn: 24, fadeOut: 60,
+                              pts: [[col[0].l + 4, 0], [mEnd, 0]] });
             } else {
-                var b = col[Math.min(t.from || 1, last)].l;
-                pts = [[b - 16, 0], [b + 18, off], [mMerge - 46, off], [mMerge - 12, 0]];
+                var b = branchAt(t) + 16;
+                routes.push({ track: t, off: off, fadeIn: 10, fadeOut: 14,
+                              pts: [[b - 16, 0], [b + 18, off], [mMerge - 46, off], [mMerge - 12, 0]] });
             }
-            routes.push({ track: t, pts: pts, trunk: !t.side, off: off });
         });
         loops.forEach(function (lp) {
             var t = trackByKey[lp.track];
             if (!t || !col[lp.from] || !col[lp.to]) return;
             var off = (t.side || 0) * D, top = off + (off <= 0 ? -LOOP : LOOP);
             var a = col[lp.from].c, b = col[lp.to].c;
-            routes.push({ track: t, loop: true, off: off,
+            routes.push({ track: t, loop: true, off: off, fadeIn: 10, fadeOut: 14,
                           pts: [[a + 14, off], [a - 14, top], [b + 14, top], [b - 14, off]] });
         });
         routes.forEach(sampleRoute);
@@ -315,7 +331,7 @@
                     var r = rb.getBoundingClientRect();
                     var x = r.left - wr.left + r.width / 2, yEnd = r.top - wr.top + 6;
                     var low = lowestAt(x);
-                    var yStart = cross + low + (low ? 9 : 28);   // clear the trunk's label
+                    var yStart = cross + low + (low ? 9 : trunkLabeled ? 28 : 12);   // clear a trunk label
                     if (yEnd - yStart < 8) return;
                     var g = c.createLinearGradient(0, yStart, 0, yEnd);
                     g.addColorStop(0, color);
@@ -396,9 +412,8 @@
         var dim = active >= 0 && !vertical;
         for (var i = 0; i < N; i++) {
             var rt = routes[pr[i]], d = pd[i], a = pb[i];
-            var fadeIn = rt.trunk ? 24 : 10, fadeOut = rt.trunk ? 60 : 14;
-            if (d < fadeIn) a *= d / fadeIn;
-            if (rt.len - d < fadeOut) a *= (rt.len - d) / fadeOut;
+            if (d < rt.fadeIn) a *= d / rt.fadeIn;
+            if (rt.len - d < rt.fadeOut) a *= (rt.len - d) / rt.fadeOut;
             var j = Math.min(rt.x.length - 1, (d / rt.step) | 0);
             var x = rt.x[j] + rt.nx[j] * pj[i], y = rt.y[j] + rt.ny[j] * pj[i];
             if (dim && colAt(x, y) !== active) a *= 0.4;

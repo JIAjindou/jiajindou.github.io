@@ -1,35 +1,41 @@
 # Research roadmap (homepage "Research Roadmap" section, rendered by js/roadmap.js).
 #
+# trunk: the shared start and end (stages with `track: trunk`): a short line
+#   that splits into the tracks and that they merge back into at the last stage.
 # tracks: the research directions, drawn as circuit-like lines that particles
-#   flow along (direction only). The trunk (side 0) runs the whole way; the
-#   others branch off it at stage `from` (side -1 above, 1 below) and merge
-#   back into it at the last stage. `label_from` = stage whose node the line's
-#   name follows (default: where the line starts).
+#   flow along (direction only). Each branches off the trunk at stage `from`
+#   (side -1 above, 1 below) and merges back at the last stage; give them
+#   mirrored sides so they read as equals. `label_from` = stage whose node the
+#   line's name follows (default: where the line starts). A track with side 0
+#   would instead act as a trunk running the whole way.
 # loops (optional): feedback loops drawn on a track, running back from stage
 #   `from` to stage `to` (indices into stages, 0-based).
 # stages: the columns. `track` = which line the stage's node sits on; `works`
 #   link to publications by id (#pub-<id>); `platforms` are files in
 #   images/hardware/. *_zh fields are used on the Chinese page.
 
+trunk:
+  color: "#5b6b7f"
+
 tracks:
   - key: L2C
     name: Learning for control
     name_zh: 学习赋能控制
     color: "#1e3a5f"
-    side: 0
-    from: 0
-    label_from: 1
+    side: -1
+    from: 1
   - key: C2L
     name: Control for learning
     name_zh: 控制赋能学习
     color: "#0e7490"
     side: 1
-    from: 3
+    from: 1
+    label_from: 3
 
 stages:
   - key: control
     index: "01"
-    track: L2C
+    track: trunk
     years: "2019 – 2022"
     title: Anti-disturbance control
     title_zh: 抗干扰控制
@@ -150,7 +156,7 @@ stages:
 
   - key: next
     index: "→"
-    track: L2C
+    track: trunk
     years: Next
     years_zh: 下一站
     title: Generalizable embodied intelligence
