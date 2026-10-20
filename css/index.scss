@@ -478,6 +478,16 @@ html { scroll-behavior: smooth; }
     border-top: 1px solid rgba(0, 0, 0, 0.06);
 }
 
+.site-visits {
+    margin-top: 1rem;
+    text-align: center;
+    color: #9aa5b1;
+    font-size: 84%;
+    font-family: 'Google Sans', 'Noto Sans', sans-serif;
+
+    b { color: #6b7280; font-weight: 600; }
+}
+
 .globe-toggle {
     padding: 0.4em 1.1em;
     font-family: 'Google Sans', 'Noto Sans', sans-serif;

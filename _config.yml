@@ -41,6 +41,10 @@ goatcounter: jindoujia
 # Deploy visitor-worker.js to Cloudflare, then paste the Worker URL here,
 # e.g. https://visitor-globe.<your-subdomain>.workers.dev . Leave empty to disable.
 visitor_worker_url: https://stats.jiajindou.com
+# Busuanzi (不蒜子) total-visits counter — its collector is reachable from
+# mainland China, so it catches visits the Cloudflare globe may miss. The
+# displayed number = busuanzi_base (in js/index.js) + busuanzi's own count.
+busuanzi: true
 
 # Build settings
 theme: minima

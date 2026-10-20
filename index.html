@@ -382,8 +382,18 @@ layout: null
         <div id="globe-box" class="globe-box" hidden></div>
       </div>
       {% endif %}
+      {% if site.busuanzi %}
+      <p class="site-visits">
+        Total visits <b id="site-visits">—</b>
+        <span id="busuanzi_container_site_pv" hidden><span id="busuanzi_value_site_pv"></span></span>
+      </p>
+      {% endif %}
     </div>
   </footer>
+
+  {% if site.busuanzi %}
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  {% endif %}
 
 </body>
 

@@ -4,10 +4,35 @@ $(document).ready(function() {
     setupNewsToggle();
     setupPreprintToggle();
     pingVisitor();
+    setupSiteVisits();
     setupVisitorGlobe();
     setupOwnerPanel();
     window.addEventListener('hashchange', setupOwnerPanel);
 });
+
+// Busuanzi total-visits counter. Busuanzi only reports its own raw count
+// (which started at ~0 when it was added); we add a fixed base so the
+// displayed total continues from the visitor count the site already had.
+// Busuanzi's collector is reachable from mainland China, so this number
+// tends to be more complete there than the Cloudflare-based globe total.
+function setupSiteVisits() {
+    var out = document.getElementById('site-visits');
+    var src = document.getElementById('busuanzi_value_site_pv');
+    if (!out || !src) return;
+    var base = 1369; // historical baseline (visitor total when busuanzi was added)
+    var done = false, tries = 0;
+    var iv = setInterval(function () {
+        var raw = (src.textContent || '').replace(/[^0-9]/g, '');
+        if (raw !== '') {
+            done = true;
+            clearInterval(iv);
+            out.textContent = (base + parseInt(raw, 10)).toLocaleString();
+        } else if (++tries > 40) {           // ~10s: busuanzi didn't load
+            clearInterval(iv);
+            if (!done) out.textContent = base.toLocaleString();
+        }
+    }, 250);
+}
 
 // Record this visit with the Cloudflare Worker (once per browser session).
 // The Worker reads the visitor's approximate lat/lon from Cloudflare's edge
