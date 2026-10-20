@@ -1,140 +1,151 @@
 # Research roadmap (homepage "Research Roadmap" section, rendered by js/roadmap.js).
-# Each stage: a band of the particle stream. `flow` picks how particles move
-# through it (laminar | feedback | uncertainty | generative | world | next);
-# `caption` says in plain words what that motion shows.
-# `works` link to publications by id (#pub-<id>); `platforms` are files in
-# images/hardware/. *_zh fields are used on the Chinese page (fallback: English).
+#
+# tracks: the research directions, drawn as circuit-like lines that particles
+#   flow along (direction only). The trunk (side 0) runs the whole way; the
+#   others branch off it at stage `from` (side -1 above, 1 below) and merge
+#   back into it at the last stage.
+# loops: feedback loops drawn on a track, running back from stage `from` to
+#   stage `to` (indices into stages, 0-based).
+# stages: the columns. `track` = which line the stage's node sits on; `works`
+#   link to publications by id (#pub-<id>); `platforms` are files in
+#   images/hardware/. *_zh fields are used on the Chinese page.
 
-- key: control
-  index: "01"
-  years: "2019 – 2022"
-  title: Anti-disturbance control
-  title_zh: 抗干扰控制
-  desc: >-
-    Model the disturbance, then reject or exploit it: observer-based agile
-    flight control for quadrotors that turns aerodynamic drag from a nuisance
-    into a resource.
-  desc_zh: 先对扰动建模，再抵消或利用它：基于干扰观测器的四旋翼敏捷飞行控制，把气动阻力从“干扰”变成可以利用的资源。
-  caption: "Ordered flow: precise control"
-  caption_zh: "整齐有序：精确控制"
-  color: "#6a87ad"
-  flow: laminar
-  works:
-    - { id: Drag, name: Drag utilization, venue: "R-AL'22" }
-    - { id: Window, name: Agile flight, venue: "T-AES'22" }
-    - { id: ICUAS, name: Safety control, venue: "ICUAS'22" }
-    - { id: CEP, name: Multiple observers, venue: "CEP'20" }
-    - { id: CAC, name: Dual observers, venue: "CAC'19" }
-  platforms:
-    - drone_2020CEP_2022TAES.webp
-    - drone_2022RAL.webp
+tracks:
+  - key: A
+    name: Physical priors & control
+    name_zh: 物理先验与控制
+    color: "#1e3a5f"
+    side: 0
+    from: 0
+  - key: B
+    name: Learning & uncertainty
+    name_zh: 学习与不确定性
+    color: "#5f84b4"
+    side: -1
+    from: 1
+  - key: C
+    name: Generative policies & world models
+    name_zh: 生成式策略与世界模型
+    color: "#0e7490"
+    side: 1
+    from: 3
 
-- key: learning
-  index: "02"
-  years: "2023 – 2025"
-  title: Learning-augmented control
-  title_zh: 学习增强控制
-  desc: >-
-    Let learning capture what physics misses: online learning and prediction
-    of disturbances (EVOLVER), and feedback loops that keep learned dynamics
-    accurate far beyond the training data.
-  desc_zh: 让学习补上物理模型缺失的部分：在线学习与预测扰动（EVOLVER），并用反馈回路让学到的动力学在训练数据之外依然准确。
-  caption: "A disturbance, damped by feedback"
-  caption_zh: "扰动出现，被反馈抹平"
-  color: "#48709e"
-  flow: feedback
-  works:
-    - { id: EVOLVER, name: EVOLVER, venue: "T-RO'24" }
-    - { id: FeedbackNN, name: Feedback neural ODE, venue: "ICLR'25 Oral" }
-    - { id: control_friendly, name: Control-friendly trajectories, venue: "arXiv'26" }
-  platforms:
-    - drone_2022RAL_2023TRO.webp
-    - arm_2023TRO_2026arXiv.webp
+loops:
+  - { track: B, from: 4, to: 1 }
 
-- key: uncertainty
-  index: "03"
-  years: "2024 – 2026"
-  title: Uncertainty prediction
-  title_zh: 不确定性预测
-  desc: >-
-    Predict uncertainty instead of ignoring it: converged prediction of
-    internal and external uncertainties (FORESEER) and learning-based
-    observers for coupled disturbances, validated across agile aerial robots.
-  desc_zh: 不忽略不确定性，而是预测它：面向内部与外部不确定性的收敛预测框架（FORESEER），以及针对耦合扰动的学习型观测器，在多种敏捷飞行机器人上验证。
-  caption: "Spread = predicted uncertainty"
-  caption_zh: "散开的宽度＝不确定性"
-  color: "#2f5584"
-  flow: uncertainty
-  works:
-    - { id: FORESEER, name: FORESEER, venue: "IJRR'25" }
-    - { id: Learning_obs, name: Learning-based observer, venue: "ICRA'26" }
-  platforms:
-    - drone_2025IJRR_2026ICRA.webp
-    - grasp_drone_2025IJRR.webp
-    - vio_drone_2025IJRR.webp
-    - drone_2025IJRR.webp
+stages:
+  - key: control
+    index: "01"
+    track: A
+    years: "2019 – 2022"
+    title: Anti-disturbance control
+    title_zh: 抗干扰控制
+    desc: >-
+      Model the disturbance, then reject or exploit it: observer-based agile
+      flight control for quadrotors that turns aerodynamic drag from a nuisance
+      into a resource.
+    desc_zh: 先对扰动建模，再抵消或利用它：基于干扰观测器的四旋翼敏捷飞行控制，把气动阻力从“干扰”变成可以利用的资源。
+    works:
+      - { id: Drag, name: Drag utilization, venue: "R-AL'22" }
+      - { id: Window, name: Agile flight, venue: "T-AES'22" }
+      - { id: ICUAS, name: Safety control, venue: "ICUAS'22" }
+      - { id: CEP, name: Multiple observers, venue: "CEP'20" }
+      - { id: CAC, name: Dual observers, venue: "CAC'19" }
+    platforms:
+      - drone_2020CEP_2022TAES.webp
+      - drone_2022RAL.webp
 
-- key: generative
-  index: "04"
-  years: "2025 – 2026"
-  title: Generative policies
-  title_zh: 生成式策略
-  desc: >-
-    Make generative policies fast and controllable: action-to-action flow
-    matching (A2A), single-step trajectories (FLASH), multimodality only when it
-    matters (MARS, MOSS), and scaling to robot foundation models (Δ-Flow).
-  desc_zh: 让生成式策略又快又可控：动作到动作的流匹配（A2A）、单步生成轨迹（FLASH）、只在需要时引入多模态（MARS、MOSS），并扩展到机器人基础模型（Δ-Flow）。
-  caption: "Noise shaped into clear actions"
-  caption_zh: "噪声塑造成明确动作"
-  color: "#1e3a5f"
-  flow: generative
-  works:
-    - { id: A2A, name: A2A, venue: "RSS'26" }
-    - { id: FLASH, name: FLASH, venue: "NeurIPS'26" }
-    - { id: DeltaFlow, name: Δ-Flow, venue: "arXiv'26" }
-    - { id: MARS, name: MARS policy, venue: "arXiv'26" }
-    - { id: MOSS, name: MOSS, venue: "arXiv'26" }
-    - { id: APEX, name: APEX, venue: "arXiv'26" }
-    - { id: TUCO, name: TUCO, venue: "arXiv'26" }
-  platforms:
-    - arm_2026arXiv_2026RSS.webp
-    - dual_arm_2026arXiv.webp
+  - key: learning
+    index: "02"
+    track: B
+    years: "2023 – 2025"
+    title: Learning-augmented control
+    title_zh: 学习增强控制
+    desc: >-
+      Let learning capture what physics misses: online learning and prediction
+      of disturbances (EVOLVER), and feedback loops that keep learned dynamics
+      accurate far beyond the training data.
+    desc_zh: 让学习补上物理模型缺失的部分：在线学习与预测扰动（EVOLVER），并用反馈回路让学到的动力学在训练数据之外依然准确。
+    works:
+      - { id: EVOLVER, name: EVOLVER, venue: "T-RO'24" }
+      - { id: FeedbackNN, name: Feedback neural ODE, venue: "ICLR'25 Oral" }
+      - { id: control_friendly, name: Control-friendly trajectories, venue: "arXiv'26" }
+    platforms:
+      - drone_2022RAL_2023TRO.webp
+      - arm_2023TRO_2026arXiv.webp
 
-- key: world
-  index: "05"
-  years: "2026 –"
-  title: World models & physical priors
-  title_zh: 世界模型与物理先验
-  desc: >-
-    Close the loop between imagination and reality: feedback world models that
-    guide diffusion policies (FWM), physics filtering for generalization
-    (PhyFilter), and disturbance-aware humanoid locomotion (ADAPT).
-  desc_zh: 让“想象”与现实形成闭环：用反馈世界模型引导扩散策略（FWM），用物理过滤提升泛化能力（PhyFilter），以及扰动感知的人形机器人运动控制（ADAPT）。
-  caption: "Branching into imagined futures"
-  caption_zh: "分叉出想象的未来"
-  color: "#0e7490"
-  flow: world
-  works:
-    - { id: FWM, name: Feedback world model, venue: "NeurIPS'26" }
-    - { id: WorldModelSurvey, name: World model survey, venue: "IJRR'26" }
-    - { id: PhyFilter, name: PhyFilter, venue: "npj Robotics'26" }
-    - { id: ADAPT, name: ADAPT, venue: "CoRL'26" }
-  platforms:
-    - humanoid_2026arXiv.webp
-    - quadruped_2026arXiv.webp
-    - drone_2026arXiv.webp
+  - key: uncertainty
+    index: "03"
+    track: B
+    years: "2024 – 2026"
+    title: Uncertainty prediction
+    title_zh: 不确定性预测
+    desc: >-
+      Predict uncertainty instead of ignoring it: converged prediction of
+      internal and external uncertainties (FORESEER) and learning-based
+      observers for coupled disturbances, validated across agile aerial robots.
+    desc_zh: 不忽略不确定性，而是预测它：面向内部与外部不确定性的收敛预测框架（FORESEER），以及针对耦合扰动的学习型观测器，在多种敏捷飞行机器人上验证。
+    works:
+      - { id: FORESEER, name: FORESEER, venue: "IJRR'25" }
+      - { id: Learning_obs, name: Learning-based observer, venue: "ICRA'26" }
+    platforms:
+      - drone_2025IJRR_2026ICRA.webp
+      - grasp_drone_2025IJRR.webp
+      - vio_drone_2025IJRR.webp
+      - drone_2025IJRR.webp
 
-- key: next
-  index: "→"
-  years: Next
-  years_zh: 下一站
-  title: Generalizable embodied intelligence
-  title_zh: 可泛化的具身智能
-  desc: >-
-    Robots that transfer reliably from the environments they were trained in to
-    ones they have never seen.
-  desc_zh: 让机器人从训练环境可靠地迁移到从未见过的新环境。
-  caption: "Into unseen environments"
-  caption_zh: "走向未知环境"
-  color: "#0e7490"
-  flow: next
+  - key: generative
+    index: "04"
+    track: C
+    years: "2025 – 2026"
+    title: Generative policies
+    title_zh: 生成式策略
+    desc: >-
+      Make generative policies fast and controllable: action-to-action flow
+      matching (A2A), single-step trajectories (FLASH), multimodality only when it
+      matters (MARS, MOSS), and scaling to robot foundation models (Δ-Flow).
+    desc_zh: 让生成式策略又快又可控：动作到动作的流匹配（A2A）、单步生成轨迹（FLASH）、只在需要时引入多模态（MARS、MOSS），并扩展到机器人基础模型（Δ-Flow）。
+    works:
+      - { id: A2A, name: A2A, venue: "RSS'26" }
+      - { id: FLASH, name: FLASH, venue: "NeurIPS'26" }
+      - { id: DeltaFlow, name: Δ-Flow, venue: "arXiv'26" }
+      - { id: MARS, name: MARS policy, venue: "arXiv'26" }
+      - { id: MOSS, name: MOSS, venue: "arXiv'26" }
+      - { id: APEX, name: APEX, venue: "arXiv'26" }
+      - { id: TUCO, name: TUCO, venue: "arXiv'26" }
+    platforms:
+      - arm_2026arXiv_2026RSS.webp
+      - dual_arm_2026arXiv.webp
+
+  - key: world
+    index: "05"
+    track: C
+    years: "2026 –"
+    title: World models & physical priors
+    title_zh: 世界模型与物理先验
+    desc: >-
+      Close the loop between imagination and reality: feedback world models that
+      guide diffusion policies (FWM), physics filtering for generalization
+      (PhyFilter), and disturbance-aware humanoid locomotion (ADAPT).
+    desc_zh: 让“想象”与现实形成闭环：用反馈世界模型引导扩散策略（FWM），用物理过滤提升泛化能力（PhyFilter），以及扰动感知的人形机器人运动控制（ADAPT）。
+    works:
+      - { id: FWM, name: Feedback world model, venue: "NeurIPS'26" }
+      - { id: WorldModelSurvey, name: World model survey, venue: "IJRR'26" }
+      - { id: PhyFilter, name: PhyFilter, venue: "npj Robotics'26" }
+      - { id: ADAPT, name: ADAPT, venue: "CoRL'26" }
+    platforms:
+      - humanoid_2026arXiv.webp
+      - quadruped_2026arXiv.webp
+      - drone_2026arXiv.webp
+
+  - key: next
+    index: "→"
+    track: A
+    years: Next
+    years_zh: 下一站
+    title: Generalizable embodied intelligence
+    title_zh: 可泛化的具身智能
+    desc: >-
+      Robots that transfer reliably from the environments they were trained in to
+      ones they have never seen.
+    desc_zh: 让机器人从训练环境可靠地迁移到从未见过的新环境。

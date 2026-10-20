@@ -1,20 +1,13 @@
 /*
- * Research roadmap: a particle stream that flows through the research stages
- * of _data/roadmap.yml (embedded as #roadmap-data), with each stage's robot
- * platforms hanging off the stream.
+ * Research roadmap: the research directions in _data/roadmap.yml (embedded as
+ * #roadmap-data) drawn as circuit-like tracks across the stages, with
+ * particles flowing along them. The particles only show direction: side tracks
+ * branch off the trunk and merge back at the end, and loops run back along a
+ * track (feedback). Each stage's robots hang below the tracks.
  *
- * Each stage moves the particles the way its research works:
- *   laminar     ordered parallel lanes                  (model-based control)
- *   feedback    a disturbance appears, feedback damps it (learning + control)
- *   uncertainty the lanes melt into a ±2σ envelope       (uncertainty prediction)
- *   generative  lanes -> noise -> a few sharp modes      (flow-matching policies)
- *   world       each mode branches into imagined futures (world models)
- *   next        the futures fade into the frontier
- *
- * Desktop: horizontal stream, stages as columns, an inspector panel that
- * auto-cycles through the stages (hover/tap to pick one). Narrow screens: a
- * vertical stream down the left edge with every stage's details inline.
- * Pauses off-screen; a still frame for prefers-reduced-motion.
+ * Desktop: stages as columns plus an inspector that tours them (hover/tap to
+ * pick one). Narrow screens: the tracks run down the left edge and every
+ * stage's details are inline. Pauses off-screen; still for reduced motion.
  */
 (function () {
     'use strict';
@@ -22,9 +15,10 @@
     var root = document.getElementById('roadmap');
     var dataEl = document.getElementById('roadmap-data');
     if (!root || !dataEl) return;
-    var stages;
-    try { stages = JSON.parse(dataEl.textContent); } catch (e) { return; }
-    if (!stages || !stages.length) return;
+    var data;
+    try { data = JSON.parse(dataEl.textContent); } catch (e) { return; }
+    var stages = data && data.stages, tracks = (data && data.tracks) || [], loops = (data && data.loops) || [];
+    if (!stages || !stages.length || !tracks.length) return;
 
     var zh = (document.documentElement.lang || '').slice(0, 2) === 'zh';
     var imgBase = root.getAttribute('data-img-base') || '/images/hardware/';
@@ -33,17 +27,17 @@
     var reduceMotion = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
     var CYCLE_MS = 5200;
 
+    var trackByKey = {};
+    tracks.forEach(function (t) { trackByKey[t.key] = t; });
+    var trunk = tracks.filter(function (t) { return !t.side; })[0] || tracks[0];
+    function trackOf(st) { return trackByKey[st.track] || trunk; }
+
     function tr(o, k) { return (zh && o[k + '_zh']) || o[k] || ''; }
     function esc(s) {
         return String(s).replace(/[&<>"]/g, function (c) {
             return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
         });
     }
-    function hexRgb(h) {
-        h = h.replace('#', '');
-        return [parseInt(h.slice(0, 2), 16), parseInt(h.slice(2, 4), 16), parseInt(h.slice(4, 6), 16)];
-    }
-    function smooth(t) { return t <= 0 ? 0 : t >= 1 ? 1 : t * t * (3 - 2 * t); }
 
     // ── Markup ──────────────────────────────────────────────────────────
     var wrap = root.querySelector('.rm-stages');
@@ -56,6 +50,15 @@
     wrap.appendChild(bg);
     wrap.appendChild(fx);
 
+    // Legend of the directions (shown on narrow screens, where the tracks
+    // are too close together to label inline).
+    var legend = document.createElement('div');
+    legend.className = 'rm-legend';
+    legend.innerHTML = tracks.map(function (t) {
+        return '<span style="--c:' + esc(t.color) + '"><i></i>' + esc(tr(t, 'name')) + '</span>';
+    }).join('');
+    root.insertBefore(legend, wrap);
+
     function worksHtml(st) {
         if (!st.works || !st.works.length) return '';
         return '<div class="rm-works">' + st.works.map(function (w) {
@@ -63,15 +66,13 @@
         }).join('') + '</div>';
     }
 
-    var n = stages.length;
-    var nextIdx = -1, worldIdx = -1;
+    var n = stages.length, last = n - 1;
     var els = [], nodes = [];
-    stages.forEach(function (st, i) {
-        if (st.flow === 'next') nextIdx = i;
-        if (st.flow !== 'next') worldIdx = i;      // last behaviour stage
+    stages.forEach(function (st) {
+        var color = trackOf(st).color;
         var el = document.createElement('div');
-        el.className = 'rm-stage' + (st.flow === 'next' ? ' rm-next' : '');
-        el.style.setProperty('--c', st.color);
+        el.className = 'rm-stage' + (st.key === 'next' ? ' rm-next' : '');
+        el.style.setProperty('--c', color);
         el.setAttribute('tabindex', '0');
         var robots = (st.platforms || []).map(function (p) {
             return '<span class="rm-robot"><img src="' + esc(imgBase + p) + '" alt="" loading="lazy" decoding="async"></span>';
@@ -80,33 +81,115 @@
             '<div class="rm-head"><span class="rm-idx">' + esc(st.index || '') + '</span>' +
             '<span class="rm-title">' + esc(tr(st, 'title')) + '</span>' +
             '<span class="rm-years">' + esc(tr(st, 'years')) + '</span></div>' +
-            '<div class="rm-gap"><div class="rm-caption">' + esc(tr(st, 'caption')) + '</div>' +
-            '<div class="rm-flow"></div></div>' +
+            '<div class="rm-flow"></div>' +
             '<div class="rm-robots">' + robots + '</div>' +
             '<div class="rm-detail"><p>' + esc(tr(st, 'desc')) + '</p>' + worksHtml(st) + '</div>';
         wrap.appendChild(el);
         els.push(el);
         var node = document.createElement('span');
         node.className = 'rm-node';
-        node.style.setProperty('--c', st.color);
+        node.style.setProperty('--c', color);
         wrap.appendChild(node);
         nodes.push(node);
     });
-    if (nextIdx < 0) nextIdx = n;   // no frontier stage: fade at the very end
+
+    var labels = tracks.map(function (t) {
+        var lb = document.createElement('span');
+        lb.className = 'rm-track-label';
+        lb.style.setProperty('--c', t.color);
+        lb.textContent = tr(t, 'name');
+        wrap.appendChild(lb);
+        return lb;
+    });
 
     // ── Geometry ────────────────────────────────────────────────────────
-    var W = 0, H = 0, dpr = 1, vertical = false, k = 1, pathLen = 1;
-    var LUTN = 720;
-    var lx = new Float32Array(LUTN + 1), ly = new Float32Array(LUTN + 1);
-    var lnx = new Float32Array(LUTN + 1), lny = new Float32Array(LUTN + 1);
-    var sb = [];          // stage start positions along the stream, sb[n] = 1
-    var nodeS = [];       // node position of each stage along the stream
-    var colors = [];      // 64 colour strings along the stream
-    var COLN = 64;
+    // Routes are laid out in (m, c): m runs along the stages, c across them
+    // (0 = trunk). toXY maps them to the screen for either orientation.
+    var D = 34, LOOP = 28, CORNER = 10;
+    var W = 0, H = 0, dpr = 1, vertical = false, k = 1, cross = 0, rail = 27;
+    var col = [], routes = [];
+
+    function toXY(m, c) { return vertical ? [rail + c * k, m] : [m, cross + c]; }
+
+    function sampleRoute(rt) {
+        var P = rt.pts.map(function (p) { return toXY(p[0], p[1]); });
+        var poly = [P[0]];
+        for (var i = 1; i < P.length - 1; i++) {
+            var a = P[i - 1], b = P[i], c = P[i + 1];
+            var l1 = Math.hypot(b[0] - a[0], b[1] - a[1]), l2 = Math.hypot(c[0] - b[0], c[1] - b[1]);
+            var r = Math.min(CORNER, l1 / 2, l2 / 2);
+            var p1 = [b[0] + (a[0] - b[0]) * r / l1, b[1] + (a[1] - b[1]) * r / l1];
+            var p2 = [b[0] + (c[0] - b[0]) * r / l2, b[1] + (c[1] - b[1]) * r / l2];
+            poly.push(p1);
+            for (var q = 1; q <= 8; q++) {       // rounded corner (quadratic Bézier)
+                var t = q / 8, u = 1 - t;
+                poly.push([u * u * p1[0] + 2 * u * t * b[0] + t * t * p2[0],
+                           u * u * p1[1] + 2 * u * t * b[1] + t * t * p2[1]]);
+            }
+        }
+        poly.push(P[P.length - 1]);
+        // Resample at a fixed step so particles move at constant speed.
+        var STEP = 1.5, xs = [poly[0][0]], ys = [poly[0][1]], carry = 0;
+        for (i = 1; i < poly.length; i++) {
+            var x0 = poly[i - 1][0], y0 = poly[i - 1][1], dx = poly[i][0] - x0, dy = poly[i][1] - y0;
+            var seg = Math.hypot(dx, dy), pos = STEP - carry;
+            while (pos <= seg) {
+                xs.push(x0 + dx * pos / seg);
+                ys.push(y0 + dy * pos / seg);
+                pos += STEP;
+            }
+            carry = seg - (pos - STEP);
+        }
+        var m = xs.length;
+        rt.x = new Float32Array(xs); rt.y = new Float32Array(ys);
+        rt.nx = new Float32Array(m); rt.ny = new Float32Array(m);
+        for (i = 0; i < m; i++) {
+            var j0 = Math.max(0, i - 2), j1 = Math.min(m - 1, i + 2);
+            var tx = rt.x[j1] - rt.x[j0], ty = rt.y[j1] - rt.y[j0], len = Math.hypot(tx, ty) || 1;
+            rt.nx[i] = -ty / len;
+            rt.ny[i] = tx / len;
+        }
+        rt.step = STEP;
+        rt.len = (m - 1) * STEP;
+    }
+
+    function buildRoutes() {
+        routes = [];
+        var mEnd = col[last].r - 4, mMerge = col[last].c;
+        tracks.forEach(function (t) {
+            var off = (t.side || 0) * D, pts;
+            if (!t.side) {
+                pts = [[col[0].l + 4, 0], [mEnd, 0]];
+            } else {
+                var b = col[Math.min(t.from || 1, last)].l;
+                pts = [[b - 16, 0], [b + 18, off], [mMerge - 46, off], [mMerge - 12, 0]];
+            }
+            routes.push({ track: t, pts: pts, trunk: !t.side, off: off });
+        });
+        loops.forEach(function (lp) {
+            var t = trackByKey[lp.track];
+            if (!t || !col[lp.from] || !col[lp.to]) return;
+            var off = (t.side || 0) * D, top = off + (off <= 0 ? -LOOP : LOOP);
+            var a = col[lp.from].c, b = col[lp.to].c;
+            routes.push({ track: t, loop: true, off: off,
+                          pts: [[a + 14, off], [a - 14, top], [b + 14, top], [b - 14, off]] });
+        });
+        routes.forEach(sampleRoute);
+    }
+
+    // Offset of the lowest track at m (robots hang from it).
+    function lowestAt(m) {
+        var c = 0;
+        routes.forEach(function (rt) {
+            if (rt.loop || rt.trunk) return;
+            if (m >= rt.pts[1][0] && m <= rt.pts[2][0]) c = Math.max(c, rt.off);
+        });
+        return c;
+    }
 
     function layout() {
         vertical = window.innerWidth < 769;
-        k = vertical ? 0.42 : 1;
+        k = vertical ? 0.36 : 1;
         W = wrap.clientWidth;
         H = wrap.clientHeight;
         if (!W || !H) return false;
@@ -117,144 +200,113 @@
             c.style.width = W + 'px';
             c.style.height = H + 'px';
         });
-
         var wr = wrap.getBoundingClientRect();
-        var rc = els.map(function (el) {
+        col = els.map(function (el) {
             var r = el.getBoundingClientRect();
-            return { l: r.left - wr.left, t: r.top - wr.top, w: r.width, h: r.height };
+            return vertical
+                ? { l: r.top - wr.top, r: r.bottom - wr.top, c: r.top - wr.top + 12 }
+                : { l: r.left - wr.left, r: r.right - wr.left, c: r.left - wr.left + r.width / 2 };
         });
-        var last = rc[n - 1], a0, a1, cross, amp, freq;
         if (!vertical) {
-            var g = els[0].querySelector('.rm-flow').getBoundingClientRect();
-            cross = g.top - wr.top + g.height / 2;
-            a0 = rc[0].l + 2;
-            a1 = last.l + last.w;
-            amp = 9; freq = 1.25;
-        } else {
-            cross = 27;
-            a0 = rc[0].t + 4;
-            a1 = last.t + last.h;
-            amp = 2.5; freq = 2;
+            var f = els[0].querySelector('.rm-flow').getBoundingClientRect();
+            cross = f.top - wr.top + f.height * 0.6;
         }
-        pathLen = a1 - a0;
-        for (var j = 0; j <= LUTN; j++) {
-            var s = j / LUTN;
-            var m = a0 + s * pathLen;
-            var c = cross + amp * Math.sin(2 * Math.PI * freq * s + 0.6);
-            if (!vertical) { lx[j] = m; ly[j] = c; } else { lx[j] = c; ly[j] = m; }
-        }
-        for (j = 0; j <= LUTN; j++) {
-            var j0 = Math.max(0, j - 1), j1 = Math.min(LUTN, j + 1);
-            var tx = lx[j1] - lx[j0], ty = ly[j1] - ly[j0];
-            var len = Math.sqrt(tx * tx + ty * ty) || 1;
-            lnx[j] = -ty / len;
-            lny[j] = tx / len;
-        }
+        buildRoutes();
 
-        sb = rc.map(function (r, i) {
-            return i === 0 ? 0 : ((vertical ? r.t : r.l) - a0) / pathLen;
-        });
-        sb.push(1);
-        nodeS = rc.map(function (r) {
-            var m = vertical ? r.t + 12 : r.l + r.w / 2;
-            return Math.max(0, Math.min(1, (m - a0) / pathLen));
-        });
         nodes.forEach(function (nd, i) {
-            var p = at(nodeS[i]);
+            var t = trackOf(stages[i]);
+            var p = toXY(col[i].c, i === last ? 0 : (t.side || 0) * D);
             nd.style.left = p[0] + 'px';
             nd.style.top = p[1] + 'px';
         });
-
-        // Colour ramp: each stage's colour at its node, blended in between.
-        var rgb = stages.map(function (st) { return hexRgb(st.color || '#7c8cff'); });
-        colors = [];
-        for (var q = 0; q < COLN; q++) {
-            var sq = q / (COLN - 1), a = 0;
-            while (a < n - 1 && nodeS[a + 1] <= sq) a++;
-            var b = Math.min(a + 1, n - 1);
-            var f = (b === a || sq <= nodeS[a]) ? 0 : smooth((sq - nodeS[a]) / (nodeS[b] - nodeS[a]));
-            colors.push('rgb(' + [0, 1, 2].map(function (z) {
-                return Math.round(rgb[a][z] + (rgb[b][z] - rgb[a][z]) * f);
-            }).join(',') + ')');
-        }
-        drawStatic(rc, wr);
+        // Each direction's name sits just after its first node, in the space
+        // between its line and the trunk (the trunk's goes below it).
+        labels.forEach(function (lb, i) {
+            var t = tracks[i], start = t.side ? col[Math.min(t.from || 1, last)] : col[0];
+            var off = (t.side || 0) * D;
+            var p = toXY(start.c + 16, t.side > 0 ? off - 17 : off + 17);
+            lb.style.left = p[0] + 'px';
+            lb.style.top = p[1] + 'px';
+        });
+        drawStatic(wr);
         return true;
     }
 
-    // Point on the stream at s (linear interpolation in the lookup table).
-    function at(s) {
-        var f = Math.max(0, Math.min(1, s)) * LUTN, j = f | 0, fr = f - j;
-        if (j >= LUTN) { j = LUTN - 1; fr = 1; }
-        return [lx[j] + (lx[j + 1] - lx[j]) * fr, ly[j] + (ly[j + 1] - ly[j]) * fr];
-    }
-
-    function stageAt(s) {
-        var i = 0;
-        while (i < n - 1 && s >= sb[i + 1]) i++;
-        return i;
-    }
-
-    // ── Static layer: stream glow, uncertainty envelope, robot tethers ──
-    function drawStatic(rc, wr) {
+    // ── Static layer: tracks, junctions, loop arrows, robot tethers ─────
+    function drawStatic(wr) {
         var c = bg.getContext('2d');
         c.setTransform(dpr, 0, 0, dpr, 0, 0);
         c.clearRect(0, 0, W, H);
-        var grad = vertical ? c.createLinearGradient(0, ly[0], 0, ly[LUTN])
-                            : c.createLinearGradient(lx[0], 0, lx[LUTN], 0);
-        stages.forEach(function (st, i) { grad.addColorStop(nodeS[i], st.color); });
+        c.lineCap = 'round';
+        c.lineJoin = 'round';
 
-        function strokePath(width, alpha) {
+        function trace(rt) {
             c.beginPath();
-            for (var j = 0; j <= LUTN; j += 4) {
-                if (j === 0) c.moveTo(lx[j], ly[j]); else c.lineTo(lx[j], ly[j]);
+            for (var i = 0; i < rt.x.length; i += 2) {
+                if (i === 0) c.moveTo(rt.x[i], rt.y[i]); else c.lineTo(rt.x[i], rt.y[i]);
             }
-            c.strokeStyle = grad;
-            c.globalAlpha = alpha;
-            c.lineWidth = width;
-            c.lineCap = 'round';
-            c.stroke();
+            c.lineTo(rt.x[rt.x.length - 1], rt.y[rt.y.length - 1]);
         }
-        strokePath(46 * k, 0.035);
-        strokePath(16 * k, 0.05);
-        strokePath(1, 0.25);
-
-        // Uncertainty stage: dashed ±2σ envelope around the stream.
-        stages.forEach(function (st, i) {
-            if (st.flow !== 'uncertainty') return;
-            c.setLineDash([3, 4]);
-            c.lineWidth = 1;
-            c.globalAlpha = 0.5;
-            c.strokeStyle = st.color;
-            [-1, 1].forEach(function (sign) {
-                c.beginPath();
-                for (var q = 0; q <= 60; q++) {
-                    var s = sb[i] + (sb[i + 1] - sb[i]) * q / 60;
-                    var t = q / 60, b = Math.pow(Math.sin(Math.PI * t), 2);
-                    var e = sign * (16.5 * k * (1 - b) + 27 * k * b + 3 * k);
-                    var j = Math.round(s * LUTN), p = at(s);
-                    var x = p[0] + lnx[j] * e, y = p[1] + lny[j] * e;
-                    if (q === 0) c.moveTo(x, y); else c.lineTo(x, y);
-                }
-                c.stroke();
-            });
+        routes.forEach(function (rt) {
+            c.strokeStyle = rt.track.color;
+            trace(rt);
+            c.globalAlpha = 0.07;
+            c.lineWidth = vertical ? 6 : 9;
+            c.stroke();
+            c.globalAlpha = rt.loop ? 0.45 : 0.55;
+            c.lineWidth = 1.3;
+            if (rt.loop) c.setLineDash([3, 4]);
+            c.stroke();
             c.setLineDash([]);
         });
 
-        // Tethers from the stream down to each robot (horizontal layout).
+        // Chevrons along loops, pointing the way the loop runs.
+        routes.forEach(function (rt) {
+            if (!rt.loop) return;
+            c.strokeStyle = rt.track.color;
+            c.globalAlpha = 0.8;
+            c.lineWidth = 1.3;
+            var every = Math.round((vertical ? 60 : 80) / rt.step);
+            for (var i = Math.round(every * 0.6); i < rt.x.length - every * 0.4; i += every) {
+                var tx = rt.ny[i], ty = -rt.nx[i], s = vertical ? 3 : 4;  // unit tangent (direction of travel)
+                c.beginPath();
+                c.moveTo(rt.x[i] - tx * s + rt.nx[i] * s, rt.y[i] - ty * s + rt.ny[i] * s);
+                c.lineTo(rt.x[i], rt.y[i]);
+                c.lineTo(rt.x[i] - tx * s - rt.nx[i] * s, rt.y[i] - ty * s - rt.ny[i] * s);
+                c.stroke();
+            }
+        });
+
+        // Junctions where tracks split from / merge into the trunk.
+        routes.forEach(function (rt) {
+            if (rt.trunk) return;
+            [0, rt.x.length - 1].forEach(function (i) {
+                c.globalAlpha = 1;
+                c.fillStyle = '#fff';
+                c.strokeStyle = rt.track.color;
+                c.lineWidth = 1.3;
+                c.beginPath();
+                c.arc(rt.x[i], rt.y[i], vertical ? 2 : 2.8, 0, Math.PI * 2);
+                c.fill();
+                c.stroke();
+            });
+        });
+
+        // Tethers from the lowest track down to each robot (horizontal).
         if (!vertical) {
             els.forEach(function (el, i) {
-                var col = stages[i].color;
+                var color = trackOf(stages[i]).color;
                 el.querySelectorAll('.rm-robot').forEach(function (rb) {
                     var r = rb.getBoundingClientRect();
                     var x = r.left - wr.left + r.width / 2, yEnd = r.top - wr.top + 6;
-                    var s = (x - lx[0]) / (lx[LUTN] - lx[0]);
-                    var yStart = at(s)[1] + 34;
+                    var low = lowestAt(x);
+                    var yStart = cross + low + (low ? 9 : 28);   // clear the trunk's label
                     if (yEnd - yStart < 8) return;
-                    var g2 = c.createLinearGradient(0, yStart, 0, yEnd);
-                    g2.addColorStop(0, col);
-                    g2.addColorStop(1, 'rgba(255,255,255,0)');
+                    var g = c.createLinearGradient(0, yStart, 0, yEnd);
+                    g.addColorStop(0, color);
+                    g.addColorStop(1, 'rgba(255,255,255,0)');
                     c.globalAlpha = 0.5;
-                    c.strokeStyle = g2;
+                    c.strokeStyle = g;
                     c.lineWidth = 1;
                     c.setLineDash([1, 3]);
                     c.beginPath();
@@ -263,7 +315,7 @@
                     c.stroke();
                     c.setLineDash([]);
                     c.globalAlpha = 0.9;
-                    c.fillStyle = col;
+                    c.fillStyle = color;
                     c.beginPath();
                     c.arc(x, yStart, 1.6, 0, Math.PI * 2);
                     c.fill();
@@ -273,71 +325,46 @@
         c.globalAlpha = 1;
     }
 
-    // ── Particles ───────────────────────────────────────────────────────
-    var N = 0, ps, lane, uu, nn, mode, br, sz, spd, bright;
-    var MODE = [-1, 0, 1];
-
+    // ── Particles (direction only) ──────────────────────────────────────
+    var N = 0, pr, pd, pj, pv, ps, pb;
     function gauss() {
         var u = 0;
         while (!u) u = Math.random();
         var g = Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * Math.random());
-        return g > 2.4 ? 2.4 : g < -2.4 ? -2.4 : g;
-    }
-    function respawn(i, s) {
-        ps[i] = s;
-        lane[i] = Math.max(-3, Math.min(3, Math.round(gauss() * 1.25)));
-        uu[i] = gauss();
-        nn[i] = gauss();
-        var r = Math.random();
-        mode[i] = r < 0.34 ? 0 : r < 0.66 ? 1 : 2;
-        br[i] = (Math.floor(Math.random() * 3) - 1) * 0.7 + gauss() * 0.05;
-        sz[i] = 0.9 + Math.random() * 1.1;
-        spd[i] = 0.8 + Math.random() * 0.4;
-        bright[i] = 0.55 + Math.random() * 0.45;
+        return g > 2.2 ? 2.2 : g < -2.2 ? -2.2 : g;
     }
     function initParticles() {
-        N = vertical ? 700 : Math.round(Math.min(1900, W * 2));
-        ps = new Float32Array(N); lane = new Float32Array(N); uu = new Float32Array(N);
-        nn = new Float32Array(N); mode = new Uint8Array(N); br = new Float32Array(N);
-        sz = new Float32Array(N); spd = new Float32Array(N); bright = new Float32Array(N);
-        for (var i = 0; i < N; i++) respawn(i, Math.random());
-    }
-
-    // Lateral offset (px) of particle i at stream position s.
-    function offset(i, s, time) {
-        var bi = Math.min(stageAt(s), worldIdx);
-        var end = bi === worldIdx ? 1 : sb[bi + 1];
-        var t = (s - sb[bi]) / (end - sb[bi]);
-        var L = lane[i] * 5.5 * k;
-        switch (stages[bi].flow) {
-            case 'feedback':
-                var env = Math.exp(-2.6 * t) * (1 - t) * (1 - Math.exp(-14 * t));
-                return L + 17 * k * env * Math.sin(2 * Math.PI * 2.4 * t - time * 1.6);
-            case 'uncertainty':
-                var b = Math.sin(Math.PI * t);
-                b *= b;
-                return L * (1 - b) + uu[i] * 13 * k * b;
-            case 'generative':
-                if (t < 0.3) {
-                    var w = smooth(t / 0.3);
-                    return L * (1 - w) + nn[i] * 22 * k * w;
-                }
-                var w2 = smooth((t - 0.3) / 0.7);
-                return nn[i] * 22 * k * (1 - w2) + (MODE[mode[i]] * 20 + uu[i] * 1.6) * k * w2;
-            case 'world':
-                return (MODE[mode[i]] * 20 + uu[i] * 1.6) * k + 30 * k * br[i] * Math.pow(t, 1.3);
-            default:   // laminar
-                return L;
-        }
+        var dens = vertical ? 0.3 : 0.5, counts = routes.map(function (rt) {
+            return Math.round(rt.len * dens * (rt.loop ? 0.55 : 1));
+        });
+        N = counts.reduce(function (a, b) { return a + b; }, 0);
+        pr = new Uint8Array(N); pd = new Float32Array(N); pj = new Float32Array(N);
+        pv = new Float32Array(N); ps = new Float32Array(N); pb = new Float32Array(N);
+        var i = 0;
+        counts.forEach(function (cnt, r) {
+            for (var q = 0; q < cnt; q++, i++) {
+                pr[i] = r;
+                pd[i] = Math.random() * routes[r].len;
+                pj[i] = gauss() * (vertical ? 0.9 : 1.6);
+                pv[i] = 0.85 + Math.random() * 0.3;
+                ps[i] = 0.9 + Math.random() * 1.0;
+                pb[i] = 0.5 + Math.random() * 0.5;
+            }
+        });
     }
 
     var ctx = fx.getContext('2d');
-    var buckets = [];
     var LEVELS = [0.22, 0.42, 0.66, 0.92];
-    for (var q = 0; q < COLN * LEVELS.length; q++) buckets.push([]);
+    var buckets = [];
     var active = -1;
 
-    function render(time, trails) {
+    function colAt(x, y) {
+        var m = vertical ? y : x, i = 0;
+        while (i < last && m >= col[i + 1].l) i++;
+        return i;
+    }
+
+    function render(trails) {
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
         if (trails) {
             ctx.globalCompositeOperation = 'destination-out';
@@ -348,58 +375,57 @@
             ctx.clearRect(0, 0, W, H);
         }
         ctx.globalCompositeOperation = 'source-over';
+        var nb = routes.length * LEVELS.length;
+        while (buckets.length < nb) buckets.push([]);
+        for (var b = 0; b < nb; b++) buckets[b].length = 0;
         var dim = active >= 0 && !vertical;
-        var fadeFrom = nextIdx < n ? sb[nextIdx] : 0.97;
-        for (var b = 0; b < buckets.length; b++) buckets[b].length = 0;
         for (var i = 0; i < N; i++) {
-            var s = ps[i];
-            var a = bright[i];
-            if (s < 0.025) a *= s / 0.025;
-            if (s > fadeFrom) a *= 1 - smooth(((s - fadeFrom) / (1 - fadeFrom) - 0.15) / 0.85);
-            if (dim && stageAt(s) !== active) a *= 0.38;
+            var rt = routes[pr[i]], d = pd[i], a = pb[i];
+            var fadeIn = rt.trunk ? 24 : 10, fadeOut = rt.trunk ? 60 : 14;
+            if (d < fadeIn) a *= d / fadeIn;
+            if (rt.len - d < fadeOut) a *= (rt.len - d) / fadeOut;
+            var j = Math.min(rt.x.length - 1, (d / rt.step) | 0);
+            var x = rt.x[j] + rt.nx[j] * pj[i], y = rt.y[j] + rt.ny[j] * pj[i];
+            if (dim && colAt(x, y) !== active) a *= 0.4;
             if (a < 0.06) continue;
-            var f = s * LUTN, j = f | 0, fr = f - j;
-            if (j >= LUTN) { j = LUTN - 1; fr = 1; }
-            var o = offset(i, s, time);
-            var x = lx[j] + (lx[j + 1] - lx[j]) * fr + lnx[j] * o;
-            var y = ly[j] + (ly[j + 1] - ly[j]) * fr + lny[j] * o;
             var lv = a < 0.3 ? 0 : a < 0.55 ? 1 : a < 0.8 ? 2 : 3;
-            var bk = buckets[lv * COLN + Math.min(COLN - 1, (s * COLN) | 0)];
-            bk.push(x, y, sz[i]);
+            buckets[pr[i] * LEVELS.length + lv].push(x, y, ps[i]);
         }
-        for (b = 0; b < buckets.length; b++) {
+        for (b = 0; b < nb; b++) {
             var arr = buckets[b];
             if (!arr.length) continue;
-            ctx.globalAlpha = LEVELS[(b / COLN) | 0];
-            ctx.fillStyle = colors[b % COLN];
+            ctx.globalAlpha = LEVELS[b % LEVELS.length];
+            ctx.fillStyle = routes[(b / LEVELS.length) | 0].track.color;
             ctx.beginPath();
             for (var p = 0; p < arr.length; p += 3) {
-                var d = arr[p + 2];
-                ctx.rect(arr[p] - d / 2, arr[p + 1] - d / 2, d, d);
+                var s = arr[p + 2];
+                ctx.rect(arr[p] - s / 2, arr[p + 1] - s / 2, s, s);
             }
             ctx.fill();
         }
         ctx.globalAlpha = 1;
-        ctx.globalCompositeOperation = 'source-over';
     }
 
     function step(dt) {
-        var v = (vertical ? 40 : 48) / pathLen;   // px per second along the stream
+        var v = vertical ? 34 : 44;   // px per second
         for (var i = 0; i < N; i++) {
-            ps[i] += v * spd[i] * dt;
-            if (ps[i] >= 1) respawn(i, Math.random() * 0.01);
+            var len = routes[pr[i]].len;
+            pd[i] += v * pv[i] * dt;
+            if (pd[i] >= len) {
+                pd[i] -= len;
+                pj[i] = gauss() * (vertical ? 0.9 : 1.6);
+            }
         }
     }
 
     // ── Animation loop ──────────────────────────────────────────────────
-    var running = false, onScreen = false, raf = 0, lastT = 0, clock = 0, ready = false;
+    var running = false, onScreen = false, raf = 0, lastT = 0, ready = false;
     function frame(now) {
         if (!running) return;
         var dt = Math.min(0.05, (now - lastT) / 1000 || 0.016);
         lastT = now;
-        clock += dt;
         step(dt);
-        render(clock, 1 - Math.pow(1 - 0.2, dt * 60));
+        render(1 - Math.pow(1 - 0.24, dt * 60));
         raf = requestAnimationFrame(frame);
     }
     function start() {
@@ -418,7 +444,7 @@
 
     function renderInspector(i) {
         var st = stages[i];
-        inspector.style.setProperty('--c', st.color);
+        inspector.style.setProperty('--c', trackOf(st).color);
         var works = st.works && st.works.length
             ? '<div class="rm-works-label">' + esc(labelWorks) + '</div>' + worksHtml(st) : '';
         inspector.innerHTML =
@@ -436,7 +462,7 @@
         els.forEach(function (el, j) { el.classList.toggle('is-active', j === i); });
         nodes.forEach(function (nd, j) { nd.classList.toggle('is-active', j === i); });
         if (i >= 0 && !vertical) renderInspector(i);
-        if (reduceMotion && ready) render(clock, 0);
+        if (reduceMotion && ready) render(0);
     }
 
     function cycling() { return !vertical && !reduceMotion && !hovering && onScreen; }
@@ -450,7 +476,7 @@
     }
 
     els.forEach(function (el, i) {
-        el.addEventListener('mouseenter', function () { if (!vertical) { setActive(i); } });
+        el.addEventListener('mouseenter', function () { if (!vertical) setActive(i); });
         el.addEventListener('focus', function () { if (!vertical) setActive(i); });
         el.addEventListener('click', function () {
             if (vertical) return;
@@ -494,17 +520,14 @@
         var wasVertical = vertical;
         if (!layout()) return;
         var modeChanged = !ready || wasVertical !== vertical;
-        if (modeChanged) initParticles();
+        initParticles();                 // routes are rebuilt on every layout
         ready = true;
         if (!vertical) {
             if (active < 0) setActive(0);
             else if (modeChanged) renderInspector(active);
         }
         if (vertical) trackScroll();
-        if (reduceMotion) {
-            for (var i = 0; i < 6; i++) step(0.3);
-            render(clock, 0);
-        }
+        if (reduceMotion) render(0);
         scheduleCycle();
         start();
     }

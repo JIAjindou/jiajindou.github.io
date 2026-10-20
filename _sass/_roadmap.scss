@@ -1,6 +1,7 @@
 // Research roadmap (js/roadmap.js): a white card in the homepage's own palette
-// (navy #1e3a5f, teal #0e7490, slate greys) with a particle stream flowing
-// through the research stages; robots hang off the stream.
+// (navy #1e3a5f, steel blue, teal #0e7490, slate greys). The research
+// directions run across the stages as circuit-like tracks with particles
+// flowing along them; robots hang off the tracks.
 // Plain CSS on purpose (no Sass features) so it can be previewed as-is.
 
 .roadmap-section {
@@ -84,25 +85,27 @@
     color: #9aa5b1;
 }
 
-// Gap between the titles and the robots: a one-line plain-words caption of
-// what the particles in this stage show, then the stream itself.
-.rm-gap {
-    display: flex;
-    flex-direction: column;
+// Room for the tracks between the titles and the robots.
+.rm-flow { height: 150px; }
+
+// Name of each research direction, placed next to its line by the script.
+.rm-track-label {
+    position: absolute;
+    z-index: 1;
+    padding: 0 5px;
+    transform: translateY(-50%);
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.88);
+    font: 600 10px/1.5 'Google Sans', 'Noto Sans', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: var(--c);
+    pointer-events: none;
 }
 
-.rm-caption {
-    display: flex;
-    align-items: flex-end;
-    justify-content: center;
-    height: 34px;
-    font-size: 11.5px;
-    line-height: 1.4;
-    color: #6b7280;
-    transition: color 0.3s ease;
-}
-
-.rm-flow { height: 124px; }
+// Legend of the directions, for narrow screens only.
+.rm-legend { display: none; }
 
 .rm-robots {
     display: flex;
@@ -185,7 +188,6 @@
 }
 
 .rm-stage.is-active .rm-title { color: #1e3a5f; }
-.rm-stage.is-active .rm-caption { color: var(--c); }
 .rm-stage.is-active .rm-robot img { transform: translateY(-3px) scale(1.07); }
 .roadmap.has-active .rm-stage:not(.is-active) .rm-robot img { opacity: 0.62; }
 .roadmap.has-active .rm-stage:not(.is-active) .rm-robot::before { opacity: 0.5; }
@@ -270,8 +272,8 @@
     box-shadow: 0 3px 8px rgba(30, 58, 95, 0.1);
 }
 
-.rm-in { animation: rm-in 0.45s ease both; }
-.rm-insp-body.rm-in { animation-delay: 0.06s; }
+// No fill mode: if animations are throttled the text is simply shown.
+.rm-in { animation: rm-in 0.45s ease; }
 
 @keyframes rm-in {
     from { opacity: 0; transform: translateY(6px); }
@@ -322,14 +324,29 @@
         color: #1e3a5f;
     }
 
-    .rm-gap { display: block; }
-    .rm-flow { display: none; }
+    .rm-flow,
+    .rm-track-label { display: none; }
 
-    .rm-caption {
-        justify-content: flex-start;
-        height: auto;
-        margin-top: 4px;
-        font-size: 12.5px;
+    .rm-legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px 14px;
+        padding: 14px 14px 0;
+        font-size: 11.5px;
+        color: #555;
+    }
+
+    .rm-legend span {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .rm-legend i {
+        width: 16px;
+        height: 2px;
+        border-radius: 1px;
+        background: var(--c);
     }
 
     .rm-robots {
