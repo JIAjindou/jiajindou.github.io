@@ -1,6 +1,7 @@
 // Record the visit first, independent of jQuery and the DOM, so a failure in
 // any other script or a slow asset can never stop the visit from counting.
-pingVisitor();
+// Wrapped so that even an unexpected error here can't break the rest of the page.
+try { pingVisitor(); } catch (e) {}
 
 $(document).ready(function() {
     setupPublicationFilters();
@@ -41,35 +42,96 @@ function setupSiteVisits() {
 // The Worker reads the visitor's approximate lat/lon from Cloudflare's edge
 // (request.cf) — the page only sends the referrer (which site linked here).
 function pingVisitor() {
+    // Session flag. Older code set "mv_pinged" as soon as the request was
+    // fired, even if it then failed, so a stale flag could silently block
+    // every later visit in that tab; a new name makes any leftover inert.
+    var FLAG = 'mv_rec';
     var url = window.VISITOR_WORKER_URL;
+    // ?debug in the URL shows an on-page panel describing every step, so a
+    // visitor on a device we can't access (e.g. a phone in mainland China)
+    // can screenshot exactly where recording fails.
+    var debug = /[?&]debug\b/.test(location.search);
+    var log = debug ? visitDebugPanel() : function () {};
+    var src = (document.currentScript && document.currentScript.src) || '';
+    log('script: ' + (src.split('/').pop() || '?'));
+    log('endpoint base: ' + (url || '(none)'));
+    log('UA: ' + navigator.userAgent);
     if (!url) return;
-    try { if (sessionStorage.getItem('mv_pinged')) return; } catch (e) {}
+    var already = false;
+    try { already = !!sessionStorage.getItem(FLAG); } catch (e) {}
+    log('already recorded this session: ' + already);
+    if (already && !debug) return;   // debug mode always sends, to show the result
     var ref = '';
     try { ref = document.referrer || ''; } catch (e) {}
     var endpoint = url.replace(/\/$/, '') + '/collect?ref=' + encodeURIComponent(ref);
+    var markDone = function () { try { sessionStorage.setItem(FLAG, '1'); } catch (e) {} };
+
+    // Browsers without fetch: fall back to an image request, which every
+    // browser supports (the Worker records /collect on any method).
+    if (typeof fetch !== 'function') {
+        log('no fetch() — using image beacon');
+        var img = new Image();
+        img.onload = img.onerror = function () { log('image beacon sent'); };
+        img.src = endpoint + '&_=' + Date.now();
+        markDone();
+        return;
+    }
 
     // Retry a few times with a timeout: a mainland -> Cloudflare request can
-    // transiently fail or hang even when the page itself loaded fine. We mark
-    // the session as pinged only once a request actually succeeds, so a reload
+    // transiently fail or hang even when the page itself loaded fine. The
+    // session is marked only once a request actually succeeds, so a reload
     // gets more chances instead of being deduped away after a silent failure.
     var attempt = 0;
     function send() {
-        attempt++;
+        var n = ++attempt;
         var ctrl = null, timer = null;
         try { ctrl = new AbortController(); timer = setTimeout(function () { ctrl.abort(); }, 8000); } catch (e) {}
+        log('attempt ' + n + ' -> POST ' + endpoint);
         fetch(endpoint, {
             method: 'POST', mode: 'cors', keepalive: true,
             signal: ctrl ? ctrl.signal : undefined
         }).then(function (r) {
             if (timer) clearTimeout(timer);
+            log('attempt ' + n + ' <- HTTP ' + (r && r.status));
             if (!r || !r.ok) throw 0;
-            try { sessionStorage.setItem('mv_pinged', '1'); } catch (e) {}
-        }).catch(function () {
+            markDone();
+            log('OK: visit recorded');
+        }).catch(function (e) {
             if (timer) clearTimeout(timer);
+            if (e !== 0) log('attempt ' + n + ' FAILED: ' +
+                (e && e.name === 'AbortError' ? 'timeout after 8s' : (e && e.message) || String(e)));
             if (attempt < 3) setTimeout(send, attempt * 1500);
+            else log('gave up after 3 attempts');
         });
     }
     send();
+}
+
+// On-page diagnostics for ?debug. Collects lines from the moment the script
+// runs (before <body> exists) and renders them in a fixed panel once it does.
+function visitDebugPanel() {
+    var lines = [], box = null;
+    function render() {
+        if (!box && document.body) {
+            box = document.createElement('pre');
+            box.style.cssText = 'position:fixed;left:8px;right:8px;bottom:8px;z-index:99999;margin:0;' +
+                'padding:10px 12px;background:rgba(15,23,42,.94);color:#e2e8f0;border-radius:10px;' +
+                'font:12px/1.5 Menlo,Consolas,monospace;white-space:pre-wrap;word-break:break-all;' +
+                'max-height:50vh;overflow:auto;box-shadow:0 6px 24px rgba(0,0,0,.35)';
+            document.body.appendChild(box);
+        }
+        if (box) box.textContent = 'Visitor debug\n' + lines.join('\n');
+    }
+    function log(m) {
+        var t = (window.performance && performance.now) ? (performance.now() / 1000).toFixed(1) + 's' : '';
+        lines.push(t + '  ' + m);
+        render();
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+        log('jQuery: ' + (window.jQuery ? jQuery.fn.jquery : 'NOT LOADED'));
+        render();
+    });
+    return log;
 }
 
 // Owner-only visitor log. Hidden from the public: only activates when you
