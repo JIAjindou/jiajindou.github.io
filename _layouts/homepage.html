@@ -11,7 +11,7 @@
 
 <head>
   <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
-  {%- if lang == "en" %}
+  {%- if lang == "en" and page.url == "/" %}
   <script>
     // Visitors who chose Chinese before go straight to the Chinese page
     // (runs before the visit is recorded, so it is counted only once).
@@ -29,6 +29,9 @@
   <meta name="description" content="{{ t.meta_description }}">
   <meta name="author" content="Jindou Jia">
   <link rel="canonical" href="{{ site.url }}{{ page.url }}">
+  {%- if page.noindex %}
+  <meta name="robots" content="noindex">
+  {%- endif %}
   <link rel="alternate" hreflang="en" href="{{ site.url }}/">
   <link rel="alternate" hreflang="zh-CN" href="{{ site.url }}/zh/">
   <link rel="alternate" hreflang="x-default" href="{{ site.url }}/">
@@ -180,6 +183,17 @@
 
     </div>
   </section>
+
+  {% if page.roadmap %}
+  <!-- Research roadmap. -->
+  <div class="hr">
+    <div class="container">
+      <hr>
+    </div>
+  </div>
+
+  {% include roadmap.html %}
+  {% endif %}
 
   <!-- Robotic Platforms. -->
   <div class="hr">

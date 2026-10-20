@@ -1,0 +1,351 @@
+// Research roadmap (js/roadmap.js): a white card in the homepage's own palette
+// (navy #1e3a5f, teal #0e7490, slate greys) with a particle stream flowing
+// through the research stages; robots hang off the stream.
+// Plain CSS on purpose (no Sass features) so it can be previewed as-is.
+
+.roadmap-section {
+    padding-top: 2rem;
+    padding-bottom: 3.5rem;
+}
+
+.roadmap-subtitle {
+    color: #555;
+    margin-top: -0.25em;
+    margin-bottom: 1.25em;
+    font-size: 95%;
+}
+
+.roadmap {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    border-radius: 14px;
+    color: #444;
+    background:
+        radial-gradient(rgba(30, 58, 95, 0.075) 1px, transparent 1.3px) 0 0 / 22px 22px,
+        linear-gradient(180deg, #fff 0%, #f7f9fb 100%);
+    border: 1px solid #e6eaef;
+    box-shadow: 0 10px 30px rgba(30, 58, 95, 0.07);
+}
+
+.rm-stages {
+    position: relative;
+    display: flex;
+    padding: 26px 16px 2px;
+}
+
+.rm-canvas {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.rm-stage {
+    position: relative;
+    z-index: 1;
+    flex: 1 1 0;
+    min-width: 0;
+    padding: 0 6px;
+    text-align: center;
+    outline: none;
+    cursor: default;
+}
+
+.rm-stage.rm-next { flex: 0 0 104px; }
+
+.rm-head {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    min-height: 74px;
+}
+
+.rm-idx {
+    font: 600 11px/1.2 ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    letter-spacing: 0.16em;
+    color: var(--c);
+}
+
+.rm-title {
+    font-family: 'Google Sans', 'Noto Sans', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+    font-weight: 600;
+    font-size: 14.5px;
+    line-height: 1.3;
+    color: #444;
+    transition: color 0.3s ease;
+}
+
+.rm-years {
+    font-size: 11.5px;
+    letter-spacing: 0.03em;
+    color: #9aa5b1;
+}
+
+.rm-gap { height: 140px; }
+
+.rm-robots {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: flex-start;
+    min-height: 128px;
+    padding-bottom: 6px;
+}
+
+.rm-robot {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50%;          // two per row in every column
+    max-width: 74px;
+    height: 58px;
+}
+
+// A soft floor shadow under each robot.
+.rm-robot::before {
+    content: '';
+    position: absolute;
+    left: 10px;
+    right: 10px;
+    bottom: 2px;
+    height: 12px;
+    border-radius: 50%;
+    background: radial-gradient(closest-side, rgba(30, 58, 95, 0.16), rgba(30, 58, 95, 0));
+    transition: opacity 0.35s ease;
+}
+
+.rm-robot img {
+    position: relative;
+    max-width: 88%;
+    max-height: 48px;
+    object-fit: contain;
+    transition: transform 0.35s ease, opacity 0.35s ease, filter 0.35s ease;
+}
+
+.rm-detail { display: none; }
+
+// Stage nodes on the stream, placed by the script.
+.rm-node {
+    position: absolute;
+    z-index: 2;
+    width: 11px;
+    height: 11px;
+    margin: -5.5px 0 0 -5.5px;
+    border-radius: 50%;
+    background: #fff;
+    border: 2px solid var(--c);
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.9), 0 2px 6px rgba(30, 58, 95, 0.18);
+    pointer-events: none;
+    transition: transform 0.35s ease, background 0.35s ease;
+}
+
+.rm-node::after {
+    content: '';
+    position: absolute;
+    inset: -8px;
+    border-radius: 50%;
+    border: 1px solid var(--c);
+    opacity: 0;
+    animation: rm-pulse 2.8s ease-out infinite;
+}
+
+.rm-node.is-active {
+    background: var(--c);
+    transform: scale(1.3);
+}
+
+.rm-node.is-active::after { animation-duration: 1.6s; }
+
+@keyframes rm-pulse {
+    0% { transform: scale(0.4); opacity: 0.7; }
+    100% { transform: scale(2.2); opacity: 0; }
+}
+
+.rm-stage.is-active .rm-title { color: #1e3a5f; }
+.rm-stage.is-active .rm-robot img { transform: translateY(-3px) scale(1.07); }
+.roadmap.has-active .rm-stage:not(.is-active) .rm-robot img { opacity: 0.62; }
+.roadmap.has-active .rm-stage:not(.is-active) .rm-robot::before { opacity: 0.5; }
+
+// Inspector: details of the active stage (desktop).
+.rm-inspector {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 210px 1fr;
+    gap: 6px 24px;
+    min-height: 124px;
+    margin: 0 16px 16px;
+    padding: 16px 18px 14px;
+    overflow: hidden;
+    border-radius: 10px;
+    background: #fff;
+    border: 1px solid #e6eaef;
+    box-shadow: 0 2px 8px rgba(30, 58, 95, 0.04);
+}
+
+.rm-progress {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 2px;
+    background: var(--c);
+    opacity: 0.8;
+    transform: scaleX(0);
+    transform-origin: left;
+}
+
+.rm-inspector.is-cycling .rm-progress { animation: rm-progress 5.2s linear forwards; }
+
+@keyframes rm-progress { to { transform: scaleX(1); } }
+
+.rm-insp-head {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.rm-insp-title {
+    font-family: 'Google Sans', 'Noto Sans', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+    font-weight: 700;
+    font-size: 17px;
+    line-height: 1.3;
+    color: #1e3a5f;
+}
+
+.rm-insp-body p,
+.rm-detail p {
+    margin: 0 0 10px;
+    font-size: 14px;
+    line-height: 1.65;
+    color: #555;
+}
+
+.rm-works-label {
+    margin-bottom: 6px;
+    font: 600 10.5px/1.2 ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #9aa5b1;
+}
+
+.rm-works {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.rm-chip {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 6px;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    line-height: 1.5;
+    color: #444;
+    background: #f5f7fa;
+    border: 1px solid #e2e8f0;
+    text-decoration: none;
+    transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.rm-chip b {
+    font-weight: 700;
+    color: var(--c);
+}
+
+.rm-chip:hover {
+    color: #1e3a5f;
+    background: #fff;
+    border-color: var(--c);
+    box-shadow: 0 3px 8px rgba(30, 58, 95, 0.1);
+}
+
+.rm-in { animation: rm-in 0.45s ease both; }
+.rm-insp-body.rm-in { animation-delay: 0.06s; }
+
+@keyframes rm-in {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: none; }
+}
+
+.rm-hint {
+    position: absolute;
+    right: 14px;
+    bottom: 8px;
+    font-size: 11px;
+    color: #b3bcc6;
+}
+
+// Small laptops / tablets: tighter columns so the titles still fit.
+@media (min-width: 769px) and (max-width: 1023px) {
+    .rm-stages { padding-left: 10px; padding-right: 10px; }
+    .rm-stage { padding: 0 3px; }
+    .rm-stage.rm-next { flex-basis: 84px; }
+    .rm-title { font-size: 13px; }
+    .rm-inspector { grid-template-columns: 170px 1fr; }
+}
+
+// Narrow screens: vertical stream down the left edge, details inline.
+@media (max-width: 768px) {
+    .rm-stages {
+        flex-direction: column;
+        padding: 22px 14px 6px 50px;
+    }
+
+    .rm-stage {
+        padding: 0 0 26px;
+        text-align: left;
+    }
+
+    .rm-stage.rm-next {
+        flex: none;
+        padding-bottom: 12px;
+    }
+
+    .rm-head {
+        align-items: flex-start;
+        min-height: 0;
+    }
+
+    .rm-title {
+        font-size: 16px;
+        color: #1e3a5f;
+    }
+
+    .rm-gap { display: none; }
+
+    .rm-robots {
+        justify-content: flex-start;
+        min-height: 0;
+        margin: 4px 0 2px -8px;
+        padding-bottom: 0;
+    }
+
+    .rm-robots:empty { display: none; }
+
+    .rm-detail { display: block; }
+    .rm-detail p { font-size: 13.5px; margin: 6px 0 8px; }
+    .rm-works { gap: 5px; }
+
+    .rm-chip {
+        gap: 4px;
+        padding: 1px 8px;
+        font-size: 11px;
+    }
+    .rm-inspector { display: none; }
+
+    .roadmap.has-active .rm-stage:not(.is-active) .rm-robot img { opacity: 1; filter: none; }
+    .roadmap.has-active .rm-stage:not(.is-active) .rm-robot::before { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .rm-node::after,
+    .rm-in,
+    .rm-inspector.is-cycling .rm-progress { animation: none; }
+}

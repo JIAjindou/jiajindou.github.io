@@ -3,6 +3,7 @@
 
 @import "base";
 @import "nav";
+@import "roadmap";
 
 .title {
     font-family: 'Google Sans';
@@ -438,7 +439,15 @@ html:lang(zh) body {
     font-family: 'Noto Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
                  'Hiragino Sans GB', 'Microsoft YaHei', 'Source Han Sans SC', 'Noto Sans SC', sans-serif;
 }
-.publication-block { scroll-margin-top: 24px; }
+.publication-block { scroll-margin-top: 76px; }   // clears the sticky nav
+
+// Brief highlight on the paper a roadmap chip / platform badge jumped to.
+.publication-block.pub-flash { animation: pub-flash 1.8s ease-out; }
+
+@keyframes pub-flash {
+    0%, 30% { box-shadow: 0 0 0 3px rgba(14, 116, 144, 0.35); background: rgba(14, 116, 144, 0.05); }
+    100% { box-shadow: 0 0 0 3px rgba(14, 116, 144, 0); background: transparent; }
+}
 
 .platform-venues {
     margin-top: 0.65em;

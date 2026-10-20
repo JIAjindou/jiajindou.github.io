@@ -1,0 +1,21 @@
+{%- comment -%}
+  Research roadmap: a particle stream that flows through the research stages
+  in _data/roadmap.yml, with the robot platforms of each stage hanging off it.
+  Markup is built by js/roadmap.js from the JSON below (same data for / and /zh/).
+{%- endcomment -%}
+{%- assign rlang = page.lang | default: "en" -%}
+{%- assign rt = site.data.i18n[rlang] -%}
+<section class="section roadmap-section">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3">{{ rt.roadmap }}</h2>
+    <p class="roadmap-subtitle">{{ rt.roadmap_sub }}</p>
+
+    <div class="roadmap" id="roadmap" data-img-base="{{ '/images/hardware/' | relative_url }}"
+         data-label-works="{{ rt.roadmap_works }}" data-label-hint="{{ rt.roadmap_hint }}">
+      <div class="rm-stages"></div>
+      <div class="rm-inspector" aria-live="polite"></div>
+    </div>
+    <script type="application/json" id="roadmap-data">{{ site.data.roadmap | jsonify }}</script>
+  </div>
+</section>
+<script src="{{ '/js/roadmap.js' | relative_url }}?v={{ site.time | date: '%s' }}" defer></script>

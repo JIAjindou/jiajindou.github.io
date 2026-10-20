@@ -479,4 +479,24 @@ function setupPublicationFilters() {
 
     // Default view: the Featured list.
     applyFilter('featured');
+
+    // Links to a paper (#pub-<id>, from the roadmap or platform badges) may
+    // point at one the current filter hides; switch to its year first so the
+    // jump lands, then briefly highlight it.
+    document.addEventListener('click', function(e) {
+        var a = e.target.closest ? e.target.closest('a[href^="#pub-"]') : null;
+        if (!a) return;
+        var block = document.getElementById(a.getAttribute('href').slice(1));
+        if (!block) return;
+        e.preventDefault();
+        if (block.style.display === 'none') {
+            var yearBtn = document.querySelector('.pub-filter[data-filter="year:' + block.getAttribute('data-year') + '"]');
+            if (yearBtn) yearBtn.click(); else applyFilter('all');
+        }
+        block.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        if (history.replaceState) history.replaceState(null, '', a.getAttribute('href'));
+        block.classList.remove('pub-flash');
+        void block.offsetWidth;
+        block.classList.add('pub-flash');
+    });
 }
