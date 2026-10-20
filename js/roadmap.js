@@ -80,7 +80,8 @@
             '<div class="rm-head"><span class="rm-idx">' + esc(st.index || '') + '</span>' +
             '<span class="rm-title">' + esc(tr(st, 'title')) + '</span>' +
             '<span class="rm-years">' + esc(tr(st, 'years')) + '</span></div>' +
-            '<div class="rm-gap"></div>' +
+            '<div class="rm-gap"><div class="rm-caption">' + esc(tr(st, 'caption')) + '</div>' +
+            '<div class="rm-flow"></div></div>' +
             '<div class="rm-robots">' + robots + '</div>' +
             '<div class="rm-detail"><p>' + esc(tr(st, 'desc')) + '</p>' + worksHtml(st) + '</div>';
         wrap.appendChild(el);
@@ -124,7 +125,7 @@
         });
         var last = rc[n - 1], a0, a1, cross, amp, freq;
         if (!vertical) {
-            var g = els[0].querySelector('.rm-gap').getBoundingClientRect();
+            var g = els[0].querySelector('.rm-flow').getBoundingClientRect();
             cross = g.top - wr.top + g.height / 2;
             a0 = rc[0].l + 2;
             a1 = last.l + last.w;
@@ -421,7 +422,6 @@
         var works = st.works && st.works.length
             ? '<div class="rm-works-label">' + esc(labelWorks) + '</div>' + worksHtml(st) : '';
         inspector.innerHTML =
-            '<div class="rm-progress"></div>' +
             '<div class="rm-insp-head rm-in"><span class="rm-idx">' + esc(st.index || '') + '</span>' +
             '<span class="rm-insp-title">' + esc(tr(st, 'title')) + '</span>' +
             '<span class="rm-years">' + esc(tr(st, 'years')) + '</span></div>' +
@@ -442,7 +442,6 @@
     function cycling() { return !vertical && !reduceMotion && !hovering && onScreen; }
     function scheduleCycle() {
         clearTimeout(cycleTimer);
-        inspector.classList.toggle('is-cycling', cycling());
         if (!cycling()) return;
         cycleTimer = setTimeout(function () {
             setActive((active + 1) % n);
@@ -501,7 +500,7 @@
             if (active < 0) setActive(0);
             else if (modeChanged) renderInspector(active);
         }
-        if (vertical) { inspector.classList.remove('is-cycling'); trackScroll(); }
+        if (vertical) trackScroll();
         if (reduceMotion) {
             for (var i = 0; i < 6; i++) step(0.3);
             render(clock, 0);

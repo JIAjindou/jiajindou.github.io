@@ -84,7 +84,25 @@
     color: #9aa5b1;
 }
 
-.rm-gap { height: 140px; }
+// Gap between the titles and the robots: a one-line plain-words caption of
+// what the particles in this stage show, then the stream itself.
+.rm-gap {
+    display: flex;
+    flex-direction: column;
+}
+
+.rm-caption {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    height: 34px;
+    font-size: 11.5px;
+    line-height: 1.4;
+    color: #6b7280;
+    transition: color 0.3s ease;
+}
+
+.rm-flow { height: 124px; }
 
 .rm-robots {
     display: flex;
@@ -100,7 +118,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 50%;          // two per row in every column
+    // Two per row in every column.
+    width: 50%;
     max-width: 74px;
     height: 58px;
 }
@@ -166,6 +185,7 @@
 }
 
 .rm-stage.is-active .rm-title { color: #1e3a5f; }
+.rm-stage.is-active .rm-caption { color: var(--c); }
 .rm-stage.is-active .rm-robot img { transform: translateY(-3px) scale(1.07); }
 .roadmap.has-active .rm-stage:not(.is-active) .rm-robot img { opacity: 0.62; }
 .roadmap.has-active .rm-stage:not(.is-active) .rm-robot::before { opacity: 0.5; }
@@ -186,22 +206,6 @@
     border: 1px solid #e6eaef;
     box-shadow: 0 2px 8px rgba(30, 58, 95, 0.04);
 }
-
-.rm-progress {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 2px;
-    background: var(--c);
-    opacity: 0.8;
-    transform: scaleX(0);
-    transform-origin: left;
-}
-
-.rm-inspector.is-cycling .rm-progress { animation: rm-progress 5.2s linear forwards; }
-
-@keyframes rm-progress { to { transform: scaleX(1); } }
 
 .rm-insp-head {
     display: flex;
@@ -318,7 +322,15 @@
         color: #1e3a5f;
     }
 
-    .rm-gap { display: none; }
+    .rm-gap { display: block; }
+    .rm-flow { display: none; }
+
+    .rm-caption {
+        justify-content: flex-start;
+        height: auto;
+        margin-top: 4px;
+        font-size: 12.5px;
+    }
 
     .rm-robots {
         justify-content: flex-start;
@@ -346,6 +358,5 @@
 
 @media (prefers-reduced-motion: reduce) {
     .rm-node::after,
-    .rm-in,
-    .rm-inspector.is-cycling .rm-progress { animation: none; }
+    .rm-in { animation: none; }
 }

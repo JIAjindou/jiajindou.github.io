@@ -1,6 +1,7 @@
 # Research roadmap (homepage "Research Roadmap" section, rendered by js/roadmap.js).
 # Each stage: a band of the particle stream. `flow` picks how particles move
-# through it (laminar | feedback | uncertainty | generative | world | next).
+# through it (laminar | feedback | uncertainty | generative | world | next);
+# `caption` says in plain words what that motion shows.
 # `works` link to publications by id (#pub-<id>); `platforms` are files in
 # images/hardware/. *_zh fields are used on the Chinese page (fallback: English).
 
@@ -14,6 +15,8 @@
     flight control for quadrotors that turns aerodynamic drag from a nuisance
     into a resource.
   desc_zh: 先对扰动建模，再抵消或利用它：基于干扰观测器的四旋翼敏捷飞行控制，把气动阻力从“干扰”变成可以利用的资源。
+  caption: "Ordered flow: precise control"
+  caption_zh: "整齐有序：精确控制"
   color: "#6a87ad"
   flow: laminar
   works:
@@ -36,6 +39,8 @@
     of disturbances (EVOLVER), and feedback loops that keep learned dynamics
     accurate far beyond the training data.
   desc_zh: 让学习补上物理模型缺失的部分：在线学习与预测扰动（EVOLVER），并用反馈回路让学到的动力学在训练数据之外依然准确。
+  caption: "A disturbance, damped by feedback"
+  caption_zh: "扰动出现，被反馈抹平"
   color: "#48709e"
   flow: feedback
   works:
@@ -56,6 +61,8 @@
     internal and external uncertainties (FORESEER) and learning-based
     observers for coupled disturbances, validated across agile aerial robots.
   desc_zh: 不忽略不确定性，而是预测它：面向内部与外部不确定性的收敛预测框架（FORESEER），以及针对耦合扰动的学习型观测器，在多种敏捷飞行机器人上验证。
+  caption: "Spread = predicted uncertainty"
+  caption_zh: "散开的宽度＝不确定性"
   color: "#2f5584"
   flow: uncertainty
   works:
@@ -77,6 +84,8 @@
     matching (A2A), single-step trajectories (FLASH), multimodality only when it
     matters (MARS, MOSS), and scaling to robot foundation models (Δ-Flow).
   desc_zh: 让生成式策略又快又可控：动作到动作的流匹配（A2A）、单步生成轨迹（FLASH）、只在需要时引入多模态（MARS、MOSS），并扩展到机器人基础模型（Δ-Flow）。
+  caption: "Noise shaped into clear actions"
+  caption_zh: "噪声塑造成明确动作"
   color: "#1e3a5f"
   flow: generative
   works:
@@ -101,6 +110,8 @@
     guide diffusion policies (FWM), physics filtering for generalization
     (PhyFilter), and disturbance-aware humanoid locomotion (ADAPT).
   desc_zh: 让“想象”与现实形成闭环：用反馈世界模型引导扩散策略（FWM），用物理过滤提升泛化能力（PhyFilter），以及扰动感知的人形机器人运动控制（ADAPT）。
+  caption: "Branching into imagined futures"
+  caption_zh: "分叉出想象的未来"
   color: "#0e7490"
   flow: world
   works:
@@ -123,5 +134,7 @@
     Robots that transfer reliably from the environments they were trained in to
     ones they have never seen.
   desc_zh: 让机器人从训练环境可靠地迁移到从未见过的新环境。
+  caption: "Into unseen environments"
+  caption_zh: "走向未知环境"
   color: "#0e7490"
   flow: next
