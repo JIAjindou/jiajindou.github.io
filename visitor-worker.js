@@ -1,23 +1,28 @@
 /*
- * Visitor globe + analytics backend — Cloudflare Worker.
+ * Visitor globe + analytics backend — Cloudflare Worker (D1 edition).
  *
- * Reads each visit's approximate location/referrer/browser from Cloudflare's
- * edge (request.cf) — the browser sends no personal data. Stores:
- *   - points : city-level aggregated coordinates for the public globe
- *   - agg    : public aggregate stats (total, by country / referrer / browser)
- *   - log    : private recent detail log (owner only, NO IP)
+ * Every visit is one atomic INSERT into D1 (SQLite), so concurrent visits
+ * never clobber each other the way the old KV read-modify-write did — far
+ * fewer dropped records, especially when several people open the link at
+ * once (e.g. shared in a group chat). Location/referrer/browser still come
+ * from Cloudflare's edge (request.cf); the browser sends no personal data.
  *
- * ── Deploy / update (dashboard) ───────────────────────────────────────────
- * 1. Workers & Pages → your Worker → Edit code → paste this file → Deploy.
- * 2. KV binding: Settings → Bindings → KV namespace, variable VISITORS.
- * 3. Owner password: Settings → Variables and Secrets → Add Secret,
- *    name ADMIN_KEY, value = your password. Save/Deploy.
+ * Endpoints & response shapes are unchanged from the KV version, so the
+ * site's front-end needs no changes:
+ *   POST /collect?ref=<referrer>   record a visit (one row)
+ *   GET  /points                   [{lat,lon,city,country,count}]  (public globe)
+ *   GET  /stats                    {total,countries,refs,browsers} (public)
+ *   GET  /log?key=<ADMIN_KEY>      [{ts,city,region,country,ref,ua}] (owner only)
  *
- * Endpoints:
- *   POST /collect?ref=<referrer>&path=<path>   record a visit
- *   GET  /points                               globe coordinates (public)
- *   GET  /stats                                aggregate stats (public)
- *   GET  /log?key=<ADMIN_KEY>                  detail log (owner only)
+ * ── Deploy / update (Cloudflare dashboard, no CLI needed) ──────────────────
+ * 1. Workers & Pages → D1 → Create database (e.g. "visitors").
+ * 2. Open it → Console → paste & run visitor-schema.sql, then visitor-seed.sql
+ *    (the seed loads your existing ~1.4k visits as a baseline — run it once).
+ * 3. Your Worker → Settings → Bindings → add D1 database binding:
+ *    variable name DB, database = the one you created.
+ * 4. Owner password: Settings → Variables and Secrets → Secret ADMIN_KEY.
+ * 5. Edit code → paste this file → Deploy. (The old KV binding can stay or be
+ *    removed; this Worker no longer uses it.)
  */
 
 const CORS = {
@@ -64,80 +69,79 @@ export default {
       return new Response(null, { headers: CORS });
     }
 
-    // ── Record a visit ────────────────────────────────────────────────
+    // ── Record a visit — one atomic INSERT, no lost writes ────────────
     if (pathname === "/collect") {
       const cf = request.cf || {};
-      const lat = parseFloat(cf.latitude);
-      const lon = parseFloat(cf.longitude);
+      const latN = parseFloat(cf.latitude);
+      const lonN = parseFloat(cf.longitude);
+      const lat = Number.isFinite(latN) ? +latN.toFixed(1) : null;
+      const lon = Number.isFinite(lonN) ? +lonN.toFixed(1) : null;
       const ref = searchParams.get("ref") || "";
       const ua = request.headers.get("User-Agent") || "";
-      const browser = browserFromUA(ua);
 
-      // 1) Globe points (public, city-level)
-      if (Number.isFinite(lat) && Number.isFinite(lon)) {
-        const key = lat.toFixed(1) + "," + lon.toFixed(1);
-        const data = (await env.VISITORS.get("points", "json")) || {};
-        if (!data[key]) {
-          data[key] = {
-            lat: +lat.toFixed(1),
-            lon: +lon.toFixed(1),
-            city: cf.city || "",
-            country: cf.country || "",
-            count: 0,
-          };
-        }
-        data[key].count++;
-        await env.VISITORS.put("points", JSON.stringify(data));
-      }
-
-      // 2) Public aggregates (no PII)
-      const agg = (await env.VISITORS.get("agg", "json")) ||
-        { total: 0, countries: {}, refs: {}, browsers: {} };
-      agg.total = (agg.total || 0) + 1;
-      if (cf.country) agg.countries[cf.country] = (agg.countries[cf.country] || 0) + 1;
-      var rh = refHostOf(ref);
-      agg.refs[rh] = (agg.refs[rh] || 0) + 1;
-      agg.browsers[browser] = (agg.browsers[browser] || 0) + 1;
-      await env.VISITORS.put("agg", JSON.stringify(agg));
-
-      // 3) Private detail log (owner only). No IP.
-      const entry = {
-        ts: new Date().toISOString(),
-        city: cf.city || "",
-        region: cf.region || "",
-        country: cf.country || "",
-        ref: ref.slice(0, 300),
-        ua: ua.slice(0, 300),
-      };
-      const log = (await env.VISITORS.get("log", "json")) || [];
-      log.unshift(entry);
-      if (log.length > LOG_MAX) log.length = LOG_MAX;
-      await env.VISITORS.put("log", JSON.stringify(log));
+      await env.DB.prepare(
+        "INSERT INTO visits (ts, lat, lon, city, region, country, ref, browser, ua, n) " +
+        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 1)"
+      ).bind(
+        new Date().toISOString(),
+        lat, lon,
+        cf.city || "",
+        cf.region || "",
+        cf.country || "",
+        refHostOf(ref),
+        browserFromUA(ua),
+        ua.slice(0, 300)
+      ).run();
 
       return new Response("ok", { headers: CORS });
     }
 
     // ── Globe coordinates (public) ────────────────────────────────────
     if (pathname === "/points") {
-      const data = (await env.VISITORS.get("points", "json")) || {};
-      return json(Object.values(data));
+      const q = await env.DB.prepare(
+        "SELECT lat, lon, MAX(city) AS city, MAX(country) AS country, SUM(n) AS count " +
+        "FROM visits WHERE lat IS NOT NULL AND lon IS NOT NULL " +
+        "GROUP BY lat, lon ORDER BY count DESC"
+      ).all();
+      const points = (q.results || []).map((r) => ({
+        lat: r.lat, lon: r.lon, city: r.city || "", country: r.country || "", count: r.count,
+      }));
+      return json(points);
     }
 
     // ── Aggregate stats (public, no PII) ──────────────────────────────
     if (pathname === "/stats") {
-      const agg = (await env.VISITORS.get("agg", "json")) ||
-        { total: 0, countries: {}, refs: {}, browsers: {} };
-      return json(agg);
+      const totalRow = await env.DB.prepare("SELECT SUM(n) AS t FROM visits").first();
+      const total = (totalRow && totalRow.t) || 0;
+
+      const group = async (col) => {
+        const q = await env.DB.prepare(
+          "SELECT " + col + " AS k, SUM(n) AS c FROM visits WHERE " + col + " != '' GROUP BY " + col
+        ).all();
+        const out = {};
+        (q.results || []).forEach((r) => { out[r.k] = r.c; });
+        return out;
+      };
+
+      return json({
+        total,
+        countries: await group("country"),
+        refs: await group("ref"),
+        browsers: await group("browser"),
+      });
     }
 
-    // ── Detail log (owner only) ───────────────────────────────────────
+    // ── Detail log (owner only). No IP. Real visits only (n = 1) ───────
     if (pathname === "/log") {
       const key = searchParams.get("key") || "";
       if (!env.ADMIN_KEY || key !== env.ADMIN_KEY) {
         return json({ error: "unauthorized" }, 401);
       }
-      const log = (await env.VISITORS.get("log", "json")) || [];
-      return json(log);
+      const q = await env.DB.prepare(
+        "SELECT ts, city, region, country, ref, ua FROM visits " +
+        "WHERE n = 1 ORDER BY id DESC LIMIT " + LOG_MAX
+      ).all();
+      return json(q.results || []);
     }
 
     return new Response("not found", { status: 404, headers: CORS });
