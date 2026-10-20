@@ -63,7 +63,13 @@ function refHostOf(ref) {
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
-    const { pathname, searchParams } = url;
+    const { searchParams } = url;
+    // Accept both the dedicated subdomain (stats.jiajindou.com/collect) and a
+    // same-origin route on the main site (jiajindou.com/mv/collect). The
+    // same-origin route reuses the page's own connection, so a visitor who
+    // can load the site — notably in mainland China — can always reach the
+    // collector without opening a second connection that might fail.
+    const pathname = url.pathname.replace(/^\/mv(?=\/|$)/, "") || "/";
 
     if (request.method === "OPTIONS") {
       return new Response(null, { headers: CORS });
