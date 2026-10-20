@@ -1,9 +1,12 @@
+// Record the visit first, independent of jQuery and the DOM, so a failure in
+// any other script or a slow asset can never stop the visit from counting.
+pingVisitor();
+
 $(document).ready(function() {
     setupPublicationFilters();
     setupVideoToggles();
     setupNewsToggle();
     setupPreprintToggle();
-    pingVisitor();
     setupSiteVisits();
     setupVisitorGlobe();
     setupOwnerPanel();
