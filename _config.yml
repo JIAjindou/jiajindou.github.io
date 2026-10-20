@@ -46,7 +46,7 @@ visitor_worker_url: /mv
 # Busuanzi (不蒜子) total-visits counter — its collector is reachable from
 # mainland China, so it catches visits the Cloudflare globe may miss. The
 # displayed number = busuanzi_base (in js/index.js) + busuanzi's own count.
-busuanzi: true
+busuanzi: false   # footer counter turned off at the owner's request (2026-10-20); set true to restore
 
 # Build settings
 theme: minima
