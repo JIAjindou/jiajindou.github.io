@@ -37,10 +37,12 @@ google_analytics: # G-MFWSBLRKG0
 # Sign up at https://www.goatcounter.com/ (30 sec), pick a code, then
 # put it here. Leave empty to disable. Example: "jindou"
 goatcounter: jindoujia
-# Cloudflare Worker URL for the visitor globe (no trailing slash).
-# Deploy visitor-worker.js to Cloudflare, then paste the Worker URL here,
-# e.g. https://visitor-globe.<your-subdomain>.workers.dev . Leave empty to disable.
-visitor_worker_url: https://stats.jiajindou.com
+# Visitor-globe API base. Use the same-origin route "/mv" (a Cloudflare
+# Worker Route jiajindou.com/mv/* -> the Worker) so recording rides the
+# page's own connection — a visitor who can load the site can always reach
+# the collector, which matters most in mainland China. (The Worker also
+# still answers on https://stats.jiajindou.com for direct access.)
+visitor_worker_url: /mv
 # Busuanzi (不蒜子) total-visits counter — its collector is reachable from
 # mainland China, so it catches visits the Cloudflare globe may miss. The
 # displayed number = busuanzi_base (in js/index.js) + busuanzi's own count.
