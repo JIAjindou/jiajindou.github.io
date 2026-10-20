@@ -16,7 +16,7 @@
       </button>
       {% endif %}
     </div>
-    <div class="publication-image {% if publication.image_mouseover %}publication-mediacell{% endif %}{% if publication.zoom_on_hover %} publication-zoom{% endif %}">
+    <div class="publication-image {% if publication.image_mouseover %}publication-mediacell{% endif %}{% if publication.zoom_on_hover %} publication-zoom{% endif %}{% if publication.dark %} pub-dark-{{ publication.dark }}{% endif %}">
       {% if publication.image_mouseover contains "mp4" %}
       <video preload="none" playsinline muted
              data-src="{{ '/images/' | relative_url }}{{ publication.image_mouseover }}"

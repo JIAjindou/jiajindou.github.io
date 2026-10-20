@@ -27,6 +27,7 @@ en:
   roadmap_sub: "From learning for control to control for learning, and the robots built along the way."
   roadmap_works: Key works
   roadmap_hint: Click a stage to explore
+  theme_toggle: Switch light / dark theme
   publications: Publications
   pub_intro: 'All papers below are first, co-first<sup>*</sup>, or corresponding<sup>&dagger;</sup> author work.'
   pub_full_list: 'Full list on <i class="ai ai-google-scholar"></i> Google Scholar&nbsp;&rarr;'
@@ -71,6 +72,7 @@ zh:
   roadmap_sub: "从学习赋能控制，到控制赋能学习，以及一路走来搭建的机器人平台。"
   roadmap_works: 代表工作
   roadmap_hint: 点击查看各阶段
+  theme_toggle: 切换浅色 / 深色模式
   publications: 论文
   pub_intro: '以下均为本人第一作者、共同第一作者<sup>*</sup>或通讯作者<sup>&dagger;</sup>的论文。'
   pub_full_list: '完整列表见 <i class="ai ai-google-scholar"></i> Google Scholar&nbsp;&rarr;'

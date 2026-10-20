@@ -44,6 +44,33 @@
         });
     }
 
+    // ── Theme ───────────────────────────────────────────────────────────
+    // On the dark theme the line colours keep their hue but are lifted to a
+    // lightness that reads on a dark panel (navy -> soft blue, teal -> cyan).
+    function isDark() { return document.documentElement.getAttribute('data-theme') === 'dark'; }
+    function rgbOf(hex) {
+        hex = hex.replace('#', '');
+        return [0, 2, 4].map(function (i) { return parseInt(hex.slice(i, i + 2), 16); });
+    }
+    function paint(hex) {
+        if (!isDark()) return hex;
+        var c = rgbOf(hex).map(function (v) { return v / 255; });
+        var mx = Math.max(c[0], c[1], c[2]), mn = Math.min(c[0], c[1], c[2]);
+        var h = 0, s = 0, l = (mx + mn) / 2, d = mx - mn;
+        if (d) {
+            s = d / (1 - Math.abs(2 * l - 1));
+            h = mx === c[0] ? ((c[1] - c[2]) / d) % 6 : mx === c[1] ? (c[2] - c[0]) / d + 2 : (c[0] - c[1]) / d + 4;
+            h *= 60;
+        }
+        l = Math.max(l, 0.66);
+        var C = (1 - Math.abs(2 * l - 1)) * s, X = C * (1 - Math.abs((h / 60) % 2 - 1)), m = l - C / 2;
+        var rgb = h < 60 ? [C, X, 0] : h < 120 ? [X, C, 0] : h < 180 ? [0, C, X] : h < 240 ? [0, X, C] : h < 300 ? [X, 0, C] : [C, 0, X];
+        return '#' + rgb.map(function (v) {
+            return ('0' + Math.round((v + m) * 255).toString(16)).slice(-2);
+        }).join('');
+    }
+    function clear(hex) { return 'rgba(' + rgbOf(hex).join(',') + ',0)'; }
+
     // ── Markup ──────────────────────────────────────────────────────────
     var wrap = root.querySelector('.rm-stages');
     var inspector = root.querySelector('.rm-inspector');
@@ -60,9 +87,10 @@
     var legend = document.createElement('div');
     legend.className = 'rm-legend';
     legend.innerHTML = tracks.map(function (t) {
-        return '<span style="--c:' + esc(t.color) + '"><i></i>' + esc(tr(t, 'name')) + '</span>';
+        return '<span><i></i>' + esc(tr(t, 'name')) + '</span>';
     }).join('');
     root.insertBefore(legend, wrap);
+    var legendItems = legend.querySelectorAll('span');
 
     function worksHtml(st) {
         if (!st.works || !st.works.length) return '';
@@ -74,10 +102,8 @@
     var n = stages.length, last = n - 1;
     var els = [], nodes = [];
     stages.forEach(function (st) {
-        var color = trackOf(st).color;
         var el = document.createElement('div');
         el.className = 'rm-stage' + (st.key === 'next' ? ' rm-next' : '');
-        el.style.setProperty('--c', color);
         el.setAttribute('tabindex', '0');
         var robots = (st.platforms || []).map(function (p) {
             return '<span class="rm-robot"><img src="' + esc(imgBase + p) + '" alt="" loading="lazy" decoding="async"></span>';
@@ -93,7 +119,6 @@
         els.push(el);
         var node = document.createElement('span');
         node.className = 'rm-node';
-        node.style.setProperty('--c', color);
         wrap.appendChild(node);
         nodes.push(node);
     });
@@ -101,11 +126,25 @@
     var labels = tracks.map(function (t) {
         var lb = document.createElement('span');
         lb.className = 'rm-track-label';
-        lb.style.setProperty('--c', t.color);
         lb.textContent = tr(t, 'name');
         wrap.appendChild(lb);
         return lb;
     });
+
+    // --c on every coloured element, for the current theme.
+    function applyColors() {
+        stages.forEach(function (st, i) {
+            var c = paint(trackOf(st).color);
+            els[i].style.setProperty('--c', c);
+            nodes[i].style.setProperty('--c', c);
+        });
+        tracks.forEach(function (t, i) {
+            var c = paint(t.color);
+            labels[i].style.setProperty('--c', c);
+            legendItems[i].style.setProperty('--c', c);
+        });
+    }
+    applyColors();
 
     // ── Geometry ────────────────────────────────────────────────────────
     // Routes are laid out in (m, c): m runs along the stages, c across them
@@ -190,7 +229,7 @@
             routes.push({ track: t, loop: true, off: off, fadeIn: 10, fadeOut: 14,
                           pts: [[a + 14, off], [a - 14, top], [b + 14, top], [b - 14, off]] });
         });
-        routes.forEach(sampleRoute);
+        routes.forEach(function (rt) { sampleRoute(rt); rt.paint = paint(rt.track.color); });
     }
 
     // Offset of the lowest track at m (robots hang from it).
@@ -279,7 +318,7 @@
             c.lineTo(rt.x[rt.x.length - 1], rt.y[rt.y.length - 1]);
         }
         routes.forEach(function (rt) {
-            c.strokeStyle = rt.track.color;
+            c.strokeStyle = rt.paint;
             trace(rt);
             c.globalAlpha = 0.07;
             c.lineWidth = vertical ? 6 : 9;
@@ -294,7 +333,7 @@
         // Chevrons along loops, pointing the way the loop runs.
         routes.forEach(function (rt) {
             if (!rt.loop) return;
-            c.strokeStyle = rt.track.color;
+            c.strokeStyle = rt.paint;
             c.globalAlpha = 0.8;
             c.lineWidth = 1.3;
             var every = Math.round((vertical ? 60 : 80) / rt.step);
@@ -313,8 +352,8 @@
             if (rt.trunk) return;
             [0, rt.x.length - 1].forEach(function (i) {
                 c.globalAlpha = 1;
-                c.fillStyle = '#fff';
-                c.strokeStyle = rt.track.color;
+                c.fillStyle = isDark() ? '#0e1522' : '#fff';
+                c.strokeStyle = rt.paint;
                 c.lineWidth = 1.3;
                 c.beginPath();
                 c.arc(rt.x[i], rt.y[i], vertical ? 2 : 2.8, 0, Math.PI * 2);
@@ -326,7 +365,7 @@
         // Tethers from the lowest track down to each robot (horizontal).
         if (!vertical) {
             els.forEach(function (el, i) {
-                var color = trackOf(stages[i]).color;
+                var color = paint(trackOf(stages[i]).color);
                 el.querySelectorAll('.rm-robot').forEach(function (rb) {
                     var r = rb.getBoundingClientRect();
                     var x = r.left - wr.left + r.width / 2, yEnd = r.top - wr.top + 6;
@@ -335,7 +374,7 @@
                     if (yEnd - yStart < 8) return;
                     var g = c.createLinearGradient(0, yStart, 0, yEnd);
                     g.addColorStop(0, color);
-                    g.addColorStop(1, 'rgba(255,255,255,0)');
+                    g.addColorStop(1, clear(color));
                     c.globalAlpha = 0.5;
                     c.strokeStyle = g;
                     c.lineWidth = 1;
@@ -425,7 +464,7 @@
             var arr = buckets[b];
             if (!arr.length) continue;
             ctx.globalAlpha = LEVELS[b % LEVELS.length];
-            ctx.fillStyle = routes[(b / LEVELS.length) | 0].track.color;
+            ctx.fillStyle = routes[(b / LEVELS.length) | 0].paint;
             ctx.beginPath();
             for (var p = 0; p < arr.length; p += 3) {
                 var s = arr[p + 2];
@@ -474,7 +513,7 @@
 
     function renderInspector(i) {
         var st = stages[i];
-        inspector.style.setProperty('--c', trackOf(st).color);
+        inspector.style.setProperty('--c', paint(trackOf(st).color));
         var works = st.works && st.works.length
             ? '<div class="rm-works-label">' + esc(labelWorks) + '</div>' + worksHtml(st) : '';
         inspector.innerHTML =
@@ -568,6 +607,13 @@
         scheduleCycle();
         start();
     }
+
+    document.addEventListener('themechange', function () {
+        applyColors();
+        if (!ready) return;
+        relayout();
+        if (active >= 0 && !vertical) renderInspector(active);
+    });
 
     var resizeTimer = 0;
     function queueRelayout() {

@@ -1,4 +1,5 @@
 - id: ADAPT
+  dark: card
   year: 2026
   title: "ADAPT: Analytical disturbance-aware policy training for humanoid locomotion"
   venue: Conference on Robot Learning (CoRL), 2026
@@ -22,6 +23,7 @@
     - jianfei
 
 - id: DeltaFlow
+  dark: card
   year: 2026
   preprint: true
   featured: true
@@ -50,6 +52,7 @@
     - jianfei
 
 - id: MOSS
+  dark: invert
   year: 2026
   preprint: true
   title: "MOSS: Mode-oriented source shaping for robot flow matching policies"
@@ -57,7 +60,7 @@
   venue_short: arXiv'26
   description: "MOSS makes behavior-mode selection controllable in robot flow matching policies by shaping mode-specific source distributions, separating modes only where the situation is truly multimodal."
   project_page: https://mmmmazr.github.io/moss/
-  image: MOSS_fig.webp
+  image: MOSS_fig.t.webp
   arxiv: "2610.22193"
   equal_contri: 2
   authors:
@@ -69,6 +72,7 @@
     - jianfei
 
 - id: TUCO
+  dark: card
   year: 2026
   preprint: true
   title: "TUCO: Curating simulation demonstrations for sim-to-real robot policy co-training"
@@ -91,6 +95,7 @@
     - jianfei
 
 - id: APEX
+  dark: card
   year: 2026
   preprint: true
   title: "APEX: Adaptive policy execution for precise manipulation"
@@ -121,7 +126,7 @@
   venue_short: arXiv'26
   description: "We present MARS, a generative policy that adaptively invokes stochasticity only when behavioral branching truly matters and reverts to deterministic learning otherwise, yielding 16.67% higher success and 83.20% lower inference latency in real-world tests."
   project_page: https://lorenzo-0-0.github.io/MARS_Policy/
-  image: MARS_fig.webp
+  image: MARS_fig.t.webp
   image_mouseover: MARS_mini.mp4
   image_mouseover2: MARS_mini2.mp4
   video: https://lorenzo-0-0.github.io/MARS_Policy/
@@ -147,7 +152,7 @@
   description: "We close the prediction–observation loop in world models with a lightweight feedback state that corrects future predictions online, paired with action-aware guidance to emphasize controllable dimensions, reducing prediction error by up to 76.4% and improving OOD success by 30%."
   project_page: https://lorenzo-0-0.github.io/Feedback_World_Model/
   github: Lorenzo-0-0/Feedback_World_Model
-  image: FWM_fig.webp
+  image: FWM_fig.t.webp
   image_mouseover: FWM_mini.mp4
   video: https://lorenzo-0-0.github.io/Feedback_World_Model/
   arxiv: "2605.15705"
@@ -166,6 +171,7 @@
     - jianfei
 
 - id: FLASH
+  dark: invert
   year: 2026
   title: "FLASH: Efficient visuomotor policy via sparse sampling"
   venue: Conference on Neural Information Processing Systems (NeurIPS), 2026
@@ -173,7 +179,7 @@
   description: "We present FLASH, an efficient visuomotor policy that replaces iterative denoising with continuous Legendre polynomial trajectories, enabling single-step inference for real-time robot control."
   project_page: https://b1ue-jay.github.io/FLASH/
   github: B1ue-Jay/FLASH
-  image: FLASH_fig.webp
+  image: FLASH_fig.t.webp
   image_mouseover: FLASH_mini.mp4
   video: https://b1ue-jay.github.io/FLASH/
   arxiv: "2605.15492"
@@ -189,6 +195,7 @@
     - jianfei
 
 - id: PhyFilter
+  dark: card
   year: 2026
   featured: true
   title: "Physics filtering favors the generalization of robot learning"
@@ -220,6 +227,7 @@
     - lei
 
 - id: WorldModelSurvey
+  dark: card
   year: 2026
   zoom_on_hover: true
   title: "World model for robot learning: A comprehensive survey"
@@ -253,6 +261,7 @@
     - jianfei
 
 - id: A2A
+  dark: invert
   year: 2026
   featured: true
   title: "Action-to-action flow matching"
@@ -276,12 +285,13 @@
     - jianfei
 
 - id: Learning_obs
+  dark: invert
   year: 2026
   title: "Learning-based observer for coupled disturbance"
   venue: IEEE International Conference on Robotics and Automation (ICRA), 2026
   venue_short: ICRA'26
   description: "We present a learning-based observer, enabling accurate prediction of the coupled disturbance consisting of internal uncertainties and external disturbances."
-  image: ICRA_26_fig.webp
+  image: ICRA_26_fig.t.webp
   image_mouseover: ICRA_26_mini.mp4
   arxiv: 2407.13229
   equal_contri: 2
@@ -295,13 +305,14 @@
     - xiang
 
 - id: control_friendly
+  dark: invert
   year: 2026
   preprint: true
   title: "Optimizing control-friendly trajectories with self-supervised residual learning"
   venue: arXiv, 2026
   venue_short: arXiv'26
   description: "The presented trajectory optimizer outputs trajectories that are friendly to the following control level."
-  image: residual_fig.webp
+  image: residual_fig.t.webp
   arxiv: 2601.02738
   corresponding_authors: 
     - jindou 
@@ -344,7 +355,7 @@
   description: "We present feedback neural networks, showing that a feedback loop can flexibly correct the learned latent dynamics of neural ordinary differential equations (neural ODEs), leading to a prominent generalization improvement."
   project_page: https://sites.google.com/view/feedbacknn
   github: JIAjindou/Feedback-neural-network
-  image: feedbackNN_fig.webp
+  image: feedbackNN_fig.t.webp
   arxiv: 2410.10253
   link_web: https://openreview.net/forum?id=cmfyMV45XO
   equal_contri: 2
@@ -382,6 +393,7 @@
     - lei
   
 - id: Drag
+  dark: card
   year: 2022
   featured: true
   title: "Accurate high-maneuvering trajectory tracking for quadrotors: A drag utilization method"

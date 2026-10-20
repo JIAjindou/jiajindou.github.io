@@ -1,0 +1,25 @@
+{%- comment -%}
+  Light / dark theme. Runs in <head> before any stylesheet so a dark-theme
+  visitor never sees a white flash. The choice is remembered in localStorage
+  (default: light). The nav's .site-nav-theme button toggles it; a
+  "themechange" event lets canvases (roadmap, globe) repaint.
+{%- endcomment -%}
+<script>
+(function () {
+  var KEY = 'site_theme', root = document.documentElement;
+  try { if (localStorage.getItem(KEY) === 'dark') root.setAttribute('data-theme', 'dark'); } catch (e) {}
+  document.addEventListener('click', function (e) {
+    var btn = e.target.closest ? e.target.closest('.site-nav-theme') : null;
+    if (!btn) return;
+    var dark = root.getAttribute('data-theme') !== 'dark';
+    root.classList.add('theme-anim');                  // cross-fade only on a real switch
+    if (dark) root.setAttribute('data-theme', 'dark'); else root.removeAttribute('data-theme');
+    try { localStorage.setItem(KEY, dark ? 'dark' : 'light'); } catch (err) {}
+    setTimeout(function () { root.classList.remove('theme-anim'); }, 450);
+    var ev;
+    try { ev = new CustomEvent('themechange', { detail: { dark: dark } }); }
+    catch (err) { ev = document.createEvent('CustomEvent'); ev.initCustomEvent('themechange', false, false, { dark: dark }); }
+    document.dispatchEvent(ev);
+  });
+})();
+</script>

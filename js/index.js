@@ -193,23 +193,30 @@ function setupVisitorGlobe() {
                         .globeImageUrl(null)
                         .showGraticules(true)
                         .showAtmosphere(true)
-                        .atmosphereColor('#acd6ef')
                         .atmosphereAltitude(0.2)
                         .hexPolygonsData((countries && countries.features) || [])
                         .hexPolygonResolution(3)
                         .hexPolygonMargin(0.32)
                         .hexPolygonUseDots(true)
-                        .hexPolygonColor(function () { return 'rgba(38,88,148,0.8)'; })
                         .pointAltitude(0.01)
                         .pointColor(function () { return '#ff4d4f'; })
                         .pointRadius(function (d) { return Math.min(0.35 + Math.log(d.count + 1) * 0.28, 1.6); })
                         .pointLabel(function (d) { return (d.city ? d.city + ', ' : '') + (d.country || '') + ' — ' + L.visits(d.count); });
 
+                    // Light theme: a pale-blue sphere with navy dots; dark
+                    // theme: a deep-navy sphere with soft-blue dots.
                     var m = world.globeMaterial();
-                    m.color.set('#cfe7f5');
-                    m.emissive.set('#2e6bb0');
-                    m.emissiveIntensity = 0.10;
                     m.shininess = 6;
+                    function themeGlobe() {
+                        var dark = document.documentElement.getAttribute('data-theme') === 'dark';
+                        world.atmosphereColor(dark ? '#3b78b8' : '#acd6ef')
+                             .hexPolygonColor(function () { return dark ? 'rgba(143,180,230,0.85)' : 'rgba(38,88,148,0.8)'; });
+                        m.color.set(dark ? '#16263d' : '#cfe7f5');
+                        m.emissive.set(dark ? '#1e3a5f' : '#2e6bb0');
+                        m.emissiveIntensity = dark ? 0.35 : 0.10;
+                    }
+                    themeGlobe();
+                    document.addEventListener('themechange', themeGlobe);
 
                     sizeGlobe();
                     var c = world.controls();
