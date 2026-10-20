@@ -85,7 +85,7 @@ function pingVisitor() {
     function send() {
         var n = ++attempt;
         var ctrl = null, timer = null;
-        try { ctrl = new AbortController(); timer = setTimeout(function () { ctrl.abort(); }, 8000); } catch (e) {}
+        try { ctrl = new AbortController(); timer = setTimeout(function () { ctrl.abort(); }, 15000); } catch (e) {}
         log('attempt ' + n + ' -> POST ' + endpoint);
         fetch(endpoint, {
             method: 'POST', mode: 'cors', keepalive: true,
@@ -99,7 +99,7 @@ function pingVisitor() {
         }).catch(function (e) {
             if (timer) clearTimeout(timer);
             if (e !== 0) log('attempt ' + n + ' FAILED: ' +
-                (e && e.name === 'AbortError' ? 'timeout after 8s' : (e && e.message) || String(e)));
+                (e && e.name === 'AbortError' ? 'timeout after 15s' : (e && e.message) || String(e)));
             if (attempt < 3) setTimeout(send, attempt * 1500);
             else log('gave up after 3 attempts');
         });
@@ -527,6 +527,11 @@ function setupPublicationFilters() {
     var buttons = document.querySelectorAll('.pub-filter');
     if (!buttons.length) return;
     var empty = document.querySelector('.pub-empty');
+    // The page ships with CSS that already shows only Featured papers (so the
+    // hidden papers' images are never downloaded before this script runs);
+    // hand control over to the inline filtering below.
+    var list = document.querySelector('.pub-list');
+    if (list) list.classList.remove('is-default-featured');
 
     function applyFilter(filter) {
         var sep = filter.indexOf(':');

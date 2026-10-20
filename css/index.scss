@@ -814,6 +814,12 @@ html { scroll-behavior: smooth; }
     min-width: 0;
 }
 
+// Default view before JS runs: Featured only. Hidden blocks' lazy images are
+// never fetched, which matters a lot on slow links; JS removes this class.
+.pub-list.is-default-featured .publication-block:not(.is-featured) {
+    display: none;
+}
+
 .pub-empty {
     color: #888;
     font-style: italic;

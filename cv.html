@@ -27,16 +27,25 @@ layout: null
 
   <link href="./css/fonts.css" rel="stylesheet">
   <link href="./css/academicons.min.css" rel="stylesheet">
+  <link href="./css/icons.css" rel="stylesheet">
   <link href="./css/bulma.min.css" rel="stylesheet">
   <link href="./css/cv.css?v={{ site.time | date: '%s' }}" rel="stylesheet">
 
   <script src="./js/jquery.min.js"></script>
-  <script defer src="./js/fontawesome.all.min.js"></script>
 
   {% if site.goatcounter %}
   <!-- GoatCounter privacy-friendly analytics -->
-  <script data-goatcounter="https://{{ site.goatcounter }}.goatcounter.com/count"
-          async src="//gc.zgo.at/count.js"></script>
+  <script>
+    // GoatCounter's gc.zgo.at is unreachable from mainland China. Load it only
+    // after the page has finished loading so a hung request never holds it up.
+    window.addEventListener('load', function () {
+      var s = document.createElement('script');
+      s.async = true;
+      s.src = 'https://gc.zgo.at/count.js';
+      s.setAttribute('data-goatcounter', 'https://{{ site.goatcounter }}.goatcounter.com/count');
+      document.body.appendChild(s);
+    });
+  </script>
   {% endif %}
 </head>
 
@@ -52,7 +61,7 @@ layout: null
           <h1 class="subtitle is-5">{{ site.position }}</h1>
         </div>
         <div class="column is-narrow portrait-column">
-          <img class="portrait-image" src="./images/myphoto3.jpg?v={{ site.time | date: '%s' }}" alt="A portrait of Jindou Jia" />
+          <img class="portrait-image" src="./images/myphoto3.webp?v={{ site.time | date: '%s' }}" alt="A portrait of Jindou Jia" />
         </div>
         <div class="column has-text-right">
           <p>
