@@ -85,12 +85,18 @@ function renderOwnerLog(log, key) {
     var old = document.getElementById('owner-panel');
     if (old) old.remove();
 
+    var esc = function (s) {
+        return String(s).replace(/[&<>"']/g, function (c) {
+            return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+        });
+    };
     var rows = log.map(function (e) {
         var t = (e.ts || '').replace('T', ' ').replace(/\..*$/, '').replace('Z', ' UTC');
         var place = [e.city, e.region, e.country].filter(Boolean).join(', ');
         var ref = e.ref ? e.ref.replace(/^https?:\/\//, '') : '—';
-        return '<tr><td>' + t + '</td><td>' + (place || '—') + '</td><td>' + ref +
-            '</td><td>' + ownerBrowser(e.ua) + '</td></tr>';
+        // net = "IPv4|IPv6 · ISP · how the location was found" (no IP is stored)
+        return '<tr><td>' + t + '</td><td>' + esc(place || '—') + '</td><td>' + esc(ref) +
+            '</td><td>' + ownerBrowser(e.ua) + '</td><td class="owner-net">' + esc(e.net || '—') + '</td></tr>';
     }).join('');
 
     var sec = document.createElement('section');
@@ -102,8 +108,8 @@ function renderOwnerLog(log, key) {
         '<button class="owner-refresh" type="button">Refresh</button>' +
         '<button class="owner-close" type="button">Close</button></div>' +
         '<div class="owner-table-wrap"><table class="owner-table"><thead><tr>' +
-        '<th>Time (UTC)</th><th>Location</th><th>From</th><th>Browser</th>' +
-        '</tr></thead><tbody>' + (rows || '<tr><td colspan="4">No records yet.</td></tr>') +
+        '<th>Time (UTC)</th><th>Location</th><th>From</th><th>Browser</th><th>Network</th>' +
+        '</tr></thead><tbody>' + (rows || '<tr><td colspan="5">No records yet.</td></tr>') +
         '</tbody></table></div></div></div>';
 
     var nav = document.querySelector('.site-nav');
