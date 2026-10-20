@@ -1,0 +1,102 @@
+{%- comment -%}
+  Records the visit as the very first thing on the page, before any CSS or JS
+  is requested. Browsers hold a <head> script until every stylesheet and
+  script above it has downloaded; on slow links (some mainland China networks
+  reach Cloudflare at ~10 KB/s) that took 30-40 s, and visitors who left
+  sooner were never counted. Inline here, it runs as soon as the first few KB
+  of HTML arrive. Include it at the top of <head> on every page.
+
+  ?debug in the URL shows an on-page panel listing every step, so a visitor on
+  a device we can't access can screenshot exactly where recording fails.
+{%- endcomment -%}
+<script>
+window.VISITOR_WORKER_URL = "{{ site.visitor_worker_url }}";
+(function () {
+  try {
+    // Session flag. Older code set "mv_pinged" as soon as the request was
+    // fired, even if it then failed, so a stale flag could block every later
+    // visit in that tab; a new name makes any leftover inert.
+    var FLAG = 'mv_rec';
+    var url = window.VISITOR_WORKER_URL;
+    var debug = /[?&]debug\b/.test(location.search);
+    var log = debug ? debugPanel() : function () {};
+    log('page build: {{ site.time | date: "%s" }}');
+    log('endpoint base: ' + (url || '(none)'));
+    log('UA: ' + navigator.userAgent);
+    if (!url) return;
+    var already = false;
+    try { already = !!sessionStorage.getItem(FLAG); } catch (e) {}
+    log('already recorded this session: ' + already);
+    if (already && !debug) return;   // debug mode always sends, to show the result
+    var ref = '';
+    try { ref = document.referrer || ''; } catch (e) {}
+    var endpoint = url.replace(/\/$/, '') + '/collect?ref=' + encodeURIComponent(ref);
+    var markDone = function () { try { sessionStorage.setItem(FLAG, '1'); } catch (e) {} };
+
+    // Browsers without fetch: an image request works everywhere (the Worker
+    // records /collect on any method).
+    if (typeof fetch !== 'function') {
+      log('no fetch() - using image beacon');
+      var img = new Image();
+      img.onload = img.onerror = function () { log('image beacon sent'); };
+      img.src = endpoint + '&_=' + Date.now();
+      markDone();
+      return;
+    }
+
+    // Retry with a timeout: a mainland -> Cloudflare request can fail or hang
+    // transiently. The session is marked only after a request succeeds, so a
+    // reload gets more chances instead of being deduped after a silent failure.
+    var attempt = 0;
+    var send = function () {
+      var n = ++attempt, ctrl = null, timer = null;
+      try { ctrl = new AbortController(); timer = setTimeout(function () { ctrl.abort(); }, 15000); } catch (e) {}
+      log('attempt ' + n + ' -> POST ' + endpoint);
+      fetch(endpoint, {
+        method: 'POST', mode: 'cors', keepalive: true,
+        signal: ctrl ? ctrl.signal : undefined
+      }).then(function (r) {
+        if (timer) clearTimeout(timer);
+        log('attempt ' + n + ' <- HTTP ' + (r && r.status));
+        if (!r || !r.ok) throw 0;
+        markDone();
+        log('OK: visit recorded');
+      }).catch(function (e) {
+        if (timer) clearTimeout(timer);
+        if (e !== 0) log('attempt ' + n + ' FAILED: ' +
+          (e && e.name === 'AbortError' ? 'timeout after 15s' : (e && e.message) || String(e)));
+        if (attempt < 3) setTimeout(send, attempt * 1500);
+        else log('gave up after 3 attempts');
+      });
+    };
+    send();
+  } catch (e) {}
+
+  // Collects lines from the moment this runs (before <body> exists) and
+  // renders them in a fixed panel once it does.
+  function debugPanel() {
+    var lines = [], box = null;
+    function render() {
+      if (!box && document.body) {
+        box = document.createElement('pre');
+        box.style.cssText = 'position:fixed;left:8px;right:8px;bottom:8px;z-index:99999;margin:0;' +
+          'padding:10px 12px;background:rgba(15,23,42,.94);color:#e2e8f0;border-radius:10px;' +
+          'font:12px/1.5 Menlo,Consolas,monospace;white-space:pre-wrap;word-break:break-all;' +
+          'max-height:50vh;overflow:auto;box-shadow:0 6px 24px rgba(0,0,0,.35)';
+        document.body.appendChild(box);
+      }
+      if (box) box.textContent = 'Visitor debug\n' + lines.join('\n');
+    }
+    function log(m) {
+      var t = (window.performance && performance.now) ? (performance.now() / 1000).toFixed(1) + 's' : '';
+      lines.push(t + '  ' + m);
+      render();
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+      log('jQuery: ' + (window.jQuery ? jQuery.fn.jquery : 'NOT LOADED'));
+      render();
+    });
+    return log;
+  }
+})();
+</script>

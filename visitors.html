@@ -6,6 +6,7 @@ layout: null
 
 <head>
   <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+  {% include visit-ping.html %}
   <meta content="width=device-width, initial-scale=1" name="viewport">
   <title>Visitors | Jindou Jia</title>
 
@@ -22,7 +23,6 @@ layout: null
   <link rel="apple-touch-icon" href="{{ '/images/ICON.png' | relative_url }}">
 
   <script src="{{ '/js/jquery.min.js' | relative_url }}"></script>
-  <script>window.VISITOR_WORKER_URL = "{{ site.visitor_worker_url }}";</script>
   <script src="{{ '/js/index.js' | relative_url }}?v={{ site.time | date: '%s' }}"></script>
 
   {% if site.goatcounter %}
