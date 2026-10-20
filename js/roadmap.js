@@ -187,6 +187,20 @@
         return c;
     }
 
+    // Height of the band the tracks run in: just enough for the lines that
+    // exist above and below the trunk (and any loops), plus a margin.
+    var MARGIN = 26, above = 0, below = 0;
+    tracks.forEach(function (t) {
+        if (t.side < 0) above = D;
+        if (t.side > 0) below = D;
+    });
+    loops.forEach(function (lp) {
+        var t = trackByKey[lp.track], off = t ? (t.side || 0) * D : 0;
+        if (off <= 0) above = Math.max(above, -off + LOOP); else below = Math.max(below, off + LOOP);
+    });
+    var flowH = MARGIN + above + below + MARGIN;
+    els.forEach(function (el) { el.querySelector('.rm-flow').style.height = flowH + 'px'; });
+
     function layout() {
         vertical = window.innerWidth < 769;
         k = vertical ? 0.36 : 1;
@@ -209,7 +223,7 @@
         });
         if (!vertical) {
             var f = els[0].querySelector('.rm-flow').getBoundingClientRect();
-            cross = f.top - wr.top + f.height * 0.6;
+            cross = f.top - wr.top + MARGIN + above;
         }
         buildRoutes();
 
@@ -222,7 +236,8 @@
         // Each direction's name sits just after its first node, in the space
         // between its line and the trunk (the trunk's goes below it).
         labels.forEach(function (lb, i) {
-            var t = tracks[i], start = t.side ? col[Math.min(t.from || 1, last)] : col[0];
+            var t = tracks[i];
+            var start = col[Math.min(t.label_from != null ? t.label_from : (t.side ? t.from || 1 : 0), last)];
             var off = (t.side || 0) * D;
             var p = toXY(start.c + 16, t.side > 0 ? off - 17 : off + 17);
             lb.style.left = p[0] + 'px';

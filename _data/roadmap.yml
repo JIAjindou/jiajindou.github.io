@@ -3,48 +3,41 @@
 # tracks: the research directions, drawn as circuit-like lines that particles
 #   flow along (direction only). The trunk (side 0) runs the whole way; the
 #   others branch off it at stage `from` (side -1 above, 1 below) and merge
-#   back into it at the last stage.
-# loops: feedback loops drawn on a track, running back from stage `from` to
-#   stage `to` (indices into stages, 0-based).
+#   back into it at the last stage. `label_from` = stage whose node the line's
+#   name follows (default: where the line starts).
+# loops (optional): feedback loops drawn on a track, running back from stage
+#   `from` to stage `to` (indices into stages, 0-based).
 # stages: the columns. `track` = which line the stage's node sits on; `works`
 #   link to publications by id (#pub-<id>); `platforms` are files in
 #   images/hardware/. *_zh fields are used on the Chinese page.
 
 tracks:
-  - key: A
-    name: Physical priors & control
-    name_zh: 物理先验与控制
+  - key: L2C
+    name: Learning for control
+    name_zh: 学习赋能控制
     color: "#1e3a5f"
     side: 0
     from: 0
-  - key: B
-    name: Learning & uncertainty
-    name_zh: 学习与不确定性
-    color: "#5f84b4"
-    side: -1
-    from: 1
-  - key: C
-    name: Generative policies & world models
-    name_zh: 生成式策略与世界模型
+    label_from: 1
+  - key: C2L
+    name: Control for learning
+    name_zh: 控制赋能学习
     color: "#0e7490"
     side: 1
     from: 3
 
-loops:
-  - { track: B, from: 4, to: 1 }
-
 stages:
   - key: control
     index: "01"
-    track: A
+    track: L2C
     years: "2019 – 2022"
     title: Anti-disturbance control
     title_zh: 抗干扰控制
     desc: >-
-      Model the disturbance, then reject or exploit it: observer-based agile
-      flight control for quadrotors that turns aerodynamic drag from a nuisance
-      into a resource.
-    desc_zh: 先对扰动建模，再抵消或利用它：基于干扰观测器的四旋翼敏捷飞行控制，把气动阻力从“干扰”变成可以利用的资源。
+      Where it started: model the disturbance, then reject or exploit it.
+      Observer-based agile flight control for quadrotors that turns aerodynamic
+      drag from a nuisance into a resource.
+    desc_zh: 一切的起点：先对扰动建模，再抵消或利用它。基于干扰观测器的四旋翼敏捷飞行控制，把气动阻力从“干扰”变成可以利用的资源。
     works:
       - { id: Drag, name: Drag utilization, venue: "R-AL'22" }
       - { id: Window, name: Agile flight, venue: "T-AES'22" }
@@ -55,84 +48,101 @@ stages:
       - drone_2020CEP_2022TAES.webp
       - drone_2022RAL.webp
 
-  - key: learning
+  - key: disturbance
     index: "02"
-    track: B
-    years: "2023 – 2025"
-    title: Learning-augmented control
-    title_zh: 学习增强控制
+    track: L2C
+    years: "2023 – 2026"
+    title: Learning disturbances
+    title_zh: 学习扰动
     desc: >-
-      Let learning capture what physics misses: online learning and prediction
-      of disturbances (EVOLVER), and feedback loops that keep learned dynamics
-      accurate far beyond the training data.
-    desc_zh: 让学习补上物理模型缺失的部分：在线学习与预测扰动（EVOLVER），并用反馈回路让学到的动力学在训练数据之外依然准确。
+      Learning for control: learn what the model misses and hand it to the
+      controller, with online learning and prediction of disturbances (EVOLVER)
+      and learning-based observers for coupled disturbances.
+    desc_zh: 学习赋能控制：用学习补上模型缺失的部分，再交给控制器。在线学习与预测扰动（EVOLVER），以及面向耦合扰动的学习型观测器。
     works:
       - { id: EVOLVER, name: EVOLVER, venue: "T-RO'24" }
-      - { id: FeedbackNN, name: Feedback neural ODE, venue: "ICLR'25 Oral" }
-      - { id: control_friendly, name: Control-friendly trajectories, venue: "arXiv'26" }
+      - { id: Learning_obs, name: Learning-based observer, venue: "ICRA'26" }
     platforms:
       - drone_2022RAL_2023TRO.webp
       - arm_2023TRO_2026arXiv.webp
+      - drone_2025IJRR_2026ICRA.webp
 
   - key: uncertainty
     index: "03"
-    track: B
+    track: L2C
     years: "2024 – 2026"
-    title: Uncertainty prediction
-    title_zh: 不确定性预测
+    title: Uncertainty prediction & planning
+    title_zh: 不确定性预测与规划
     desc: >-
-      Predict uncertainty instead of ignoring it: converged prediction of
-      internal and external uncertainties (FORESEER) and learning-based
-      observers for coupled disturbances, validated across agile aerial robots.
-    desc_zh: 不忽略不确定性，而是预测它：面向内部与外部不确定性的收敛预测框架（FORESEER），以及针对耦合扰动的学习型观测器，在多种敏捷飞行机器人上验证。
+      Learning for control: predict uncertainty instead of ignoring it, with
+      converged prediction of internal and external uncertainties (FORESEER),
+      and plan trajectories the controller can actually follow via
+      self-supervised residual learning.
+    desc_zh: 学习赋能控制：不忽略不确定性，而是预测它（FORESEER）；并用自监督残差学习规划出控制器真正跟得上的轨迹。
     works:
       - { id: FORESEER, name: FORESEER, venue: "IJRR'25" }
-      - { id: Learning_obs, name: Learning-based observer, venue: "ICRA'26" }
+      - { id: control_friendly, name: Control-friendly trajectories, venue: "arXiv'26" }
     platforms:
-      - drone_2025IJRR_2026ICRA.webp
       - grasp_drone_2025IJRR.webp
       - vio_drone_2025IJRR.webp
       - drone_2025IJRR.webp
 
-  - key: generative
+  - key: feedback
     index: "04"
-    track: C
-    years: "2025 – 2026"
-    title: Generative policies
-    title_zh: 生成式策略
+    track: C2L
+    years: "2025 –"
+    title: Feedback & world models
+    title_zh: 反馈与世界模型
     desc: >-
-      Make generative policies fast and controllable: action-to-action flow
-      matching (A2A), single-step trajectories (FLASH), multimodality only when it
-      matters (MARS, MOSS), and scaling to robot foundation models (Δ-Flow).
-    desc_zh: 让生成式策略又快又可控：动作到动作的流匹配（A2A）、单步生成轨迹（FLASH）、只在需要时引入多模态（MARS、MOSS），并扩展到机器人基础模型（Δ-Flow）。
+      Control for learning: bring the feedback loop into learned models, so
+      neural ODEs and world models correct themselves online and generalize
+      beyond their training data (Feedback NODE, FWM).
+    desc_zh: 控制赋能学习：把控制中的反馈回路引入学到的模型，让神经 ODE 和世界模型在线自我纠正，泛化到训练数据之外（Feedback NODE、FWM）。
+    works:
+      - { id: FeedbackNN, name: Feedback neural ODE, venue: "ICLR'25 Oral" }
+      - { id: FWM, name: Feedback world model, venue: "NeurIPS'26" }
+      - { id: WorldModelSurvey, name: World model survey, venue: "IJRR'26" }
+    platforms:
+      - dual_arm_2026arXiv.webp
+
+  - key: generative
+    index: "05"
+    track: C2L
+    years: "2025 –"
+    title: Efficient generative policies
+    title_zh: 高效生成式策略
+    desc: >-
+      Control for learning: give generative policies the structure of dynamics,
+      with action-to-action transport (A2A, Δ-Flow), smooth single-step
+      trajectories (FLASH), multimodality only where it matters (MARS, MOSS),
+      and curated sim-to-real data (TUCO).
+    desc_zh: 控制赋能学习：把动力学结构带进生成式策略，包括动作到动作的传输（A2A、Δ-Flow）、单步生成平滑轨迹（FLASH）、只在需要时引入多模态（MARS、MOSS），以及面向 sim-to-real 的数据筛选（TUCO）。
     works:
       - { id: A2A, name: A2A, venue: "RSS'26" }
       - { id: FLASH, name: FLASH, venue: "NeurIPS'26" }
       - { id: DeltaFlow, name: Δ-Flow, venue: "arXiv'26" }
       - { id: MARS, name: MARS policy, venue: "arXiv'26" }
       - { id: MOSS, name: MOSS, venue: "arXiv'26" }
-      - { id: APEX, name: APEX, venue: "arXiv'26" }
       - { id: TUCO, name: TUCO, venue: "arXiv'26" }
     platforms:
       - arm_2026arXiv_2026RSS.webp
-      - dual_arm_2026arXiv.webp
 
-  - key: world
-    index: "05"
-    track: C
+  - key: physics
+    index: "06"
+    track: C2L
     years: "2026 –"
-    title: World models & physical priors
-    title_zh: 世界模型与物理先验
+    title: Physical priors for learning
+    title_zh: 物理先验赋能学习
     desc: >-
-      Close the loop between imagination and reality: feedback world models that
-      guide diffusion policies (FWM), physics filtering for generalization
-      (PhyFilter), and disturbance-aware humanoid locomotion (ADAPT).
-    desc_zh: 让“想象”与现实形成闭环：用反馈世界模型引导扩散策略（FWM），用物理过滤提升泛化能力（PhyFilter），以及扰动感知的人形机器人运动控制（ADAPT）。
+      Control for learning: use physics to make learned behaviour reliable,
+      with physics filtering for generalization (PhyFilter), disturbance-aware
+      humanoid training (ADAPT), and dynamically feasible execution of learned
+      policies (APEX).
+    desc_zh: 控制赋能学习：用物理让学到的行为更可靠，包括物理过滤提升泛化（PhyFilter）、扰动感知的人形机器人训练（ADAPT），以及让学到的策略可以按动力学可行的方式执行（APEX）。
     works:
-      - { id: FWM, name: Feedback world model, venue: "NeurIPS'26" }
-      - { id: WorldModelSurvey, name: World model survey, venue: "IJRR'26" }
       - { id: PhyFilter, name: PhyFilter, venue: "npj Robotics'26" }
       - { id: ADAPT, name: ADAPT, venue: "CoRL'26" }
+      - { id: APEX, name: APEX, venue: "arXiv'26" }
     platforms:
       - humanoid_2026arXiv.webp
       - quadruped_2026arXiv.webp
@@ -140,12 +150,12 @@ stages:
 
   - key: next
     index: "→"
-    track: A
+    track: L2C
     years: Next
     years_zh: 下一站
     title: Generalizable embodied intelligence
     title_zh: 可泛化的具身智能
     desc: >-
-      Robots that transfer reliably from the environments they were trained in to
-      ones they have never seen.
-    desc_zh: 让机器人从训练环境可靠地迁移到从未见过的新环境。
+      Where the two directions meet: robots that transfer reliably from the
+      environments they were trained in to ones they have never seen.
+    desc_zh: 两条路线的交汇点：让机器人从训练环境可靠地迁移到从未见过的新环境。
