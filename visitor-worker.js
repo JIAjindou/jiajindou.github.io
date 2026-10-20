@@ -18,6 +18,18 @@
  *   GET  /log?key=<ADMIN_KEY>      [{ts,city,region,country,ref,ua,net}] (owner only)
  *                                  net = "IPv4|IPv6 · ISP · geo source"; the column
  *                                  is added to D1 automatically on first use.
+ *   POST /fix  {id,t,v4}           refine a just-recorded mainland IPv6 visit with
+ *                                  the visitor's IPv4 address (see below).
+ *
+ * Why /fix: mainland carriers do not register IPv6 by province, so every IP
+ * database (ip2region, Cloudflare, ip-api…) puts China Unicom/Telecom IPv6 in
+ * Beijing and China Mobile IPv6 in Guangdong. Their IPv4 addresses, however,
+ * resolve to the right city. When /collect sees a CN IPv6 visitor it returns
+ * {fix: "<id>.<token>"}; the page then asks an IPv4-only echo service for the
+ * visitor's IPv4 and posts it here, and the row's location is corrected. The
+ * token is an HMAC of the row id (keyed by ADMIN_KEY), so only the visitor who
+ * created a row can refine it, and only within 10 minutes. The IPv4 address
+ * is used in memory for the lookup and never stored.
  *
  * ── Deploy / update (Cloudflare dashboard, no CLI needed) ──────────────────
  * 1. Workers & Pages → D1 → Create database (e.g. "visitors").
@@ -122,7 +134,7 @@ function ipv6Top64(s) {
 
 function lookupCn(db, ip) {
   if (!ip) return null;
-  let key = CNIP_GAP;
+  let key = CNIP_GAP, coarse = false;
   if (ip.includes(":") && !ip.includes(".")) {
     const t = ipv6Top64(ip);
     if (!t) return null;
@@ -131,7 +143,14 @@ function lookupCn(db, ip) {
       const m = (lo + hi) >> 1, a = db.v6hi[m], b = db.v6lo[m];
       if (a < t[0] || (a === t[0] && b <= t[1])) { ans = m; lo = m + 1; } else hi = m - 1;
     }
-    if (ans >= 0) key = db.k6[ans];
+    if (ans >= 0) {
+      key = db.k6[ans];
+      // Real city ranges are small (~/40-/48); a segment of /36 or more is
+      // most likely a carrier-wide registration (China Unicom -> Beijing…).
+      const span = ans + 1 >= db.v6hi.length ? Infinity
+        : (db.v6hi[ans + 1] - db.v6hi[ans]) * 4294967296 + (db.v6lo[ans + 1] - db.v6lo[ans]);
+      coarse = span >= 268435456;   // 2^28 /64s = a /36
+    }
   } else {
     const n = ipv4ToInt(ip.slice(ip.lastIndexOf(":") + 1));  // also handles ::ffff:a.b.c.d
     if (n < 0) return null;
@@ -144,7 +163,18 @@ function lookupCn(db, ip) {
   }
   if (key === CNIP_GAP) return null;
   const c = db.cities[key];
-  return c ? { city: c[0], region: c[1], lat: c[2], lon: c[3], precise: !!c[4] } : null;
+  return c ? { city: c[0], region: c[1], lat: c[2], lon: c[3], precise: !!c[4], coarse } : null;
+}
+
+// HMAC token tying a /fix request to the /collect that created the row.
+let fixKey = null;
+async function fixToken(env, id) {
+  if (!fixKey) {
+    fixKey = await crypto.subtle.importKey("raw", new TextEncoder().encode(env.ADMIN_KEY),
+      { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
+  }
+  const sig = await crypto.subtle.sign("HMAC", fixKey, new TextEncoder().encode("fix:" + id));
+  return [...new Uint8Array(sig).slice(0, 12)].map((b) => b.toString(16).padStart(2, "0")).join("");
 }
 
 // Adds the owner-log "net" column (IP version · ISP · geo source) on first use.
@@ -189,19 +219,21 @@ export default {
             region.toLowerCase().includes(hit.region.toLowerCase());
           if (hit && !sameProvince) {
             city = hit.city; region = hit.region; lat = hit.lat; lon = hit.lon;
-            geo = hit.precise ? "ip2region" : "ip2region (province)";
+            geo = hit.coarse ? "ip2region (IPv6, coarse)"
+              : hit.precise ? "ip2region" : "ip2region (province)";
           }
         } catch (e) {
           geo = "cf (table unavailable)";
         }
       }
-      const net = [ip.includes(":") ? "IPv6" : "IPv4", cf.asOrganization || "", geo]
+      const isV6 = ip.includes(":");
+      const net = [isV6 ? "IPv6" : "IPv4", cf.asOrganization || "", geo]
         .filter(Boolean).join(" · ").slice(0, 200);
       const ref = searchParams.get("ref") || "";
       const ua = request.headers.get("User-Agent") || "";
 
       await ensureSchema(env);
-      await env.DB.prepare(
+      const ins = await env.DB.prepare(
         "INSERT INTO visits (ts, lat, lon, city, region, country, ref, browser, ua, net, n) " +
         "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1)"
       ).bind(
@@ -216,7 +248,38 @@ export default {
         net
       ).run();
 
+      // Mainland IPv6: invite the page to send its IPv4 for a better location.
+      const id = ins && ins.meta && ins.meta.last_row_id;
+      if (cf.country === "CN" && isV6 && id && env.ADMIN_KEY) {
+        return json({ ok: 1, fix: id + "." + (await fixToken(env, id)) });
+      }
       return new Response("ok", { headers: CORS });
+    }
+
+    // ── Refine a mainland IPv6 visit with the visitor's IPv4 ──────────
+    if (pathname === "/fix" && request.method === "POST") {
+      let body = {};
+      try { body = JSON.parse(await request.text()); } catch (e) {}
+      const id = parseInt(body.id, 10);
+      if (!(id > 0) || !env.ADMIN_KEY || body.t !== (await fixToken(env, id))) {
+        return json({ error: "bad token" }, 403);
+      }
+      const v4 = String(body.v4 || "").trim();
+      if (!/^\d{1,3}(\.\d{1,3}){3}$/.test(v4)) return json({ error: "bad address" }, 400);
+      const row = await env.DB.prepare("SELECT ts, country, net FROM visits WHERE id = ?").bind(id).first();
+      if (!row || row.country !== "CN" || !String(row.net || "").startsWith("IPv6") ||
+          String(row.net).includes("via IPv4") || Date.now() - Date.parse(row.ts) > 10 * 60 * 1000) {
+        return json({ error: "not refinable" }, 409);
+      }
+      let hit = null;
+      try { hit = lookupCn(await loadCnip(), v4); } catch (e) {}
+      if (!hit) return json({ ok: 0, reason: "IPv4 not in mainland table" });
+      const parts = String(row.net).split(" · ");          // [IPv6, ISP, old geo]
+      const net = [parts[0], parts[1] && !parts[1].startsWith("ip2region") && !parts[1].startsWith("cf") ? parts[1] : "",
+        hit.precise ? "ip2region via IPv4" : "ip2region via IPv4 (province)"].filter(Boolean).join(" · ");
+      await env.DB.prepare("UPDATE visits SET lat = ?, lon = ?, city = ?, region = ?, net = ? WHERE id = ?")
+        .bind(hit.lat, hit.lon, hit.city, hit.region, net, id).run();
+      return json({ ok: 1, city: hit.city, region: hit.region });
     }
 
     // ── Globe coordinates (public) ────────────────────────────────────
