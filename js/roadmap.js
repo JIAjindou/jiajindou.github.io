@@ -475,28 +475,24 @@
         }, CYCLE_MS);
     }
 
-    // Only a stage's title block picks it, and only after the pointer rests
-    // there briefly, so moving down to the inspector's links across other
-    // columns doesn't switch stages on the way.
-    var hoverTimer = 0;
+    // Stages switch on click only (hovering never changes them). While the
+    // pointer is over the card the tour pauses; on touch screens a tap
+    // pauses it for a while instead.
+    var touchOnly = !!(window.matchMedia && window.matchMedia('(hover: none)').matches);
     els.forEach(function (el, i) {
-        var head = el.querySelector('.rm-head');
-        head.addEventListener('mouseenter', function () {
+        el.addEventListener('click', function () {
             if (vertical) return;
-            clearTimeout(hoverTimer);
-            hoverTimer = setTimeout(function () { setActive(i); }, 160);
-        });
-        head.addEventListener('mouseleave', function () { clearTimeout(hoverTimer); });
-        head.addEventListener('click', function () {
-            if (vertical) return;
-            clearTimeout(hoverTimer);
             setActive(i);
-            hovering = true;             // a tap pauses the tour for a while
-            scheduleCycle();
-            clearTimeout(resumeTimer);
-            resumeTimer = setTimeout(function () { hovering = false; scheduleCycle(); }, 9000);
+            if (touchOnly) {
+                hovering = true;
+                scheduleCycle();
+                clearTimeout(resumeTimer);
+                resumeTimer = setTimeout(function () { hovering = false; scheduleCycle(); }, 12000);
+            }
         });
-        el.addEventListener('focus', function () { if (!vertical) setActive(i); });
+        el.addEventListener('keydown', function (e) {
+            if (!vertical && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); setActive(i); }
+        });
     });
     root.addEventListener('mouseenter', function () {
         hovering = true;

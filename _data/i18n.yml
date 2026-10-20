@@ -26,7 +26,7 @@ en:
   roadmap: Research Roadmap
   roadmap_sub: "From physical priors to generalizable robot learning, and the robots built along the way."
   roadmap_works: Key works
-  roadmap_hint: Hover or tap a stage
+  roadmap_hint: Click a stage to explore
   publications: Publications
   pub_intro: 'All papers below are first, co-first<sup>*</sup>, or corresponding<sup>&dagger;</sup> author work.'
   pub_full_list: 'Full list on <i class="ai ai-google-scholar"></i> Google Scholar&nbsp;&rarr;'
@@ -70,7 +70,7 @@ zh:
   roadmap: 研究路线
   roadmap_sub: "从物理先验走向可泛化的机器人学习，以及一路走来搭建的机器人平台。"
   roadmap_works: 代表工作
-  roadmap_hint: 悬停或点击查看各阶段
+  roadmap_hint: 点击查看各阶段
   publications: 论文
   pub_intro: '以下均为本人第一作者、共同第一作者<sup>*</sup>或通讯作者<sup>&dagger;</sup>的论文。'
   pub_full_list: '完整列表见 <i class="ai ai-google-scholar"></i> Google Scholar&nbsp;&rarr;'
