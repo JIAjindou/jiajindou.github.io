@@ -18,9 +18,30 @@ function pingVisitor() {
     try { if (sessionStorage.getItem('mv_pinged')) return; } catch (e) {}
     var ref = '';
     try { ref = document.referrer || ''; } catch (e) {}
-    fetch(url.replace(/\/$/, '') + '/collect?ref=' + encodeURIComponent(ref),
-        { method: 'POST', mode: 'cors', keepalive: true }).catch(function () {});
-    try { sessionStorage.setItem('mv_pinged', '1'); } catch (e) {}
+    var endpoint = url.replace(/\/$/, '') + '/collect?ref=' + encodeURIComponent(ref);
+
+    // Retry a few times with a timeout: a mainland -> Cloudflare request can
+    // transiently fail or hang even when the page itself loaded fine. We mark
+    // the session as pinged only once a request actually succeeds, so a reload
+    // gets more chances instead of being deduped away after a silent failure.
+    var attempt = 0;
+    function send() {
+        attempt++;
+        var ctrl = null, timer = null;
+        try { ctrl = new AbortController(); timer = setTimeout(function () { ctrl.abort(); }, 8000); } catch (e) {}
+        fetch(endpoint, {
+            method: 'POST', mode: 'cors', keepalive: true,
+            signal: ctrl ? ctrl.signal : undefined
+        }).then(function (r) {
+            if (timer) clearTimeout(timer);
+            if (!r || !r.ok) throw 0;
+            try { sessionStorage.setItem('mv_pinged', '1'); } catch (e) {}
+        }).catch(function () {
+            if (timer) clearTimeout(timer);
+            if (attempt < 3) setTimeout(send, attempt * 1500);
+        });
+    }
+    send();
 }
 
 // Owner-only visitor log. Hidden from the public: only activates when you
