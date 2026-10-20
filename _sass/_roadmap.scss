@@ -56,13 +56,19 @@
 
 .rm-stage.rm-next { flex: 0 0 104px; }
 
+// The title block is the stage's hover/tap target: only as wide as its text.
 .rm-head {
-    display: flex;
+    display: inline-flex;
     flex-direction: column;
     align-items: center;
     gap: 3px;
     min-height: 74px;
+    max-width: 100%;
+    vertical-align: top;
+    cursor: pointer;
 }
+
+.rm-head:hover .rm-title { color: #1e3a5f; }
 
 .rm-idx {
     font: 600 11px/1.2 ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
@@ -317,6 +323,7 @@
     .rm-head {
         align-items: flex-start;
         min-height: 0;
+        cursor: default;
     }
 
     .rm-title {

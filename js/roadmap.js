@@ -475,17 +475,28 @@
         }, CYCLE_MS);
     }
 
+    // Only a stage's title block picks it, and only after the pointer rests
+    // there briefly, so moving down to the inspector's links across other
+    // columns doesn't switch stages on the way.
+    var hoverTimer = 0;
     els.forEach(function (el, i) {
-        el.addEventListener('mouseenter', function () { if (!vertical) setActive(i); });
-        el.addEventListener('focus', function () { if (!vertical) setActive(i); });
-        el.addEventListener('click', function () {
+        var head = el.querySelector('.rm-head');
+        head.addEventListener('mouseenter', function () {
             if (vertical) return;
+            clearTimeout(hoverTimer);
+            hoverTimer = setTimeout(function () { setActive(i); }, 160);
+        });
+        head.addEventListener('mouseleave', function () { clearTimeout(hoverTimer); });
+        head.addEventListener('click', function () {
+            if (vertical) return;
+            clearTimeout(hoverTimer);
             setActive(i);
             hovering = true;             // a tap pauses the tour for a while
             scheduleCycle();
             clearTimeout(resumeTimer);
             resumeTimer = setTimeout(function () { hovering = false; scheduleCycle(); }, 9000);
         });
+        el.addEventListener('focus', function () { if (!vertical) setActive(i); });
     });
     root.addEventListener('mouseenter', function () {
         hovering = true;
