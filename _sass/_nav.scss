@@ -50,6 +50,24 @@
     }
 }
 
+.site-nav-links { align-items: center; }
+
+// Language switch (中文 / EN): a small outlined pill, set apart from the links.
+.site-nav-links a.site-nav-lang {
+    font-size: 0.82rem;
+    padding: 0.18em 0.75em;
+    border: 1px solid #c9d3df;
+    border-radius: 999px;
+    color: #1e3a5f;
+    line-height: 1.5;
+
+    &:hover {
+        background: #1e3a5f;
+        border-color: #1e3a5f;
+        color: #fff;
+    }
+}
+
 @media (max-width: 520px) {
     .site-nav-inner {
         flex-direction: column;

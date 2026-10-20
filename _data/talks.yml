@@ -1,22 +1,28 @@
+# title_zh / host_zh are optional; the Chinese page falls back to English.
 - title: "Classical Control and Planning Meet Modern Learning"
   type: Invited Talk
   host: "Hosted by Prof. Shangke Lyu &middot; Nanjing University (NJU)"
+  host_zh: "南京大学（NJU）&middot; Shangke Lyu 教授邀请"
   date: Oct 2026
   link: https://lsk-robot.github.io/
 
 - title: "Robopapers Podcast"
   type: Interview
   host: Guest interview on A2A policy
+  host_zh: 受邀访谈：A2A policy
   date: Aug 2026
   link: https://www.youtube.com/watch?v=5K2V6MWv3i0&t=2475s
 
 - title: "Seminar on Embodied AI Robotics"
+  title_zh: 具身智能机器人研讨会
   type: Invited Talk
   host: "Efficient robot policy learning &middot; SIMTech &amp; ARTC, Singapore"
+  host_zh: "高效机器人策略学习 &middot; 新加坡 SIMTech &amp; ARTC"
   date: Jun 2026
 
 - title: "TechBeat"
   type: Invited Talk
   host: Invited technical talk on feedback neural ODE
+  host_zh: 特邀技术报告：反馈神经常微分方程（Feedback Neural ODE）
   date: Mar 2025
   link: https://www.techbeat.net/talk-info?id=952

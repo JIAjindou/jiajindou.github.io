@@ -1,45 +1,57 @@
 - date: Sep 2026
   description: 🎉 [GRIPPER](https://arxiv.org/pdf/2609.34594) has been accepted by **T-RO**！
+  description_zh: 🎉 [GRIPPER](https://arxiv.org/pdf/2609.34594) 被 **T-RO** 接收！
 
 - date: Sep 2026
   description: 🎉 [Feedback world model](https://arxiv.org/abs/2605.15705) and [FLASH](https://arxiv.org/abs/2605.15492) have been accepted by 2026 **NeurIPS**！
+  description_zh: 🎉 [Feedback world model](https://arxiv.org/abs/2605.15705) 和 [FLASH](https://arxiv.org/abs/2605.15492) 被 2026 **NeurIPS** 接收！
 
 - date: Sep 2026
   description: 🎉 [ADAPT](https://arxiv.org/abs/2606.16542) has been accepted by 2026 **CoRL**！
+  description_zh: 🎉 [ADAPT](https://arxiv.org/abs/2606.16542) 被 2026 **CoRL** 接收！
 
 - date: Aug 2026
   description: 🎉 [PhyFilter](https://www.nature.com/articles/s44182-026-00114-y) has been accepted by **Nature npj Robotics**！
+  description_zh: 🎉 [PhyFilter](https://www.nature.com/articles/s44182-026-00114-y) 被 **Nature npj Robotics** 接收！
 
 - date: Aug 2026
   description: 🎉 Our [world model survey for robot learning](https://journals.sagepub.com/doi/full/10.1177/02783649261488980) has been accepted by **IJRR**！
+  description_zh: 🎉 我们的综述[《面向机器人学习的世界模型》](https://journals.sagepub.com/doi/full/10.1177/02783649261488980)被 **IJRR** 接收！
 
 - date: May 2026
   description: ⭐ Released [MARS policy](https://arxiv.org/abs/2605.29766), multimodality only when it matters.
+  description_zh: ⭐ 发布 [MARS policy](https://arxiv.org/abs/2605.29766)：只在真正需要时引入多模态。
 
 - date: Apr 2026
   description: 🎉 [A2A policy](https://arxiv.org/pdf/2602.07322) have been accepted by 2026 **RSS**！
+  description_zh: 🎉 [A2A policy](https://arxiv.org/pdf/2602.07322) 被 2026 **RSS** 接收！
 
 - date: Feb 2026
   description: 🎉 Two papers have been accepted by 2026 **ICRA**！
+  description_zh: 🎉 两篇论文被 2026 **ICRA** 接收！
 
 - date: Nov 2025
   description: 🚀 Started my new position as a Postdoc at NTU！
+  description_zh: 🚀 加入南洋理工大学，开始博士后工作！
 
 - date: Jul 2025
   description: 🎉 [FORESEER](https://journals.sagepub.com/doi/10.1177/02783649251364000) has been accepted by **IJRR**！
+  description_zh: 🎉 [FORESEER](https://journals.sagepub.com/doi/10.1177/02783649251364000) 被 **IJRR** 接收！
 
 - date: Jun 2025
   description: 😊 Passed my PhD doctoral dissertation defense！
-  
+  description_zh: 😊 顺利通过博士学位论文答辩！
+
 - date: Feb 2025
   description: >-
     🎉 [Feedback neural network](https://openreview.net/forum?id=cmfyMV45XO) has been selected as an oral paper by 2025 **ICLR** <span style="color: #8B0000; font-weight: 600;">(top 1.8%)</span>！
+  description_zh: >-
+    🎉 [Feedback neural network](https://openreview.net/forum?id=cmfyMV45XO) 入选 2025 **ICLR** 口头报告（Oral）<span style="color: #8B0000; font-weight: 600;">（前 1.8%）</span>！
 
 - date: Jul 2024
   description: 🎉 Our paper, [TRACE](https://ieeexplore.ieee.org/document/10591858), won the Best Student Paper Award at IEEE **ICCA** 2024!
+  description_zh: 🎉 我们的论文 [TRACE](https://ieeexplore.ieee.org/document/10591858) 获得 IEEE **ICCA** 2024 最佳学生论文奖！
 
 - date: Oct 2023
   description: 🎉 [EVOLVER](https://ieeexplore.ieee.org/document/10288520) has been accepted by **T-RO**！
-
-
-
+  description_zh: 🎉 [EVOLVER](https://ieeexplore.ieee.org/document/10288520) 被 **T-RO** 接收！

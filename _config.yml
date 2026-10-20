@@ -28,7 +28,7 @@ description: >-
   My research aims at generalizable robot learning. By integrating **world models**, **generative policies**, and **uncertainty prediction** with physical priors, I work toward robots that reliably transfer from training to unseen environments.
 
 baseurl: "" # the subpath of your site, e.g. /blog
-url: "https://jiajindou.github.io" # the base hostname & protocol for your site, e.g. http://example.com
+url: "https://jiajindou.com" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: # KeunhongP
 github_username: JIAjindou # keunhong
 google_scholar: 3gFYDFAAAAAJ&hl=zh-CN&oi=ao # HVZb-5oAAAAJ

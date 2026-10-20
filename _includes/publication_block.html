@@ -1,29 +1,30 @@
 {% assign publication = include.publication %}
+{%- assign plang = page.lang | default: "en" -%}{%- assign pt = site.data.i18n[plang] -%}
 <div class="publication-block columns{% if publication.featured %} publication-featured{% endif %}{% if publication.preprint %} is-preprint{% else %} is-published{% endif %}{% if publication.featured %} is-featured{% endif %}" id="pub-{{ publication.id }}" data-year="{{ publication.year }}" data-venue="{{ publication.venue_short | split: "'" | first | strip }}">
 
   <div class="column is-4">
     <div class="pub-badge-row">
       {% if publication.featured %}
-      <div class="featured-badge">&#9733; Featured</div>
+      <div class="featured-badge">{{ pt.badge_featured }}</div>
       {% endif %}
       {% if publication.venue_short %}
       <div class="venue-badge{% if publication.preprint %} venue-badge-preprint{% endif %}">{{ publication.venue_short }}</div>
       {% endif %}
       {% if publication.image_mouseover contains "mp4" %}
       <button class="media-toggle" type="button" aria-label="Play preview GIF">
-        <i class="fas fa-play"></i><span class="media-toggle-label">GIF</span>
+        <i class="fas fa-play"></i><span class="media-toggle-label">{{ pt.gif }}</span>
       </button>
       {% endif %}
     </div>
     <div class="publication-image {% if publication.image_mouseover %}publication-mediacell{% endif %}{% if publication.zoom_on_hover %} publication-zoom{% endif %}">
       {% if publication.image_mouseover contains "mp4" %}
       <video preload="none" playsinline muted
-             data-src="./images/{{ publication.image_mouseover }}"
-             {% if publication.image_mouseover2 %}data-src2="./images/{{ publication.image_mouseover2 }}"{% else %}loop{% endif %}>
+             data-src="{{ '/images/' | relative_url }}{{ publication.image_mouseover }}"
+             {% if publication.image_mouseover2 %}data-src2="{{ '/images/' | relative_url }}{{ publication.image_mouseover2 }}"{% else %}loop{% endif %}>
         Your browser does not support the video tag.
       </video>
       {% endif %}
-      <img alt="{{ publication.title }}" loading="lazy" src="./images/{{ publication.image }}?v={{ site.time | date: '%s' }}"/>
+      <img alt="{{ publication.title }}" loading="lazy" src="{{ '/images/' | relative_url }}{{ publication.image }}?v={{ site.time | date: '%s' }}"/>
     </div>
   </div>
 
@@ -69,13 +70,13 @@
         {% if publication.link_web %}
         <a class="external-link button is-small is-ghost" href="{{ publication.link_web }}">
          <span class="icon"><i class="fas fa-link"></i></span>
-         <span>Link</span>
+         <span>{{ pt.link }}</span>
         </a>
         {% endif %}
         {% if publication.project_page %}
         <a class="external-link button is-small is-ghost" href="{{ publication.project_page }}">
           <span class="icon"><i class="fas fa-globe-asia"></i></span>
-          <span>Project Page</span>
+          <span>{{ pt.project_page }}</span>
         </a>
         {% endif %}
         {% if publication.arxiv %}
@@ -98,13 +99,13 @@
         {% if publication.github %}
         <a class="external-link button is-small is-ghost" href="https://github.com/{{ publication.github }}">
           <span class="icon"><i class="fa fab fa-github"></i></span>
-          <span>Code</span>
+          <span>{{ pt.code }}</span>
         </a>
         {% endif %}
         {% if publication.video %}
         <a class="external-link button is-small is-ghost" href="{{ publication.video }}">
           <span class="icon"><i class="fas fa-video"></i></span>
-         <span>Video</span>
+         <span>{{ pt.video }}</span>
         </a>
         {% endif %}
       </div>

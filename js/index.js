@@ -1,3 +1,16 @@
+// UI strings for the bilingual homepage, chosen by <html lang> (en at /, zh at /zh/).
+var I18N = {
+    en: { hideMap: '✕ Hide visitor map', showMap: '🌍 Where are my visitors?', loadingGlobe: 'Loading globe…',
+          showMore: 'Show more', showLess: 'Show less', loading: 'Loading', image: 'Image', gif: 'GIF',
+          visits: function (n) { return n + (n === 1 ? ' visit' : ' visits'); },
+          places: function (n) { return n + (n === 1 ? ' place' : ' places'); } },
+    zh: { hideMap: '✕ 收起访客地图', showMap: '🌍 访客都来自哪里？', loadingGlobe: '正在加载地球…',
+          showMore: '显示更多', showLess: '收起', loading: '加载中', image: '图片', gif: '动图',
+          visits: function (n) { return n + ' 次访问'; },
+          places: function (n) { return n + ' 个地点'; } }
+};
+var L = I18N[(document.documentElement.lang || 'en').slice(0, 2)] || I18N.en;
+
 // Visits are recorded by the inline script in _includes/visit-ping.html,
 // which runs at the very top of <head> before any CSS or JS loads.
 
@@ -161,10 +174,10 @@ function setupVisitorGlobe() {
     function openGlobe() {
         box.hidden = false;
         if (stats) stats.hidden = false;
-        if (btn) { btn.setAttribute('aria-expanded', 'true'); btn.textContent = '✕ Hide visitor map'; }
+        if (btn) { btn.setAttribute('aria-expanded', 'true'); btn.textContent = L.hideMap; }
         if (loaded) { sizeGlobe(); return; }
         loaded = true;
-        box.innerHTML = '<p class="globe-loading">Loading globe…</p>';
+        box.innerHTML = '<p class="globe-loading">' + L.loadingGlobe + '</p>';
 
         loadScript('/js/globe.gl.min.js', function () {
             box.innerHTML = '';
@@ -190,7 +203,7 @@ function setupVisitorGlobe() {
                         .pointAltitude(0.01)
                         .pointColor(function () { return '#ff4d4f'; })
                         .pointRadius(function (d) { return Math.min(0.35 + Math.log(d.count + 1) * 0.28, 1.6); })
-                        .pointLabel(function (d) { return (d.city ? d.city + ', ' : '') + (d.country || '') + ' — ' + d.count + (d.count > 1 ? ' visits' : ' visit'); });
+                        .pointLabel(function (d) { return (d.city ? d.city + ', ' : '') + (d.country || '') + ' — ' + L.visits(d.count); });
 
                     var m = world.globeMaterial();
                     m.color.set('#cfe7f5');
@@ -228,7 +241,7 @@ function setupVisitorGlobe() {
                 box.hidden = true;
                 if (stats) stats.hidden = true;
                 btn.setAttribute('aria-expanded', 'false');
-                btn.textContent = '🌍 Where are my visitors?';
+                btn.textContent = L.showMap;
                 return;
             }
             openGlobe();
@@ -288,8 +301,7 @@ function renderPublicStats(agg, pts, stats) {
         if (p.country) byCountry[p.country] = (byCountry[p.country] || 0) + (p.count || 0);
     });
 
-    var html = '<div class="vstat-summary">' + totalVisits + (totalVisits === 1 ? ' visit' : ' visits') +
-        ' &middot; ' + places + ' place' + (places === 1 ? '' : 's') + '</div>';
+    var html = '<div class="vstat-summary">' + L.visits(totalVisits) + ' &middot; ' + L.places(places) + '</div>';
     // The detailed breakdown only shows on the dedicated /visitors.html page;
     // the homepage keeps just the one-line summary under the globe.
     if (document.body.getAttribute('data-globe-page') === '1') {
@@ -309,7 +321,7 @@ function setupPreprintToggle() {
     if (!btn || !extra) return;
     btn.addEventListener('click', function() {
         var expanded = extra.classList.toggle('is-expanded');
-        btn.textContent = expanded ? 'Show less' : 'Show more';
+        btn.textContent = expanded ? L.showLess : L.showMore;
         btn.setAttribute('aria-expanded', expanded ? 'true' : 'false');
     });
 }
@@ -321,7 +333,7 @@ function setupNewsToggle() {
     if (!btn || !list) return;
     btn.addEventListener('click', function() {
         var expanded = list.classList.toggle('is-expanded');
-        btn.textContent = expanded ? 'Show less' : 'Show more';
+        btn.textContent = expanded ? L.showLess : L.showMore;
         btn.setAttribute('aria-expanded', expanded ? 'true' : 'false');
     });
 }
@@ -348,13 +360,13 @@ function setupVideoToggles() {
             // state: 'play' (show video), 'loading', or 'image' (show still)
             if (state === 'loading') {
                 icon.className = 'fas fa-spinner fa-spin';
-                if (label) label.textContent = 'Loading';
+                if (label) label.textContent = L.loading;
             } else if (state === 'playing') {
                 icon.className = 'fas fa-image';
-                if (label) label.textContent = 'Image';
+                if (label) label.textContent = L.image;
             } else {
                 icon.className = 'fas fa-play';
-                if (label) label.textContent = 'GIF';
+                if (label) label.textContent = L.gif;
             }
         }
 

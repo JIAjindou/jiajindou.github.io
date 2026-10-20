@@ -1,0 +1,438 @@
+{%- comment -%}
+  Bilingual homepage. index.html (lang: en) and zh/index.html (lang: zh) both
+  use this layout; UI strings come from _data/i18n.yml, and data entries can
+  carry *_zh fields (news, talks, service) that fall back to English.
+{%- endcomment -%}
+{%- assign lang = page.lang | default: "en" -%}
+{%- assign t = site.data.i18n[lang] -%}
+{%- assign zh = false -%}{%- if lang == "zh" -%}{%- assign zh = true -%}{%- endif -%}
+<!DOCTYPE html>
+<html lang="{{ t.html_lang }}">
+
+<head>
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+  {%- if lang == "en" %}
+  <script>
+    // Visitors who chose Chinese before go straight to the Chinese page
+    // (runs before the visit is recorded, so it is counted only once).
+    try {
+      if (localStorage.getItem('site_lang') === 'zh' && !/[?&]lang=en\b/.test(location.search))
+        location.replace('{{ "/zh/" | relative_url }}' + location.hash);
+    } catch (e) {}
+  </script>
+  {%- endif %}
+  {% include visit-ping.html %}
+
+  <meta content="width=device-width, initial-scale=1" name="viewport">
+  <title>{{ t.title }}</title>
+
+  <meta name="description" content="{{ t.meta_description }}">
+  <meta name="author" content="Jindou Jia">
+  <link rel="canonical" href="{{ site.url }}{{ page.url }}">
+  <link rel="alternate" hreflang="en" href="{{ site.url }}/">
+  <link rel="alternate" hreflang="zh-CN" href="{{ site.url }}/zh/">
+  <link rel="alternate" hreflang="x-default" href="{{ site.url }}/">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="{{ t.title }}">
+  <meta property="og:description" content="{{ t.og_description }}">
+  <meta property="og:image" content="{{ '/images/myphoto3.jpg' | absolute_url }}">
+  <meta property="og:url" content="{{ site.url }}{{ page.url }}">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="{{ t.og_locale }}">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ t.title }}">
+  <meta name="twitter:description" content="{{ t.og_description }}">
+  <meta name="twitter:image" content="{{ '/images/myphoto3.jpg' | absolute_url }}">
+
+  {% if site.google_analytics %}
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id={{ site.google_analytics }}"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', '{{ site.google_analytics }}');
+  </script>
+  {% endif %}
+
+  <link href="{{ '/css/fonts.css' | relative_url }}" rel="stylesheet">
+  <link href="{{ '/css/academicons.min.css' | relative_url }}" rel="stylesheet">
+  <link href="{{ '/css/icons.css' | relative_url }}" rel="stylesheet">
+  <link href="{{ '/css/bulma.min.css' | relative_url }}" rel="stylesheet">
+  <link href="{{ '/css/index.css' | relative_url }}?v={{ site.time | date: '%s' }}" rel="stylesheet">
+
+  <link rel="icon" href="{{ '/images/ICON.png' | relative_url }}" type="image/png">
+  <link rel="apple-touch-icon" href="{{ '/images/ICON.png' | relative_url }}">
+
+  <script src="{{ '/js/jquery.min.js' | relative_url }}"></script>
+  <script src="{{ '/js/index.js' | relative_url }}?v={{ site.time | date: '%s' }}"></script>
+
+  {% if site.goatcounter %}
+  <!-- GoatCounter privacy-friendly analytics -->
+  <script>
+    // GoatCounter's gc.zgo.at is unreachable from mainland China. Load it only
+    // after the page has finished loading so a hung request never holds it up.
+    window.addEventListener('load', function () {
+      var s = document.createElement('script');
+      s.async = true;
+      s.src = 'https://gc.zgo.at/count.js';
+      s.setAttribute('data-goatcounter', 'https://{{ site.goatcounter }}.goatcounter.com/count');
+      document.body.appendChild(s);
+    });
+  </script>
+  {% endif %}
+</head>
+
+<body>
+
+  {% include nav.html active="home" %}
+
+  <section class="hero">
+    <div class="hero-body container is-max-desktop">
+      <div class="columns is-vcentered">
+
+        <div class="column is-3">
+          <div class="portrait">
+            <img src="{{ '/images/myphoto3.webp' | relative_url }}?v={{ site.time | date: '%s' }}" alt="{{ t.brand }}" />
+          </div>
+        </div>
+
+        <div class="column">
+          <h1 class="title">
+            <b>{{ t.hello }}</b>
+          </h1>
+          <div class="content has-text-justified">
+            {% if zh %}{{ t.bio | markdownify }}{% else %}{{ site.description | markdownify }}{% endif %}
+            <div class="buttons">
+              <a class="external-link button is-light"
+                href="https://scholar.google.com/citations?user={{ site.google_scholar }}">
+                <span class="icon"><i class="ai ai-google-scholar"></i></span>
+                <span>Scholar</span>
+              </a>
+
+              <a class="external-link button is-light"
+                href="https://github.com/{{ site.github_username }}">
+                <span class="icon"><i class="fab fa-github"></i></span>
+                <span>Github</span>
+              </a>
+
+              <a class="external-link button is-light" href="https://www.researchgate.net/profile/Jindou-Jia/research">
+                <span class="icon"><i class="fab fa-researchgate"></i></span>
+                <span>ResearchGate</span>
+              </a>
+
+              <a class="external-link button is-light"
+                href="https://www.linkedin.com/in/jindou-jia-01606631a/" target="_blank" rel="noopener">
+                <span class="icon"><i class="fab fa-linkedin"></i></span>
+                <span>LinkedIn</span>
+              </a>
+
+              <a class="external-link button is-light"
+                href="https://xhslink.cn/o/71xBK0sODtl" target="_blank" rel="noopener">
+                <span class="icon"><i class="fas fa-book"></i></span>
+                <span>{% if zh %}小红书{% else %}RED{% endif %}</span>
+              </a>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- News. -->
+  <div class="hr">
+    <div class="container">
+      <hr>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container is-max-desktop">
+
+      <h2 class="title is-3">{{ t.news }}</h2>
+      <div class="content">
+        <ul class="news-list">
+          {% for news in site.data.news %}
+          {%- assign d = news.date | split: " " -%}{%- assign mon = d[0] -%}{%- assign yr = d[1] -%}
+          <li{% if forloop.index > 10 %} class="news-extra"{% endif %}>
+            <b>{% if zh %}{{ yr }}年{{ t.months[mon] }}月{% else %}{{ news.date }}{% endif %}</b>{% if zh %}：{% else %}: {% endif %}
+            {%- if zh and news.description_zh -%}
+            {{ news.description_zh | markdownify | remove: '<p>' | remove: '</p>' }}
+            {%- else -%}
+            {{ news.description | markdownify | remove: '<p>' | remove: '</p>' }}
+            {%- endif %}
+          </li>
+          {% endfor %}
+        </ul>
+        {% if site.data.news.size > 10 %}
+        <button type="button" class="news-toggle" aria-expanded="false">{{ t.show_more }}</button>
+        {% endif %}
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Robotic Platforms. -->
+  <div class="hr">
+    <div class="container">
+      <hr>
+    </div>
+  </div>
+
+  <section class="section platforms-section">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3">{{ t.platforms }}</h2>
+      <p class="platforms-subtitle">{{ t.platforms_sub }}</p>
+
+      <div class="platforms-grid">
+        <div class="platform-card">
+          <div class="platform-image"><img src="{{ '/images/hardware/humanoid_2026arXiv.webp' | relative_url }}" loading="lazy" decoding="async" alt="Humanoid robot (2026 arXiv)"></div>
+          <div class="platform-venues">
+            <a class="venue-badge" href="#pub-PhyFilter">2026 npj Robotics</a>
+            <a class="venue-badge" href="#pub-ADAPT">2026 CoRL</a>
+          </div>
+        </div>
+        <div class="platform-card">
+          <div class="platform-image"><img src="{{ '/images/hardware/quadruped_2026arXiv.webp' | relative_url }}" loading="lazy" decoding="async" alt="Quadruped robot (2026 arXiv)"></div>
+          <div class="platform-venues">
+            <a class="venue-badge" href="#pub-PhyFilter">2026 npj Robotics</a>
+          </div>
+        </div>
+        <div class="platform-card">
+          <div class="platform-image"><img src="{{ '/images/hardware/dual_arm_2026arXiv.webp' | relative_url }}" loading="lazy" decoding="async" alt="Dual-arm system (2026 arXiv)"></div>
+          <div class="platform-venues">
+            <a class="venue-badge" href="#pub-FWM">2026 NeurIPS</a>
+          </div>
+        </div>
+        <div class="platform-card">
+          <div class="platform-image"><img src="{{ '/images/hardware/arm_2026arXiv_2026RSS.webp' | relative_url }}" loading="lazy" decoding="async" alt="Robotic arm (2026 arXiv, 2026 RSS)"></div>
+          <div class="platform-venues">
+            <a class="venue-badge" href="#pub-FLASH">2026 NeurIPS</a>
+            <a class="venue-badge" href="#pub-A2A">2026 RSS</a>
+          </div>
+        </div>
+        <div class="platform-card">
+          <div class="platform-image"><img src="{{ '/images/hardware/arm_2023TRO_2026arXiv.webp' | relative_url }}" loading="lazy" decoding="async" alt="Robotic arm (2023 TRO, 2026 arXiv)"></div>
+          <div class="platform-venues">
+            <a class="venue-badge" href="#pub-EVOLVER">2023 TRO</a>
+            <a class="venue-badge venue-badge-preprint" href="#pub-APEX">2026 arXiv</a>
+          </div>
+        </div>
+        <div class="platform-card">
+          <div class="platform-image"><img src="{{ '/images/hardware/drone_2026arXiv.webp' | relative_url }}" loading="lazy" decoding="async" alt="Drone (2026 arXiv)"></div>
+          <div class="platform-venues">
+            <a class="venue-badge" href="#pub-PhyFilter">2026 npj Robotics</a>
+          </div>
+        </div>
+        <div class="platform-card">
+          <div class="platform-image"><img src="{{ '/images/hardware/drone_2025IJRR_2026ICRA.webp' | relative_url }}" loading="lazy" decoding="async" alt="Drone (2025 IJRR, 2026 ICRA)"></div>
+          <div class="platform-venues">
+            <a class="venue-badge" href="#pub-FORESEER">2025 IJRR</a>
+            <a class="venue-badge" href="#pub-Learning_obs">2026 ICRA</a>
+          </div>
+        </div>
+        <div class="platform-card">
+          <div class="platform-image"><img src="{{ '/images/hardware/grasp_drone_2025IJRR.webp' | relative_url }}" loading="lazy" decoding="async" alt="Grasping drone (2025 IJRR)"></div>
+          <div class="platform-venues">
+            <a class="venue-badge" href="#pub-FORESEER">2025 IJRR</a>
+          </div>
+        </div>
+        <div class="platform-card">
+          <div class="platform-image"><img src="{{ '/images/hardware/vio_drone_2025IJRR.webp' | relative_url }}" loading="lazy" decoding="async" alt="VIO drone (2025 IJRR)"></div>
+          <div class="platform-venues">
+            <a class="venue-badge" href="#pub-FORESEER">2025 IJRR</a>
+          </div>
+        </div>
+        <div class="platform-card">
+          <div class="platform-image"><img src="{{ '/images/hardware/drone_2025IJRR.webp' | relative_url }}" loading="lazy" decoding="async" alt="Drone (2025 IJRR)"></div>
+          <div class="platform-venues">
+            <a class="venue-badge" href="#pub-FORESEER">2025 IJRR</a>
+          </div>
+        </div>
+        <div class="platform-card">
+          <div class="platform-image"><img src="{{ '/images/hardware/drone_2022RAL_2023TRO.webp' | relative_url }}" loading="lazy" decoding="async" alt="Drone (2022 RAL, 2023 TRO)"></div>
+          <div class="platform-venues">
+            <a class="venue-badge" href="#pub-Drag">2022 RAL</a>
+            <a class="venue-badge" href="#pub-EVOLVER">2023 TRO</a>
+          </div>
+        </div>
+        <div class="platform-card">
+          <div class="platform-image"><img src="{{ '/images/hardware/drone_2022RAL.webp' | relative_url }}" loading="lazy" decoding="async" alt="Drone (2022 RAL)"></div>
+          <div class="platform-venues">
+            <a class="venue-badge" href="#pub-Drag">2022 RAL</a>
+          </div>
+        </div>
+        <div class="platform-card">
+          <div class="platform-image"><img src="{{ '/images/hardware/drone_2020CEP_2022TAES.webp' | relative_url }}" loading="lazy" decoding="async" alt="Drone (2020 CEP, 2022 TAES)"></div>
+          <div class="platform-venues">
+            <a class="venue-badge" href="#pub-CEP">2020 CEP</a>
+            <a class="venue-badge" href="#pub-Window">2022 TAES</a>
+          </div>
+        </div>
+        <div class="platform-card platform-card-next">
+          <div class="platform-next-text">{{ t.whats_next }}<span class="platform-next-arrow">&rarr;</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Publications. -->
+  <div class="hr">
+    <div class="container">
+      <hr>
+    </div>
+  </div>
+
+  <section class="section" id="publications">
+    <div class="container is-max-desktop">
+
+      <h2 class="title is-3">{{ t.publications }}</h2>
+      <p class="publications-intro">
+        {{ t.pub_intro }}
+        <a class="publications-full-link" href="https://scholar.google.com/citations?user={{ site.google_scholar }}" target="_blank" rel="noopener">
+          {{ t.pub_full_list }}
+        </a>
+      </p>
+
+      {%- comment -%} Years (desc) and a manual venue order: journals first, conferences next, arXiv last. {%- endcomment -%}
+      {% assign year_list = site.data.publications | map: "year" | uniq | sort | reverse %}
+      {% assign featured_count = site.data.publications | where: "featured", true | size %}
+      {% assign venue_order = "npj Robotics|IJRR|T-RO|ICLR|RSS|R-AL|CoRL|NeurIPS|T-AES|CEP|ICRA|ICUAS|CAC|arXiv" | split: "|" %}
+
+      <div class="pub-layout">
+        <aside class="pub-sidebar">
+          <ul class="pub-filter-list">
+            <li><button type="button" class="pub-filter is-active" data-filter="featured">{{ t.featured }} <span class="pub-filter-count">({{ featured_count }})</span></button></li>
+
+            <li class="pub-filter-group">{{ t.by_year }}</li>
+            {% for y in year_list %}
+            {% assign yc = site.data.publications | where: "year", y | size %}
+            <li><button type="button" class="pub-filter" data-filter="year:{{ y }}">{{ y }} <span class="pub-filter-count">({{ yc }})</span></button></li>
+            {% endfor %}
+
+            <li class="pub-filter-group">{{ t.by_venue }}</li>
+            {% for v in venue_order %}
+            {% assign vc = site.data.publications | where_exp: "p", "p.venue_short contains v" | size %}
+            {% if vc > 0 %}
+            {% if v == "ICLR" %}{% assign vlabel = "ICLR Oral" %}{% else %}{% assign vlabel = v %}{% endif %}
+            <li><button type="button" class="pub-filter" data-filter="venue:{{ v }}">{{ vlabel }} <span class="pub-filter-count">({{ vc }})</span></button></li>
+            {% endif %}
+            {% endfor %}
+          </ul>
+        </aside>
+
+        <div class="pub-list is-default-featured">
+          {% for publication in site.data.publications %}
+            {% include publication_block.html publication=publication %}
+          {% endfor %}
+          <p class="pub-empty" hidden>{{ t.pub_empty }}</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Talks & Media. -->
+  <div class="hr">
+    <div class="container">
+      <hr>
+    </div>
+  </div>
+
+  <section class="section talks-section">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3">{{ t.talks }}</h2>
+      <ul class="timeline">
+        {% for talk in site.data.talks %}
+        {%- assign d = talk.date | split: " " -%}{%- assign mon = d[0] -%}{%- assign yr = d[1] -%}
+        {%- if zh and talk.title_zh -%}{%- assign ttitle = talk.title_zh -%}{%- else -%}{%- assign ttitle = talk.title -%}{%- endif -%}
+        {%- if zh and talk.host_zh -%}{%- assign thost = talk.host_zh -%}{%- else -%}{%- assign thost = talk.host -%}{%- endif -%}
+        <li class="timeline-item talk-type-{{ talk.type | slugify }}">
+          <span class="timeline-marker"></span>
+          <div class="timeline-content">
+            <div class="timeline-meta">
+              <span class="timeline-date">{% if zh %}{{ yr }}年{{ t.months[mon] }}月{% else %}{{ talk.date }}{% endif %}</span>
+              <span class="timeline-tag">{% if zh %}{{ t.talk_types[talk.type] | default: talk.type }}{% else %}{{ talk.type }}{% endif %}</span>
+            </div>
+            {% if talk.link %}
+            <a class="timeline-title" href="{{ talk.link }}" target="_blank" rel="noopener">{{ ttitle }}</a>
+            {% else %}
+            <span class="timeline-title">{{ ttitle }}</span>
+            {% endif %}
+            <div class="timeline-sub">{{ thost }}</div>
+          </div>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </section>
+
+  <!-- Professional Service. -->
+  <div class="hr">
+    <div class="container">
+      <hr>
+    </div>
+  </div>
+
+  <section class="section service-section">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3">{{ t.service }}</h2>
+      <div class="service-cards">
+        {% for s in site.data.service %}
+        <div class="service-card service-role-{{ s.role | slugify }}">
+          <span class="service-card-icon"><i class="fas {{ s.icon | default: 'fa-circle-check' }}"></i></span>
+          <div class="service-card-body">
+            <div class="service-card-role">{% if zh and s.role_zh %}{{ s.role_zh }}{% else %}{{ s.role }}{% endif %}</div>
+            <div class="service-card-venue">{% if zh and s.venue_zh %}{{ s.venue_zh }}{% else %}{{ s.venue }}{% endif %}</div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="content footer-links has-text-centered">
+        <a href="mailto:{{ site.email }}">
+          <i class="fas fa-envelope"></i>
+        </a>
+        <a class="external-link" href="https://github.com/{{ site.github_username }}">
+          <i class="fab fa-github"></i>
+        </a>
+        <a class="external-link" href="https://scholar.google.com/citations?user={{ site.google_scholar }}">
+          <i class="ai ai-google-scholar"></i>
+        </a>
+      </div>
+      {% if site.visitor_worker_url %}
+      <div class="visitor-globe-wrap has-text-centered">
+        <button type="button" id="globe-toggle" class="globe-toggle" aria-expanded="false">{{ t.globe_btn }}</button>
+        <div id="globe-stats" class="globe-stats" hidden></div>
+        <div id="globe-box" class="globe-box" hidden></div>
+      </div>
+      {% endif %}
+      {% if site.busuanzi %}
+      <p class="site-visits">
+        {% if zh %}总访问量{% else %}Total visits{% endif %} <b id="site-visits">—</b>
+        <span id="busuanzi_container_site_pv" hidden><span id="busuanzi_value_site_pv"></span></span>
+      </p>
+      {% endif %}
+    </div>
+  </footer>
+
+  {% if site.busuanzi %}
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  {% endif %}
+
+</body>
+
+</html>

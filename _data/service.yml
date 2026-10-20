@@ -1,7 +1,10 @@
 - role: Associate Editor
+  role_zh: 副编辑（Associate Editor）
   venue: IEEE Robotics and Automation Letters (RA-L)
   icon: fa-pen-fancy
 
 - role: Reviewer
+  role_zh: 审稿人
   venue: T-RO, IJRR, RA-L, ICRA, and other robotics venues
+  venue_zh: T-RO、IJRR、RA-L、ICRA 等机器人领域期刊与会议
   icon: fa-clipboard-check

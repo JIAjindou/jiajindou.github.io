@@ -1,0 +1,89 @@
+# UI strings for the bilingual homepage (_layouts/homepage.html).
+# English lives at /, Chinese at /zh/. Paper titles/abstracts stay in English.
+# The English bio is site.description in _config.yml; the Chinese bio is zh.bio.
+
+en:
+  html_lang: en-US
+  og_locale: en_US
+  home_url: /
+  other_url: /zh/
+  other_lang: zh
+  brand: Jindou Jia
+  switch_label: 中文
+  switch_title: 切换到中文
+  title: "Jindou Jia | NTU Postdoc"
+  meta_description: "Jindou Jia is a Postdoc at NTU MARS Lab. Research interests: robot learning, world models, generative policies, and uncertainty prediction."
+  og_description: "Postdoc at NTU MARS Lab working on robot learning, world models, generative policies, and uncertainty prediction."
+  hello: "Hello, I'm Jindou Jia"
+  nav_home: Home
+  nav_research: Research
+  nav_cv: CV
+  news: News
+  show_more: Show more
+  platforms: Robotic Platforms
+  platforms_sub: "Hardware platforms I've worked with over the years."
+  whats_next: "What's next?"
+  publications: Publications
+  pub_intro: 'All papers below are first, co-first<sup>*</sup>, or corresponding<sup>&dagger;</sup> author work.'
+  pub_full_list: 'Full list on <i class="ai ai-google-scholar"></i> Google Scholar&nbsp;&rarr;'
+  featured: Featured
+  by_year: By year
+  by_venue: By venue
+  pub_empty: No publications in this category.
+  badge_featured: "&#9733; Featured"
+  link: Link
+  project_page: Project Page
+  pdf: PDF
+  arxiv: arXiv
+  code: Code
+  video: Video
+  gif: GIF
+  talks: "Talks &amp; Media"
+  service: Professional Service
+  globe_btn: "🌍 Where are my visitors?"
+
+zh:
+  html_lang: zh-CN
+  og_locale: zh_CN
+  home_url: /zh/
+  other_url: /
+  other_lang: en
+  brand: 贾金豆
+  switch_label: EN
+  switch_title: Switch to English
+  title: "贾金豆 | 南洋理工大学博士后"
+  meta_description: "贾金豆，南洋理工大学 MARS 实验室博士后，研究方向为可泛化的机器人学习：世界模型、生成式策略与不确定性预测。"
+  og_description: "南洋理工大学 MARS 实验室博士后，研究机器人学习、世界模型、生成式策略与不确定性预测。"
+  hello: "你好，我是贾金豆"
+  nav_home: 首页
+  nav_research: 研究
+  nav_cv: 简历
+  news: 新闻动态
+  show_more: 显示更多
+  platforms: 机器人平台
+  platforms_sub: "这些年我研发和使用过的机器人硬件平台。"
+  whats_next: "下一个会是？"
+  publications: 论文
+  pub_intro: '以下均为本人第一作者、共同第一作者<sup>*</sup>或通讯作者<sup>&dagger;</sup>的论文。'
+  pub_full_list: '完整列表见 <i class="ai ai-google-scholar"></i> Google Scholar&nbsp;&rarr;'
+  featured: 精选
+  by_year: 按年份
+  by_venue: 按期刊 / 会议
+  pub_empty: 该分类下暂无论文。
+  badge_featured: "&#9733; 精选"
+  link: 链接
+  project_page: 项目主页
+  pdf: PDF
+  arxiv: arXiv
+  code: 代码
+  video: 视频
+  gif: 动图
+  talks: 报告与媒体
+  service: 学术服务
+  globe_btn: "🌍 访客都来自哪里？"
+  months: { Jan: 1, Feb: 2, Mar: 3, Apr: 4, May: 5, Jun: 6, Jul: 7, Aug: 8, Sep: 9, Oct: 10, Nov: 11, Dec: 12 }
+  talk_types: { "Invited Talk": 特邀报告, "Interview": 访谈 }
+  bio: |-
+    我目前是南洋理工大学（NTU）[MARS](http://marslab.tech) 实验室的博士后，合作导师为[杨剑飞](https://marsyang.site/)教授。2025 年博士毕业于北京航空航天大学沈元荣誉学院，师从[郭雷](https://scholar.google.com/citations?user=IxO-SDwAAAAJ&hl=zh-CN)院士、[余翔](https://scholar.google.com/citations?user=6UgtuZ8AAAAJ&hl=zh-CN&oi=ao)教授和[郭克信](https://scholar.google.com/citations?hl=zh-CN&user=c0MaejIAAAAJ)教授。
+
+    我的研究方向是可泛化的机器人学习：将**世界模型**、**生成式策略**和**不确定性预测**与物理先验相结合，让机器人能够从训练环境可靠地迁移到从未见过的新环境中。
