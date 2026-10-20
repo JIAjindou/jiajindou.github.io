@@ -486,6 +486,10 @@ html { scroll-behavior: smooth; }
     font-family: 'Google Sans', 'Noto Sans', sans-serif;
 
     b { color: #6b7280; font-weight: 600; }
+
+    // Busuanzi un-hides its own container (inline display:inline) once it
+    // loads; keep its raw count hidden — only the offset total is shown.
+    #busuanzi_container_site_pv { display: none !important; }
 }
 
 .globe-toggle {
