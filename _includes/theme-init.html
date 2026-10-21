@@ -1,20 +1,23 @@
 {%- comment -%}
-  Light / dark theme. Runs in <head> before any stylesheet so a dark-theme
-  visitor never sees a white flash. The choice is remembered in localStorage
-  (default: light). The nav's .site-nav-theme button toggles it; a
-  "themechange" event lets canvases (roadmap, globe) repaint.
+  Light / dark theme. Every new visit starts light; a switch to dark lasts
+  for the browsing session only (sessionStorage: kept across reloads and the
+  en/zh pages in that tab, gone in a new tab or window). Runs in <head> before
+  any stylesheet so a dark-theme page never flashes white. The nav's
+  .site-nav-theme button toggles it; a "themechange" event lets canvases
+  (roadmap, globe) repaint.
 {%- endcomment -%}
 <script>
 (function () {
   var KEY = 'site_theme', root = document.documentElement;
-  try { if (localStorage.getItem(KEY) === 'dark') root.setAttribute('data-theme', 'dark'); } catch (e) {}
+  try { localStorage.removeItem(KEY); } catch (e) {}      // an earlier version kept it for good
+  try { if (sessionStorage.getItem(KEY) === 'dark') root.setAttribute('data-theme', 'dark'); } catch (e) {}
   document.addEventListener('click', function (e) {
     var btn = e.target.closest ? e.target.closest('.site-nav-theme') : null;
     if (!btn) return;
     var dark = root.getAttribute('data-theme') !== 'dark';
     root.classList.add('theme-anim');                  // cross-fade only on a real switch
     if (dark) root.setAttribute('data-theme', 'dark'); else root.removeAttribute('data-theme');
-    try { localStorage.setItem(KEY, dark ? 'dark' : 'light'); } catch (err) {}
+    try { sessionStorage.setItem(KEY, dark ? 'dark' : 'light'); } catch (err) {}
     setTimeout(function () { root.classList.remove('theme-anim'); }, 450);
     var ev;
     try { ev = new CustomEvent('themechange', { detail: { dark: dark } }); }
