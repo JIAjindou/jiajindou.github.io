@@ -156,7 +156,7 @@
     // ── Geometry ────────────────────────────────────────────────────────
     // Routes are laid out in (m, c): m runs along the stages, c across them
     // (0 = trunk). toXY maps them to the screen for either orientation.
-    var D = 46, CORNER = 28, MARGIN = 38, SPLIT = 36;
+    var D = 46, CORNER = 28, MARGIN = 46, SPLIT = 36;
     var W = 0, H = 0, dpr = 1, vertical = false, k = 1, cross = 0, rail = 26;
     var col = [], lines = [], journeys = [];
 
@@ -283,6 +283,14 @@
     function layout() {
         vertical = window.innerWidth < 769;
         k = vertical ? 0.34 : 1;
+        // Give every title block the height of the tallest (long titles wrap
+        // to three lines), so the ribbons and their labels clear all of them.
+        var heads = els.map(function (el) { return el.querySelector('.rm-head'); });
+        heads.forEach(function (h) { h.style.minHeight = ''; });
+        if (!vertical) {
+            var tallest = Math.max.apply(null, heads.map(function (h) { return h.offsetHeight; }));
+            heads.forEach(function (h) { h.style.minHeight = tallest + 'px'; });
+        }
         W = wrap.clientWidth;
         H = wrap.clientHeight;
         if (!W || !H) return false;
