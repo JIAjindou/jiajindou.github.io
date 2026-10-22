@@ -2,14 +2,12 @@
 #
 # trunk: the shared start and end (stages with `track: trunk`): a short line
 #   that splits into the tracks and that they merge back into at the last stage.
-# tracks: the research directions, drawn as circuit-like lines that particles
-#   flow along (direction only). Each branches off the trunk at stage `from`
+# tracks: the research directions, drawn as hairlines with light pulses
+#   travelling along them (direction only). Each branches off the trunk at stage `from`
 #   (side -1 above, 1 below) and merges back at the last stage; give them
 #   mirrored sides so they read as equals. `label_from` = stage whose node the
 #   line's name follows (default: where the line starts). A track with side 0
 #   would instead act as a trunk running the whole way.
-# loops (optional): feedback loops drawn on a track, running back from stage
-#   `from` to stage `to` (indices into stages, 0-based).
 # stages: the columns. `track` = which line the stage's node sits on; `works`
 #   link to publications by id (#pub-<id>); `platforms` are files in
 #   images/hardware/. *_zh fields are used on the Chinese page.

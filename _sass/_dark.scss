@@ -84,55 +84,36 @@ html[data-theme="dark"] {
 
     // Research roadmap
     .roadmap-subtitle { color: var(--d-muted); }
-    .roadmap {
-        color: var(--d-text);
-        background:
-            radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1.3px) 0 0 / 22px 22px,
-            linear-gradient(180deg, #131c2b 0%, #101826 100%);
-        border-color: var(--d-border);
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
-    }
-    .rm-title { color: #c9d4e3; }
-    .rm-stage:hover .rm-title,
+    .rm-idx { color: #5d6b80; }
+    .rm-title { color: #8796ab; }
+    .rm-stage:hover .rm-title { color: var(--d-text); }
     .rm-stage.is-active .rm-title { color: #fff; }
-    .rm-years { color: #7f8ea3; }
-    .rm-track-label { background: rgba(16, 24, 38, 0.88); }
-    .rm-legend { color: var(--d-text); }
-    // A soft pool of light behind each robot, so dark hardware reads on the panel.
+    .rm-years { color: #66758b; }
+    .rm-legend { color: var(--d-muted); }
+    // A soft round pool of light behind each robot, so dark hardware reads.
     .rm-robot::before {
-        left: 4px;
-        right: 4px;
-        top: 6px;
-        bottom: 0;
+        left: -4px;
+        right: -4px;
+        top: 18px;
+        bottom: -4px;
         height: auto;
-        background: radial-gradient(closest-side, rgba(220, 231, 248, 0.68), rgba(220, 231, 248, 0.24) 62%, rgba(220, 231, 248, 0));
+        background: radial-gradient(closest-side, rgba(220, 231, 248, 0.42), rgba(220, 231, 248, 0.12) 62%, rgba(220, 231, 248, 0));
     }
-    .rm-node {
-        background: var(--d-bg);
-        box-shadow: 0 0 0 3px rgba(14, 21, 34, 0.9), 0 0 10px rgba(143, 180, 230, 0.25);
+    .rm-robot img { opacity: 0.78; }
+    .rm-insp-robot::before {
+        top: 8px;
+        height: auto;
+        background: radial-gradient(closest-side, rgba(220, 231, 248, 0.4), rgba(220, 231, 248, 0.1) 62%, rgba(220, 231, 248, 0));
     }
+    .rm-node { background: var(--d-bg); }
     .rm-node.is-active { background: var(--c); }
-    .rm-inspector {
-        background: var(--d-surface);
-        border-color: var(--d-border);
-        box-shadow: none;
-    }
+    .rm-inspector { border-top-color: var(--d-border); }
     .rm-insp-title { color: #fff; }
     .rm-insp-body p,
     .rm-detail p { color: var(--d-text); }
-    .rm-works-label,
-    .rm-hint { color: #66758b; }
-    .rm-chip {
-        background: var(--d-surface-2);
-        border-color: var(--d-border);
-        color: var(--d-text);
-    }
-    .rm-chip:hover {
-        background: var(--d-hover);
-        color: #fff;
-        border-color: var(--c);
-        box-shadow: none;
-    }
+    .rm-works-label { color: #66758b; }
+    .rm-chip { color: var(--d-text); }
+    .rm-chip:hover { color: #fff; }
 
     // Publications
     .publications-intro,
@@ -242,6 +223,11 @@ html[data-theme="dark"] {
     .owner-table th,
     .owner-table td { border-bottom-color: var(--d-border); }
     .owner-table tbody tr:hover { background: var(--d-surface-2); }
+}
+
+// Narrow screens show every robot in full colour.
+@media (max-width: 768px) {
+    html[data-theme="dark"] .rm-robot img { opacity: 1; }
 }
 
 @keyframes pub-flash-dark {

@@ -1,7 +1,7 @@
-// Research roadmap (js/roadmap.js): a white card in the homepage's own palette
-// (navy #1e3a5f, steel blue, teal #0e7490, slate greys). The research
-// directions run across the stages as circuit-like tracks with particles
-// flowing along them; robots hang off the tracks.
+// Research roadmap (js/roadmap.js). Minimal on purpose: no card, no grid, no
+// connectors. Hairlines with light pulses, quiet type, a greyscale robot
+// line-up that comes into colour for the active stage, and a details panel
+// set off by a single rule. Palette: navy #1e3a5f, teal #0e7490, slate greys.
 // Plain CSS on purpose (no Sass features) so it can be previewed as-is.
 
 .roadmap-section {
@@ -12,27 +12,16 @@
 .roadmap-subtitle {
     color: #555;
     margin-top: -0.25em;
-    margin-bottom: 1.25em;
+    margin-bottom: 1.6em;
     font-size: 95%;
 }
 
-.roadmap {
-    position: relative;
-    isolation: isolate;
-    overflow: hidden;
-    border-radius: 14px;
-    color: #444;
-    background:
-        radial-gradient(rgba(30, 58, 95, 0.075) 1px, transparent 1.3px) 0 0 / 22px 22px,
-        linear-gradient(180deg, #fff 0%, #f7f9fb 100%);
-    border: 1px solid #e6eaef;
-    box-shadow: 0 10px 30px rgba(30, 58, 95, 0.07);
-}
+.roadmap { position: relative; }
 
 .rm-stages {
     position: relative;
     display: flex;
-    padding: 26px 16px 2px;
+    padding-top: 6px;
 }
 
 .rm-canvas {
@@ -55,127 +44,111 @@
     cursor: pointer;
 }
 
-.rm-stage.rm-next { flex: 0 0 104px; }
+.rm-stage.rm-next { flex: 0 0 110px; }
 
 .rm-head {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 3px;
-    min-height: 74px;
+    gap: 5px;
+    min-height: 72px;
 }
 
-.rm-stage:hover .rm-title { color: #1e3a5f; }
-
 .rm-idx {
-    font: 600 11px/1.2 ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
-    letter-spacing: 0.16em;
-    color: var(--c);
+    font: 500 10.5px/1 ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    letter-spacing: 0.2em;
+    color: #9aa5b1;
+    transition: color 0.3s ease;
 }
 
 .rm-title {
     font-family: 'Google Sans', 'Noto Sans', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
     font-weight: 600;
     font-size: 14.5px;
-    line-height: 1.3;
-    color: #444;
+    line-height: 1.35;
+    color: #6b7280;
     transition: color 0.3s ease;
 }
 
 .rm-years {
     font-size: 11.5px;
-    letter-spacing: 0.03em;
-    color: #9aa5b1;
+    letter-spacing: 0.04em;
+    font-variant-numeric: tabular-nums;
+    color: #a3adb9;
 }
 
-// Room for the tracks between the titles and the robots.
-.rm-flow { height: 150px; }
+.rm-stage:hover .rm-title { color: #374151; }
+.rm-stage.is-active .rm-idx { color: var(--c); }
+.rm-stage.is-active .rm-title { color: #1e3a5f; }
 
-// Name of each research direction, placed next to its line by the script.
-.rm-track-label {
-    position: absolute;
-    z-index: 1;
-    padding: 0 5px;
-    transform: translateY(-50%);
-    border-radius: 3px;
-    background: rgba(255, 255, 255, 0.88);
-    font: 600 10px/1.5 'Google Sans', 'Noto Sans', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    white-space: nowrap;
-    color: var(--c);
-    pointer-events: none;
-}
+// Room for the lines (height set by the script).
+.rm-flow { height: 136px; }
 
-// Legend of the directions, for narrow screens only.
-.rm-legend { display: none; }
-
+// Robots: two per row (the odd one centred below), as large as the column
+// allows; greyscale until their stage is active.
 .rm-robots {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     align-content: flex-start;
-    min-height: 128px;
-    padding-bottom: 6px;
+    min-height: 150px;
+    padding-top: 2px;
 }
 
 .rm-robot {
     position: relative;
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     justify-content: center;
-    // Two per row in every column.
-    width: 50%;
-    max-width: 74px;
-    height: 58px;
+    flex: 0 0 50%;
+    max-width: 84px;
+    height: 72px;
 }
 
-// A soft floor shadow under each robot.
 .rm-robot::before {
     content: '';
     position: absolute;
-    left: 10px;
-    right: 10px;
-    bottom: 2px;
-    height: 12px;
+    left: 14%;
+    right: 14%;
+    bottom: 0;
+    height: 8px;
     border-radius: 50%;
-    background: radial-gradient(closest-side, rgba(30, 58, 95, 0.16), rgba(30, 58, 95, 0));
-    transition: opacity 0.35s ease;
+    background: radial-gradient(closest-side, rgba(30, 58, 95, 0.12), rgba(30, 58, 95, 0));
 }
 
 .rm-robot img {
     position: relative;
-    max-width: 88%;
-    max-height: 48px;
+    max-width: 98%;
+    max-height: 64px;
+    margin-bottom: 3px;
     object-fit: contain;
-    transition: transform 0.35s ease, opacity 0.35s ease, filter 0.35s ease;
+    filter: grayscale(1);
+    opacity: 0.72;
+    transition: filter 0.45s ease, opacity 0.45s ease, transform 0.45s ease;
+}
+
+.rm-stage:hover .rm-robot img { opacity: 0.9; }
+
+.rm-stage.is-active .rm-robot img {
+    filter: none;
+    opacity: 1;
+    transform: translateY(-3px);
 }
 
 .rm-detail { display: none; }
 
-// Stage nodes on the stream, placed by the script.
+// Stage nodes on the lines, placed by the script.
 .rm-node {
     position: absolute;
     z-index: 2;
-    width: 11px;
-    height: 11px;
-    margin: -5.5px 0 0 -5.5px;
+    width: 9px;
+    height: 9px;
+    margin: -4.5px 0 0 -4.5px;
     border-radius: 50%;
     background: #fff;
-    border: 2px solid var(--c);
-    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.9), 0 2px 6px rgba(30, 58, 95, 0.18);
+    border: 1.5px solid var(--c);
     pointer-events: none;
     transition: transform 0.35s ease, background 0.35s ease;
-}
-
-.rm-node::after {
-    content: '';
-    position: absolute;
-    inset: -8px;
-    border-radius: 50%;
-    border: 1px solid var(--c);
-    opacity: 0;
-    animation: rm-pulse 2.8s ease-out infinite;
 }
 
 .rm-node.is-active {
@@ -183,146 +156,194 @@
     transform: scale(1.3);
 }
 
-.rm-node.is-active::after { animation-duration: 1.6s; }
-
-@keyframes rm-pulse {
-    0% { transform: scale(0.4); opacity: 0.7; }
-    100% { transform: scale(2.2); opacity: 0; }
+.rm-node.is-active::after {
+    content: '';
+    position: absolute;
+    inset: -7px;
+    border-radius: 50%;
+    border: 1px solid var(--c);
+    opacity: 0;
+    animation: rm-ring 2.6s ease-out infinite;
 }
 
-.rm-stage.is-active .rm-title { color: #1e3a5f; }
-.rm-stage.is-active .rm-robot img { transform: translateY(-3px) scale(1.07); }
-.roadmap.has-active .rm-stage:not(.is-active) .rm-robot img { opacity: 0.62; }
-.roadmap.has-active .rm-stage:not(.is-active) .rm-robot::before { opacity: 0.5; }
+@keyframes rm-ring {
+    0% { transform: scale(0.5); opacity: 0.6; }
+    100% { transform: scale(1.8); opacity: 0; }
+}
 
-// Inspector: details of the active stage (desktop).
-.rm-inspector {
-    position: relative;
+// Name of each direction, on the outer side of its line.
+.rm-track-label {
+    position: absolute;
     z-index: 1;
-    display: grid;
-    grid-template-columns: 210px 1fr;
-    gap: 6px 24px;
-    min-height: 124px;
-    margin: 0 16px 16px;
-    padding: 16px 18px 14px;
-    overflow: hidden;
-    border-radius: 10px;
-    background: #fff;
-    border: 1px solid #e6eaef;
-    box-shadow: 0 2px 8px rgba(30, 58, 95, 0.04);
+    transform: translateY(-50%);
+    font: 600 10px/1 'Google Sans', 'Noto Sans', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: var(--c);
+    opacity: 0.85;
+    pointer-events: none;
 }
+
+// Legend of the directions, for narrow screens only.
+.rm-legend { display: none; }
+
+// Details of the active stage (desktop), set off by a single rule.
+.rm-inspector {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 8px 36px;
+    min-height: 128px;
+    margin-top: 22px;
+    padding: 24px 4px 0;
+    border-top: 1px solid #e9edf2;
+}
+
+.rm-inspector.has-robots { grid-template-columns: 200px 1fr 300px; }
 
 .rm-insp-head {
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 6px;
 }
+
+// The active stage's robots, large.
+.rm-insp-robots {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: flex-start;
+    gap: 6px 0;
+}
+
+.rm-insp-robot {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    flex: 0 0 50%;
+    height: 112px;
+}
+
+.rm-insp-robot:only-child {
+    flex-basis: 100%;
+    height: 150px;
+}
+
+.rm-insp-robot::before {
+    content: '';
+    position: absolute;
+    left: 16%;
+    right: 16%;
+    bottom: 0;
+    height: 12px;
+    border-radius: 50%;
+    background: radial-gradient(closest-side, rgba(30, 58, 95, 0.14), rgba(30, 58, 95, 0));
+}
+
+.rm-insp-robot img {
+    position: relative;
+    max-width: 92%;
+    max-height: calc(100% - 8px);
+    margin-bottom: 5px;
+    object-fit: contain;
+}
+
+.rm-insp-head .rm-idx { color: var(--c); }
 
 .rm-insp-title {
     font-family: 'Google Sans', 'Noto Sans', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
-    font-weight: 700;
-    font-size: 17px;
+    font-weight: 600;
+    font-size: 19px;
     line-height: 1.3;
     color: #1e3a5f;
 }
 
 .rm-insp-body p,
 .rm-detail p {
-    margin: 0 0 10px;
-    font-size: 14px;
-    line-height: 1.65;
-    color: #555;
+    margin: 0 0 14px;
+    font-size: 14.5px;
+    line-height: 1.7;
+    color: #4b5563;
 }
 
 .rm-works-label {
-    margin-bottom: 6px;
-    font: 600 10.5px/1.2 ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
-    letter-spacing: 0.14em;
+    margin-bottom: 8px;
+    font: 500 10px/1 ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: #9aa5b1;
+    color: #a3adb9;
 }
 
 .rm-works {
     display: flex;
     flex-wrap: wrap;
-    gap: 6px;
+    gap: 6px 22px;
 }
 
+// Paper links: plain text, venue in the stage colour.
 .rm-chip {
-    display: inline-flex;
-    align-items: baseline;
-    gap: 6px;
-    padding: 3px 10px;
-    border-radius: 999px;
-    font-size: 12px;
-    line-height: 1.5;
-    color: #444;
-    background: #f5f7fa;
-    border: 1px solid #e2e8f0;
+    padding: 1px 0;
+    font-size: 12.5px;
+    line-height: 1.6;
+    color: #4b5563;
     text-decoration: none;
-    transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    border-bottom: 1px solid transparent;
+    transition: color 0.2s ease, border-color 0.2s ease;
 }
 
 .rm-chip b {
-    font-weight: 700;
+    margin-right: 6px;
+    font-weight: 600;
     color: var(--c);
 }
 
 .rm-chip:hover {
-    color: #1e3a5f;
-    background: #fff;
-    border-color: var(--c);
-    box-shadow: 0 3px 8px rgba(30, 58, 95, 0.1);
+    color: #111827;
+    border-bottom-color: var(--c);
 }
 
 // No fill mode: if animations are throttled the text is simply shown.
-.rm-in { animation: rm-in 0.45s ease; }
+.rm-in { animation: rm-in 0.5s ease; }
 
 @keyframes rm-in {
-    from { opacity: 0; transform: translateY(6px); }
+    from { opacity: 0; transform: translateY(5px); }
     to { opacity: 1; transform: none; }
-}
-
-.rm-hint {
-    position: absolute;
-    right: 14px;
-    bottom: 8px;
-    font-size: 11px;
-    color: #b3bcc6;
 }
 
 // Small laptops / tablets: tighter columns so the titles still fit.
 @media (min-width: 769px) and (max-width: 1023px) {
-    .rm-stages { padding-left: 10px; padding-right: 10px; }
     .rm-stage { padding: 0 3px; }
-    .rm-stage.rm-next { flex-basis: 84px; }
+    .rm-stage.rm-next { flex-basis: 88px; }
     .rm-title { font-size: 13px; }
-    .rm-inspector { grid-template-columns: 170px 1fr; }
+    .rm-inspector { grid-template-columns: 170px 1fr; gap: 8px 24px; }
+    .rm-inspector.has-robots { grid-template-columns: 160px 1fr 220px; }
+    .rm-insp-robot { height: 86px; }
+    .rm-insp-robot:only-child { height: 120px; }
 }
 
-// Narrow screens: vertical stream down the left edge, details inline.
+// Narrow screens: lines down the left edge, details inline, robots in colour.
 @media (max-width: 768px) {
     .rm-stages {
         flex-direction: column;
-        padding: 22px 14px 6px 50px;
+        padding: 18px 0 0 46px;
     }
 
     .rm-stage {
-        padding: 0 0 26px;
+        padding: 0 0 30px;
         text-align: left;
+        cursor: default;
     }
 
     .rm-stage.rm-next {
         flex: none;
-        padding-bottom: 12px;
+        padding-bottom: 8px;
     }
 
     .rm-head {
         align-items: flex-start;
         min-height: 0;
     }
-
-    .rm-stage { cursor: default; }
 
     .rm-title {
         font-size: 16px;
@@ -332,53 +353,60 @@
     .rm-flow,
     .rm-track-label { display: none; }
 
+    .rm-robots {
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        min-height: 0;
+        margin: 10px 0 2px -6px;
+        padding-top: 0;
+    }
+
+    .rm-robot {
+        flex: 0 1 33.3%;
+        max-width: 104px;
+        height: 76px;
+    }
+
+    .rm-robot img { max-height: 68px; }
+
+    .rm-robots:empty { display: none; }
+
+    .rm-robot img,
+    .rm-stage:hover .rm-robot img {
+        filter: none;
+        opacity: 1;
+    }
+
+    .rm-detail { display: block; }
+    .rm-detail p { font-size: 13.5px; margin: 8px 0 10px; }
+    .rm-works { gap: 4px 16px; }
+    .rm-chip { font-size: 12px; }
+    .rm-inspector { display: none; }
+
     .rm-legend {
         display: flex;
         flex-wrap: wrap;
-        gap: 4px 14px;
-        padding: 14px 14px 0;
-        font-size: 11.5px;
-        color: #555;
+        gap: 6px 18px;
+        font: 600 10px/1.4 'Google Sans', 'Noto Sans', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: #6b7280;
     }
 
     .rm-legend span {
         display: inline-flex;
         align-items: center;
-        gap: 6px;
+        gap: 7px;
     }
 
     .rm-legend i {
         width: 16px;
-        height: 2px;
-        border-radius: 1px;
+        height: 1.5px;
         background: var(--c);
     }
-
-    .rm-robots {
-        justify-content: flex-start;
-        min-height: 0;
-        margin: 4px 0 2px -8px;
-        padding-bottom: 0;
-    }
-
-    .rm-robots:empty { display: none; }
-
-    .rm-detail { display: block; }
-    .rm-detail p { font-size: 13.5px; margin: 6px 0 8px; }
-    .rm-works { gap: 5px; }
-
-    .rm-chip {
-        gap: 4px;
-        padding: 1px 8px;
-        font-size: 11px;
-    }
-    .rm-inspector { display: none; }
-
-    .roadmap.has-active .rm-stage:not(.is-active) .rm-robot img { opacity: 1; filter: none; }
-    .roadmap.has-active .rm-stage:not(.is-active) .rm-robot::before { opacity: 1; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .rm-node::after,
+    .rm-node.is-active::after,
     .rm-in { animation: none; }
 }
