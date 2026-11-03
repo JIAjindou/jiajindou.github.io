@@ -1,3 +1,33 @@
+- id: ODE
+  dark: card
+  year: 2026
+  preprint: true
+  featured: true
+  title: "ODE policy: Robot learning via action dynamics, not actions"
+  venue: arXiv, 2026
+  venue_short: arXiv'26
+  description: "ODE policy learns the dynamics of the action rather than the action itself: a neural ODE integrates each action from the previous one, so motion is continuous by construction. Against flow matching it reaches 5.9× the success after one epoch and generates actions 10.8× faster."
+  project_page: https://ntumars.github.io/ODE/
+  github: NTUMARS/ODE-POLICY
+  image: ODE_fig.webp
+  arxiv: "2611.01729"
+  equal_contri: 4
+  corresponding_authors:
+    - jianfei
+  authors:
+    - jindou
+    - jingliang
+    - kuangji
+    - tuo
+    - yuxuan
+    - mengfei
+    - bofan
+    - jiaqi
+    - daoyuan
+    - hengyu
+    - junpeng
+    - jianfei
+
 - id: ADAPT
   dark: card
   year: 2026

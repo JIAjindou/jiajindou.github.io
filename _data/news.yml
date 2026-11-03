@@ -1,3 +1,7 @@
+- date: Nov 2026
+  description: ⭐ Released [ODE policy](https://arxiv.org/abs/2611.01729), robot learning via action dynamics, not actions.
+  description_zh: ⭐ 发布 [ODE policy](https://arxiv.org/abs/2611.01729)：学习动作的动力学，而不是动作本身。
+
 - date: Sep 2026
   description: 🎉 [GRIPPER](https://arxiv.org/pdf/2609.34594) has been accepted by **T-RO**！
   description_zh: 🎉 [GRIPPER](https://arxiv.org/pdf/2609.34594) 被 **T-RO** 接收！
