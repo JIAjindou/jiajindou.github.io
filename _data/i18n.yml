@@ -90,7 +90,7 @@ zh:
   service: 学术服务
   globe_btn: "🌍 访客都来自哪里？"
   months: { Jan: 1, Feb: 2, Mar: 3, Apr: 4, May: 5, Jun: 6, Jul: 7, Aug: 8, Sep: 9, Oct: 10, Nov: 11, Dec: 12 }
-  talk_types: { "Invited Talk": 特邀报告, "Interview": 访谈 }
+  talk_types: { "Invited Talk": 特邀报告, "Guest Lecture": 客座讲座, "Interview": 访谈 }
   bio: |-
     我目前是南洋理工大学（NTU）[MARS](http://marslab.tech) 实验室的博士后，合作导师为[杨剑飞](https://marsyang.site/)教授。2025 年博士毕业于北京航空航天大学沈元荣誉学院，师从[郭雷](https://scholar.google.com/citations?user=IxO-SDwAAAAJ&hl=zh-CN)院士、[余翔](https://scholar.google.com/citations?user=6UgtuZ8AAAAJ&hl=zh-CN&oi=ao)教授和[郭克信](https://scholar.google.com/citations?hl=zh-CN&user=c0MaejIAAAAJ)教授。
 

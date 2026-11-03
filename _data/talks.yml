@@ -1,5 +1,12 @@
 # title_zh / host_zh are optional; the Chinese page falls back to English.
 - title: "Classical Control and Planning Meet Modern Learning"
+  type: Guest Lecture
+  host: "CEG5304 Deep Learning for Digitalization Technologies &middot; National University of Singapore (NUS)"
+  host_zh: "新加坡国立大学（NUS）&middot; 课程 CEG5304 Deep Learning for Digitalization Technologies"
+  date: Nov 2026
+  link: https://nusmods.com/courses/CEG5304/deep-learning-for-digitalization-technologies
+
+- title: "Classical Control and Planning Meet Modern Learning"
   type: Invited Talk
   host: "Hosted by Prof. Shangke Lyu &middot; Nanjing University (NJU)"
   host_zh: "南京大学（NJU）&middot; Shangke Lyu 教授邀请"
