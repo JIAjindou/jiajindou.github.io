@@ -6,7 +6,7 @@
   title: "ODE policy: Robot learning via action dynamics, not actions"
   venue: arXiv, 2026
   venue_short: arXiv'26
-  description: "ODE policy learns the dynamics of the action rather than the action itself: a neural ODE integrates each action from the previous one, so motion is continuous by construction. Against flow matching it reaches 5.9× the success after one epoch and generates actions 10.8× faster."
+  description: "ODE policy learns the dynamics of the action rather than the action itself: a neural ODE integrates each action from the previous one, so motion is continuous by construction."
   project_page: https://ntumars.github.io/ODE/
   github: NTUMARS/ODE-POLICY
   image: ODE_fig.webp
@@ -26,6 +26,30 @@
     - daoyuan
     - hengyu
     - junpeng
+    - jianfei
+
+- id: TOPS
+  dark: invert
+  year: 2026
+  preprint: true
+  title: "TOPS: Reshaping flow source and transport for multi-task robot manipulation"
+  venue: arXiv, 2026
+  venue_short: arXiv'26
+  description: "TOPS gives each task its own flow source and transport schedule without changing the network: language selects where generation starts, and transport slows early and speeds up late where actions must expand."
+  project_page: https://ntumars.github.io/TOPS/
+  github: NTUMARS/TOPS
+  image: TOPS_fig.t.webp
+  arxiv: "2610.36694"
+  corresponding_authors:
+    - jindou
+    - jianfei
+  authors:
+    - tuo
+    - chuhao
+    - jiahua
+    - jingliang
+    - jiaqi
+    - jindou
     - jianfei
 
 - id: ADAPT

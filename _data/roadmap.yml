@@ -119,9 +119,9 @@ stages:
       Control for learning: give generative policies the structure of dynamics,
       with policies that learn how actions change rather than the actions
       themselves (ODE policy), action-to-action transport (A2A, Δ-Flow), smooth single-step
-      trajectories (FLASH), multimodality only where it matters (MARS, MOSS),
+      trajectories (FLASH), multimodality only where it matters (MARS, MOSS), task-oriented flow sources and schedules (TOPS),
       and curated sim-to-real data (TUCO).
-    desc_zh: 控制赋能学习：把动力学结构带进生成式策略，包括学习动作如何变化、而不是动作本身的 ODE policy，动作到动作的传输（A2A、Δ-Flow）、单步生成平滑轨迹（FLASH）、只在需要时引入多模态（MARS、MOSS），以及面向 sim-to-real 的数据筛选（TUCO）。
+    desc_zh: 控制赋能学习：把动力学结构带进生成式策略，包括学习动作如何变化、而不是动作本身的 ODE policy，动作到动作的传输（A2A、Δ-Flow）、单步生成平滑轨迹（FLASH）、只在需要时引入多模态（MARS、MOSS）、为每个任务定制流的起点与传输节奏（TOPS），以及面向 sim-to-real 的数据筛选（TUCO）。
     works:
       - { id: ODE, name: ODE policy, venue: "arXiv'26" }
       - { id: A2A, name: A2A, venue: "RSS'26" }
@@ -129,6 +129,7 @@ stages:
       - { id: DeltaFlow, name: Δ-Flow, venue: "arXiv'26" }
       - { id: MARS, name: MARS policy, venue: "arXiv'26" }
       - { id: MOSS, name: MOSS, venue: "arXiv'26" }
+      - { id: TOPS, name: TOPS, venue: "arXiv'26" }
       - { id: TUCO, name: TUCO, venue: "arXiv'26" }
     platforms:
       - arm_2026arXiv_2026RSS.webp
