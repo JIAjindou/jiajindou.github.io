@@ -49,11 +49,12 @@ en:
   downloads: Downloads
   acknowledgments: Acknowledgments
   ack: >-
-    Over the years, a few people have left a deep mark on how I work and think:
+    Over the years, a few young scholars have left a deep mark on how I work and think:
     Prof. [Kexin Guo](https://shi.buaa.edu.cn/guokexin1/zh_CN/index/191336/list/index.htm),
     Prof. [Jianfei Yang](https://marsyang.site/), and Weihua Zhao, CEO of
-    [Taiyi](https://skymagic.show/). Much of what I know about doing research, and
-    about getting hard things done, I picked up from watching them. Thank you.
+    [Taiyi](https://skymagic.show/). All three are still young, yet much of what I know
+    about doing research, and about getting hard things done, I picked up from watching
+    them. Thank you.
   globe_btn: "🌍 Where are my visitors?"
 
 zh:
@@ -102,7 +103,7 @@ zh:
   service: 学术服务
   downloads: 资料下载
   acknowledgments: 致谢
-  ack: 这些年，有几位老师和前辈对我影响很深：[郭克信](https://shi.buaa.edu.cn/guokexin1/zh_CN/index/191336/list/index.htm)教授、[杨剑飞](https://marsyang.site/)教授，以及[太一科技](https://skymagic.show/) CEO Weihua Zhao。怎么做科研、怎么把难事做成，很多都是看着这几位学来的。谢谢你们。
+  ack: 这些年，有几位年轻学者对我影响很深：[郭克信](https://shi.buaa.edu.cn/guokexin1/zh_CN/index/191336/list/index.htm)教授、[杨剑飞](https://marsyang.site/)教授，以及[太一科技](https://skymagic.show/) CEO Weihua Zhao。三位都还很年轻，可怎么做科研、怎么把难事做成，我很多都是看着他们学来的。谢谢你们。
   globe_btn: "🌍 访客都来自哪里？"
   months: { Jan: 1, Feb: 2, Mar: 3, Apr: 4, May: 5, Jun: 6, Jul: 7, Aug: 8, Sep: 9, Oct: 10, Nov: 11, Dec: 12 }
   pub_awards: { "Oral Presentation": 口头报告, "First Prize of Outstanding Paper": 优秀论文一等奖 }
