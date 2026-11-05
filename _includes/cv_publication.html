@@ -1,0 +1,40 @@
+{%- comment -%}
+  One publication row of the CV page. The description shows on the web only;
+  the print styles (and so the PDF) hide it to keep the CV compact.
+{%- endcomment -%}
+{%- assign publication = include.publication -%}
+{%- assign title_link = publication.link_web -%}
+{%- unless title_link -%}
+  {%- if publication.arxiv -%}
+    {%- assign title_link = publication.arxiv | prepend: "https://arxiv.org/abs/" -%}
+  {%- else -%}
+    {%- assign title_link = publication.project_page -%}
+  {%- endif -%}
+{%- endunless -%}
+<div class="columns cv-pub">
+  <div class="column is-four-fifths">
+    {% if title_link %}<a href="{{ title_link }}"><b>{{ publication.title }}</b></a>{% else %}<b>{{ publication.title }}</b>{% endif %}
+    <div class="publication-authors">
+      {% for author_id in publication.authors %}
+      {%- assign author = site.data.authors[author_id] -%}
+      {%- assign is_cofirst = false -%}
+      {%- if publication.equal_contri and forloop.index <= publication.equal_contri -%}{%- assign is_cofirst = true -%}{%- endif -%}
+      {%- capture author_name -%}
+        {%- if author.is_me or is_cofirst -%}{{ author.first_name }} {{ author.middle_name }} {{ author.last_name }}{%- else -%}{{ author.first_name | slice: 0 }}. {{ author.last_name }}{%- endif -%}
+        {%- if is_cofirst -%}<sup>*</sup>{%- endif -%}
+        {%- if publication.corresponding_authors contains author_id -%}<sup>†</sup>{%- endif -%}
+      {%- endcapture -%}
+      <span class="author-block {% if author.is_me %}author-me{% endif %}">
+        {%- if author.website -%}<a href="{{ author.website }}">{{ author_name }}</a>{%- else -%}{{ author_name }}{%- endif -%}
+        {%- if forloop.last == false -%},{%- endif -%}
+      </span>
+      {% endfor %}
+    </div>
+    <div class="cv-pub-desc">{{ publication.description }}</div>
+  </div>
+  <div class="column is-one-fifths has-text-right">
+    <span class="cv-venue-full">{{ publication.venue }}</span>
+    <span class="cv-venue-badge{% if publication.preprint %} is-preprint{% endif %}">{{ publication.venue_short }}</span>
+    {% if publication.awards %}<div class="cv-pub-award">{{ publication.awards | join: ", " }}</div>{% endif %}
+  </div>
+</div>

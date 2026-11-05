@@ -1,28 +1,28 @@
-- company: Outstanding graduate of Beihang University
-  dates: "2025"
-  location: Beihang, China
-  
-- company: Academic Excellence Fund for Doctoral Candidate
-  description: Funds, ≤1 %, Project leader
-  dates: " 2024 - 2025"
-  location: Beihang, China
-
-- company: Outstanding Research Project of Shen Yuan Honors College
-  description: Funds, Project leader
-  dates: " 2022 - 2024"
-  location: Beihang, China
-
-- company: 2024 ICCA Best student paper award
+- company: 2024 ICCA Best Student Paper Award
   description: >-
-    Title： <i>TRACE - Trajectory refinement with control error enables safe and accurate maneuvers.</i>
+    Title: <i>TRACE - Trajectory refinement with control error enables safe and accurate maneuvers.</i>
   dates: "2024"
   location: IEEE International Conference on Control and Automation
 
 - company: 2019 CAC First Prize of Outstanding Paper
   description: >-
-    Title : <i>Dual-disturbance observers-based control of UAV subject to internal and external disturbances.</i>
+    Title: <i>Dual-disturbance observers-based control of UAV subject to internal and external disturbances.</i>
   dates: "2019"
   location: IEEE Chinese Automation Conference
+
+- company: Outstanding graduate of Beihang University
+  dates: "2025"
+  location: Beihang, China
+
+- company: Academic Excellence Fund for Doctoral Candidate
+  description: Funds, ≤1%, Project leader
+  dates: " 2024 - 2025"
+  location: Beihang, China
+
+- company: Outstanding Research Project of Shenyuan Honors College
+  description: Funds, Project leader
+  dates: " 2022 - 2024"
+  location: Beihang, China
 
 - company: Four-times Outstanding Academic Innovation Award  
   dates: "2022 - 2023"
@@ -47,5 +47,3 @@
 - company: National Scholarship
   dates: "2016"
   location: China
-
-

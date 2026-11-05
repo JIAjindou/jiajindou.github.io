@@ -4,36 +4,612 @@
 @import "base";
 @import "nav";
 
+// CV page and, through the print rules below, files/Jindou_Jia_CV.pdf
+// (tools/build_cv_pdf.py). Same palette as the homepage.
+$navy: #1e3a5f;
+$teal: #0e7490;
+$ink: #374151;
+$muted: #6b7280;
+$rule: #e2e8f0;
+$heading-font: 'Google Sans', 'Noto Sans', sans-serif;
+
 body {
-  margin-top: 1em;
-  font-family: "Noto Sans", sans-serif;
+    font-family: "Noto Sans", sans-serif;
+    color: $ink;
 }
 
-.portrait-column {
-    padding: 0;
+.cv-page {
+    padding: 1.8rem 1.25rem 3rem;
+}
+
+// ── Header ──────────────────────────────────────────────────────────────
+.cv-header {
+    display: flex;
+    align-items: center;
+    gap: 1.4rem;
 }
 
 .portrait-image {
+    flex: none;
+    width: 6.4rem;
+    height: 6.4rem;
     border-radius: 50%;
-    max-width: 7em;
+    object-fit: cover;
+    object-position: 50% 24%;
+}
+
+.cv-id {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.cv-name {
+    font-family: $heading-font;
+    font-size: 2.3rem;
+    font-weight: 700;
+    line-height: 1.15;
+    color: $navy;
+}
+
+.cv-headline {
+    margin-top: 0.15rem;
+    font-size: 1.02rem;
+    color: $ink;
+}
+
+.cv-contact {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.1rem 1.1rem;
+    margin-top: 0.4rem;
+    font-size: 0.88rem;
+
+    a {
+        color: $muted;
+    }
+
+    a:hover {
+        color: $navy;
+    }
+
+    i {
+        margin-right: 0.35em;
+        color: $navy;
+    }
+}
+
+.cv-download {
+    flex: none;
+    align-self: flex-start;
+    padding: 0.42rem 0.95rem;
+    border-radius: 999px;
+    background: $navy;
+    font-family: $heading-font;
+    font-size: 0.86rem;
+    font-weight: 600;
+    color: #fff;
+    transition: background 0.2s ease;
+
+    i {
+        margin-right: 0.45em;
+    }
+
+    &:hover {
+        background: #15263f;
+        color: #fff;
+    }
+}
+
+.cv-summary {
+    margin-top: 1.1rem;
+    font-size: 1.02rem;
+    line-height: 1.6;
+}
+
+// ── Numbers and venues ──────────────────────────────────────────────────
+.cv-stats {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.6rem 1.7rem;
+    margin-top: 1rem;
+    padding: 0.8rem 0;
+    border-top: 1px solid $rule;
+    border-bottom: 1px solid $rule;
+}
+
+.cv-stat {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    b {
+        font-family: $heading-font;
+        font-size: 1.6rem;
+        font-weight: 700;
+        line-height: 1;
+        color: $navy;
+    }
+
+    span {
+        max-width: 7.2em;
+        font-size: 0.74rem;
+        line-height: 1.2;
+        color: $muted;
+    }
+}
+
+.cv-venues {
+    display: flex;
+    flex: 1 1 15rem;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 0.28rem;
+
+    span {
+        padding: 0.05rem 0.5rem;
+        border-radius: 0.3rem;
+        background: $navy;
+        font-family: $heading-font;
+        font-size: 0.72rem;
+        font-weight: 600;
+        line-height: 1.6;
+        color: #fff;
+    }
+}
+
+// ── Strengths ───────────────────────────────────────────────────────────
+.cv-strengths {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    margin-top: 1rem;
+}
+
+.cv-card {
+    padding: 0.8rem 1rem;
+    border: 1px solid #e7ecf3;
+    border-left: 3px solid var(--c);
+    border-radius: 10px;
+    background: #f7f9fc;
+
+    h3 {
+        margin-bottom: 0.25rem;
+        font-family: $heading-font;
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--c);
+    }
+
+    p {
+        font-size: 0.88rem;
+        line-height: 1.55;
+    }
+
+    b {
+        color: $ink;
+    }
+}
+
+.cv-expertise {
+    margin-top: 0.9rem;
+    font-size: 0.88rem;
+
+    p {
+        display: flex;
+        gap: 0.8rem;
+        padding: 0.12rem 0;
+    }
+
+    b {
+        flex: none;
+        width: 11.5em;
+        font-family: $heading-font;
+        color: $navy;
+    }
+}
+
+// ── Section headings ────────────────────────────────────────────────────
+.cv-trajectory h2,
+.cv-two h2,
+.content h2 {
+    margin-top: 1.5rem !important;
+    margin-bottom: 0.6rem !important;
+    padding-bottom: 0.25rem;
+    border-bottom: 1px solid $navy;
+    font-family: $heading-font;
+    font-size: 1.28rem;
+    font-weight: 700;
+    color: $navy;
+}
+
+// ── Research trajectory ─────────────────────────────────────────────────
+.cv-trajectory-scroll {
+    overflow-x: auto;
+}
+
+.cv-trajectory-inner {
+    min-width: 640px;
+}
+
+.cv-stages {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+}
+
+.cv-stage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 0.25rem;
+    text-align: center;
+}
+
+.cv-stage-idx {
+    font: 500 0.64rem/1.3 ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    letter-spacing: 0.16em;
+    color: #9aa5b1;
+}
+
+.cv-stage-title {
+    font-family: $heading-font;
+    font-size: 0.8rem;
+    font-weight: 600;
+    line-height: 1.25;
+    color: $navy;
+}
+
+.cv-stage-years {
+    margin-top: 0.1rem;
+    font-size: 0.68rem;
+    color: #9aa5b1;
+}
+
+.cv-ribbon {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.cv-robots {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 0.2rem;
+    margin-top: 0.15rem;
+
+    img {
+        flex: 0 1 7%;
+        min-width: 0;
+        max-height: 3.6rem;
+        object-fit: contain;
+    }
+}
+
+// ── Appointments and education, side by side ────────────────────────────
+.cv-two {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 1.5rem;
+}
+
+.cv-row {
+    margin-bottom: 0.55rem;
+    font-size: 0.9rem;
+    line-height: 1.45;
+}
+
+.cv-row-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.6rem;
+
+    b {
+        color: #111;
+    }
+
+    span {
+        flex: none;
+        font-size: 0.8rem;
+        color: $muted;
+    }
+}
+
+// ── Lists ───────────────────────────────────────────────────────────────
+.columns {
+    margin-bottom: 0 !important;
 }
 
 .author-me {
     font-weight: 600;
+    color: #111;
 }
 
-h2 {
-    margin-top: 0.5em !important;
-    margin-bottom: 0.3em !important;
+.cv-legend {
+    margin-bottom: 0.4em !important;
+    font-size: 88%;
+    color: $muted;
 }
 
-.columns {
-    margin-bottom: 0 !important;
+.content h3.cv-subhead {
+    margin: 1em 0 0.45em;
+    font-family: $heading-font;
+    font-size: 1.02em;
+    font-weight: 600;
+    color: $teal;
+}
+
+.cv-pub-desc {
+    color: $muted;
+}
+
+// Venue: full name on the web, a badge like the homepage's in the PDF.
+.cv-venue-badge {
+    display: none;
+    padding: 0.02rem 0.45rem;
+    border-radius: 0.3rem;
+    background: $navy;
+    font-family: $heading-font;
+    font-weight: 600;
+    white-space: nowrap;
+    color: #fff;
+
+    &.is-preprint {
+        background: $muted;
+    }
+}
+
+.cv-pub-award {
+    font-size: 90%;
+    font-weight: 600;
+    color: #c0392b;
+}
+
+@media screen and (max-width: 768px) {
+    .cv-header {
+        flex-wrap: wrap;
+    }
+
+    .cv-strengths,
+    .cv-two {
+        grid-template-columns: 1fr;
+    }
+
+    .cv-venues {
+        justify-content: flex-start;
+    }
+
+    .cv-expertise p {
+        display: block;
+
+        b {
+            display: block;
+            width: auto;
+        }
+    }
+}
+
+// ── Print / PDF: A4, no site chrome, no paper descriptions, tight rows, ──
+// ── no entry split across pages. ─────────────────────────────────────────
+@page {
+    size: A4;
+    margin: 13mm 15mm 15mm;
 }
 
 @media print {
     html, body {
         height: auto;
-        font-size: 9pt; /* changing to 10pt has no impact */
+        font-size: 9.5pt;
+        line-height: 1.33;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    .site-nav,
+    .cv-download,
+    .cv-pub-desc {
+        display: none !important;
+    }
+
+    .cv-page {
+        width: 100%;
+        max-width: none !important;
+        margin: 0;
+        padding: 0;
+    }
+
+    a {
+        color: inherit;
+    }
+
+    .cv-header {
+        gap: 12pt;
+    }
+
+    .portrait-image {
+        width: 58pt;
+        height: 58pt;
+    }
+
+    .cv-name {
+        font-size: 23pt;
+    }
+
+    .cv-headline {
+        font-size: 10.5pt;
+    }
+
+    .cv-contact {
+        gap: 0 11pt;
+        font-size: 8.5pt;
+    }
+
+    .cv-summary {
+        margin-top: 8pt;
+        font-size: 10pt;
+        line-height: 1.45;
+    }
+
+    .cv-stats {
+        gap: 4pt 15pt;
+        margin-top: 8pt;
+        padding: 6pt 0;
+    }
+
+    .cv-stat {
+        gap: 4pt;
+
+        b {
+            font-size: 16pt;
+        }
+
+        span {
+            font-size: 7pt;
+        }
+    }
+
+    .cv-venues span {
+        font-size: 7pt;
+    }
+
+    .cv-strengths {
+        gap: 6pt;
+        margin-top: 8pt;
+    }
+
+    .cv-card {
+        padding: 6pt 8pt;
+        border-radius: 5pt;
+
+        h3 {
+            margin-bottom: 1.5pt;
+            font-size: 9.5pt;
+        }
+
+        p {
+            font-size: 8.5pt;
+            line-height: 1.4;
+        }
+    }
+
+    .cv-expertise {
+        margin-top: 7pt;
+        font-size: 8.5pt;
+
+        p {
+            padding: 0.5pt 0;
+        }
+    }
+
+    .cv-trajectory h2,
+    .cv-two h2,
+    .content h2 {
+        margin-top: 9pt !important;
+        margin-bottom: 3.5pt !important;
+        padding-bottom: 2pt;
+        font-size: 11.5pt;
+        break-after: avoid;
+    }
+
+    .cv-trajectory-scroll {
+        overflow: visible;
+    }
+
+    .cv-trajectory-inner {
+        min-width: 0;
+    }
+
+    .cv-trajectory {
+        break-inside: avoid;
+    }
+
+    .cv-stage-idx {
+        font-size: 6.5pt;
+    }
+
+    .cv-stage-title {
+        font-size: 7.8pt;
+    }
+
+    .cv-stage-years {
+        font-size: 6.8pt;
+    }
+
+    .cv-robots img {
+        max-height: 40pt;
+    }
+
+    .cv-two {
+        gap: 0 14pt;
+    }
+
+    .cv-row {
+        margin-bottom: 3.5pt;
+        font-size: 8.5pt;
+        line-height: 1.35;
+        break-inside: avoid;
+    }
+
+    .cv-row-head span {
+        font-size: 7.5pt;
+    }
+
+    .cv-legend {
+        margin-bottom: 0 !important;
+        font-size: 8pt;
+        break-after: avoid;
+    }
+
+    .content h3.cv-subhead {
+        margin: 6pt 0 1pt;
+        font-size: 9.5pt;
+        break-after: avoid;
+    }
+
+    .content .columns {
+        margin: 0 !important;
+        break-inside: avoid;
+    }
+
+    .content .column {
+        padding: 1.6pt 0;
+    }
+
+    .content .column.is-four-fifths {
+        width: 77%;
+    }
+
+    .content .column.is-one-fifths {
+        flex: none;
+        width: 23%;
+        padding-left: 8pt;
+        font-size: 8pt;
+        line-height: 1.3;
+    }
+
+    // Papers: more room for titles, a badge instead of the full venue name.
+    .content .cv-pub .column.is-four-fifths {
+        width: 87%;
+    }
+
+    .content .cv-pub .column.is-one-fifths {
+        width: 13%;
+        padding-left: 4pt;
+    }
+
+    .cv-venue-full {
+        display: none;
+    }
+
+    .cv-venue-badge {
+        display: inline-block;
+        font-size: 7pt;
+    }
+
+    .cv-pub-award {
+        margin-top: 1.5pt;
+        font-size: 6.8pt;
+        line-height: 1.2;
     }
 }

@@ -9,7 +9,7 @@ layout: null
   {% include visit-ping.html %}
 
   <meta content="width=device-width, initial-scale=1" name="viewport">
-  <title>{{ site.title }}</title>
+  <title>{{ site.name }} | CV</title>
   {% if site.google_analytics %}
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id={{ site.google_analytics }}"></script>
@@ -54,112 +54,194 @@ layout: null
 
   {% include nav.html active="cv" %}
 
-  <section>
-    <div class="container is-max-desktop">
-      <div class="columns is-vcentered">
-        <div class="column">
-          <h1 class="title is-2">{{ site.name }}</h1>
-          <h1 class="subtitle is-5">{{ site.position }}</h1>
-        </div>
-        <div class="column is-narrow portrait-column">
-          <img class="portrait-image" src="./images/myphoto3.webp?v={{ site.time | date: '%s' }}" alt="A portrait of Jindou Jia" />
-        </div>
-        <div class="column has-text-right">
-          <p>
-            <a href="{{ site.url }}">
-              <i class="fas fa-home"></i>
-              {% assign url_parts = site.url | split: "//" %}
-              {{ url_parts[1] }}
-            </a>
-          </p>
-          <p>
-            <a href="https://github.com/{{ site.github_username }}">
-              <i class="fab fa-github"></i>
-              {{ site.github_username }}
-            </a>
-          </p>
-          <p>
-            <a href="mailto:{{ site.email }}">
-              <i class="fas fa-envelope"></i>
-              {{ site.email }}
-            </a>
-          </p>
-        </div>
+  {%- comment -%}
+    Paper order: accepted featured papers; other accepted papers; preprints, those
+    where I am first or co-first author before those where I am not (each with
+    featured papers first). Newest first within each group.
+  {%- endcomment -%}
+  {%- assign pub_years = site.data.publications | map: "year" | uniq | sort | reverse -%}
+  {%- assign pubs_selected = "" -%}
+  {%- assign pubs_accepted = "" -%}
+  {%- assign pre_lead_featured = "" -%}
+  {%- assign pre_lead = "" -%}
+  {%- assign pre_other_featured = "" -%}
+  {%- assign pre_other = "" -%}
+  {%- assign count_lead = 0 -%}
+  {%- assign count_corr = 0 -%}
+  {%- for pub_year in pub_years -%}
+    {%- for p in site.data.publications -%}
+      {%- if p.year == pub_year -%}
+        {%- capture row -%}{% include cv_publication.html publication=p %}{%- endcapture -%}
+        {%- assign lead_limit = p.equal_contri | default: 1 -%}
+        {%- assign is_lead = false -%}
+        {%- for a in p.authors limit: lead_limit -%}
+          {%- if site.data.authors[a].is_me -%}{%- assign is_lead = true -%}{%- endif -%}
+        {%- endfor -%}
+        {%- if is_lead -%}{%- assign count_lead = count_lead | plus: 1 -%}{%- endif -%}
+        {%- for a in p.corresponding_authors -%}
+          {%- if site.data.authors[a].is_me -%}{%- assign count_corr = count_corr | plus: 1 -%}{%- endif -%}
+        {%- endfor -%}
+        {%- if p.preprint -%}
+          {%- if is_lead and p.featured -%}{%- assign pre_lead_featured = pre_lead_featured | append: row -%}
+          {%- elsif is_lead -%}{%- assign pre_lead = pre_lead | append: row -%}
+          {%- elsif p.featured -%}{%- assign pre_other_featured = pre_other_featured | append: row -%}
+          {%- else -%}{%- assign pre_other = pre_other | append: row -%}
+          {%- endif -%}
+        {%- elsif p.featured -%}
+          {%- assign pubs_selected = pubs_selected | append: row -%}
+        {%- else -%}
+          {%- assign pubs_accepted = pubs_accepted | append: row -%}
+        {%- endif -%}
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endfor -%}
+  {%- assign count_robots = 0 -%}
+  {%- for st in site.data.roadmap.stages -%}
+    {%- if st.platforms -%}{%- assign count_robots = count_robots | plus: st.platforms.size -%}{%- endif -%}
+  {%- endfor -%}
+  {%- assign cv = site.data.cv %}
+
+  <main class="container is-max-desktop cv-page">
+    <header class="cv-header">
+      <img class="portrait-image" src="./images/cv_portrait.webp" alt="A portrait of {{ site.name }}" />
+      <div class="cv-id">
+        <h1 class="cv-name">{{ site.name }}</h1>
+        <p class="cv-headline">{{ cv.headline }}</p>
+        <p class="cv-contact">
+          <a href="mailto:{{ site.email }}"><i class="fas fa-envelope"></i>{{ site.email }}</a>
+          {%- assign url_parts = site.url | split: "//" %}
+          <a href="{{ site.url }}"><i class="fas fa-home"></i>{{ url_parts[1] }}</a>
+          <a href="https://github.com/{{ site.github_username }}"><i class="fab fa-github"></i>{{ site.github_username }}</a>
+          <a href="https://scholar.google.com/citations?user={{ site.google_scholar }}"><i class="ai ai-google-scholar"></i>Google Scholar</a>
+        </p>
       </div>
+      <a class="cv-download" href="./files/Jindou_Jia_CV.pdf?v={{ site.time | date: '%s' }}" download="Jindou_Jia_CV.pdf"><i class="fas fa-file-pdf"></i>Download PDF</a>
+    </header>
 
-      <div class="content">
-        <h2>Education</h2>
-        {% for school in site.data.education %}
-        <div class="columns">
-          <div class="column is-four-fifths">
-            <b>{{ school.name }}</b><br />
-            {{ school.description }}
-          </div>
-          <div class="column is-one-fifths has-text-right">
-            {{ school.dates }}
-          </div>
-        </div>
-        {% endfor %}
+    <p class="cv-summary">{{ cv.summary }}</p>
 
-        <h2>Appointments</h2>
-        {% for appt in site.data.appointments %}
-        <div class="columns">
-          <div class="column is-four-fifths">
-            <b>{{ appt.name }}</b><br />
-            {{ appt.description }}
-          </div>
-          <div class="column is-one-fifths has-text-right">
-            {{ appt.dates }}
-          </div>
-        </div>
-        {% endfor %}
-
-        <h2>Main Awards and Honors</h2>
-
-        {% for job in site.data.employment %}
-        <div class="columns">
-          <div class="column is-four-fifths">
-            <b>{{ job.company }}</b><br />
-            {{ job.description }}
-          </div>
-          <div class="column is-one-fifths has-text-right">
-            {{ job.dates }}
-            <br />
-            {{ job.location }}
-          </div>
-        </div>
-        {% endfor %}
-
-        <h2>Publications</h2>
-
-        {% for publication in site.data.publications %}
-        <div class="columns">
-          <div class="column is-four-fifths">
-            <a href="{{ publication.link_web }}"><b>{{ publication.title }}</b></a>
-            <div class="publication-authors">
-              {% for author_id in publication.authors %}
-              {% assign author = site.data.authors[author_id] %}
-              {% assign is_cofirst = false %}
-              {% if publication.equal_contri and forloop.index <= publication.equal_contri %}{% assign is_cofirst = true %}{% endif %}
-              <span class="author-block {% if author.is_me %}author-me{% endif %}">
-                {% if author.is_me or is_cofirst %}
-                <a href="{{ author.website }}">{{ author.first_name }} {{ author.middle_name }} {{ author.last_name }}{% if is_cofirst %}<sup>*</sup>{% endif %}{% if publication.corresponding_authors contains author_id %}<sup>†</sup>{% endif %}</a>{% if forloop.last == false %},{% endif %}
-                {% else %}
-                <a href="{{ author.website }}">{{ author.first_name | slice: 0 }}. {{ author.last_name }}{% if publication.corresponding_authors contains author_id %}<sup>†</sup>{% endif %}</a>{% if forloop.last == false %},{% endif %}
-                {% endif %}
-              </span>
-              {% endfor %}
-            </div>
-            {{ publication.description }}
-          </div>
-          <div class="column is-one-fifths has-text-right">
-            {{ publication.venue }}
-          </div>
-        </div>
-        {% endfor %}
-      </div>
+    <div class="cv-stats">
+      <div class="cv-stat"><b>{{ site.data.publications.size }}</b><span>Papers</span></div>
+      <div class="cv-stat"><b>{{ count_lead }}</b><span>First / co-first author</span></div>
+      <div class="cv-stat"><b>{{ count_corr }}</b><span>Corresponding author</span></div>
+      <div class="cv-stat"><b>{{ count_robots }}</b><span>Robot platforms</span></div>
+      <div class="cv-venues">{% for v in cv.venues %}<span>{{ v }}</span>{% endfor %}</div>
     </div>
-  </section>
+
+    <section class="cv-strengths">
+      {%- for s in cv.strengths %}
+      <div class="cv-card" style="--c:{{ s.color }}">
+        <h3>{{ s.title }}</h3>
+        <p>{{ s.body | replace: "%CORR%", count_corr | replace: "%ROBOTS%", count_robots }}</p>
+      </div>
+      {%- endfor %}
+    </section>
+
+    <section class="cv-expertise">
+      {%- for e in cv.expertise %}
+      <p><b>{{ e.area }}</b><span>{{ e.items }}</span></p>
+      {%- endfor %}
+    </section>
+
+    <section class="cv-trajectory">
+      <h2>Research Trajectory</h2>
+      <div class="cv-trajectory-scroll">
+        <div class="cv-trajectory-inner">
+          <div class="cv-stages">
+            {%- for st in site.data.roadmap.stages %}
+            <div class="cv-stage">
+              <span class="cv-stage-idx">{{ st.index }}</span>
+              <span class="cv-stage-title">{{ st.title }}</span>
+              <span class="cv-stage-years">{{ st.years }}</span>
+            </div>
+            {%- endfor %}
+          </div>
+          {% include cv_ribbon.svg %}
+          <div class="cv-robots">
+            {%- for st in site.data.roadmap.stages -%}
+              {%- for r in st.platforms %}
+            <img src="./images/hardware/{{ r }}" alt="" />
+              {%- endfor -%}
+            {%- endfor %}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="cv-two">
+      <div>
+        <h2>Experience</h2>
+        {%- for appt in site.data.appointments %}
+        <div class="cv-row">
+          <div class="cv-row-head"><b>{{ appt.name }}</b><span>{{ appt.dates }}</span></div>
+          <div>{{ appt.description }}</div>
+        </div>
+        {%- endfor %}
+      </div>
+      <div>
+        <h2>Education</h2>
+        {%- for school in site.data.education %}
+        <div class="cv-row">
+          <div class="cv-row-head"><b>{{ school.name }}</b><span>{{ school.dates }}</span></div>
+          <div>{{ school.description }}</div>
+        </div>
+        {%- endfor %}
+      </div>
+    </section>
+
+    <div class="content">
+      <h2>Publications</h2>
+      <p class="cv-legend"><sup>*</sup> Equal contribution &nbsp; <sup>†</sup> Corresponding author</p>
+
+      <h3 class="cv-subhead">Selected Publications</h3>
+      {{ pubs_selected }}
+
+      <h3 class="cv-subhead">Other Peer-Reviewed Publications</h3>
+      {{ pubs_accepted }}
+
+      <h3 class="cv-subhead">Preprints</h3>
+      {{ pre_lead_featured }}{{ pre_lead }}{{ pre_other_featured }}{{ pre_other }}
+
+      <h2>Main Awards and Honors</h2>
+      {% for job in site.data.employment %}
+      <div class="columns">
+        <div class="column is-four-fifths">
+          <b>{{ job.company }}</b>{% if job.description %}<br />
+          {{ job.description }}{% endif %}
+        </div>
+        <div class="column is-one-fifths has-text-right">
+          {{ job.dates }}
+          <br />
+          {{ job.location }}
+        </div>
+      </div>
+      {% endfor %}
+
+      <h2>Talks and Media</h2>
+      {% for talk in site.data.talks %}
+      <div class="columns">
+        <div class="column is-four-fifths">
+          {% if talk.link %}<a href="{{ talk.link }}"><b>{{ talk.title }}</b></a>{% else %}<b>{{ talk.title }}</b>{% endif %}<br />
+          {{ talk.host }}
+        </div>
+        <div class="column is-one-fifths has-text-right">
+          {{ talk.date }}
+          <br />
+          {{ talk.type }}
+        </div>
+      </div>
+      {% endfor %}
+
+      <h2>Professional Service</h2>
+      {% for item in site.data.service %}
+      <div class="columns">
+        <div class="column">
+          <b>{{ item.role }}</b>, {{ item.venue }}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </main>
 
 </body>
 

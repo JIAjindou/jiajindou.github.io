@@ -1,0 +1,51 @@
+# Content of the CV page's summary (cv.html). In strength bodies, %CORR% and
+# %ROBOTS% are filled in with counts computed from publications.yml / roadmap.yml.
+
+headline: Postdoctoral Researcher in Robot Learning, Nanyang Technological University
+
+summary: >-
+  Robot-learning researcher trained in control theory. I combine world models,
+  generative policies and uncertainty prediction with physical priors, so that
+  robots transfer reliably from training to environments they have never seen,
+  and I validate this work on real hardware.
+
+venues: [T-RO, IJRR, NeurIPS, ICLR Oral, RSS, CoRL, ICRA, npj Robotics, R-AL]
+
+strengths:
+  - title: Control and learning, in both directions
+    color: "#1e3a5f"
+    body: >-
+      PhD in control science at Beihang University, now at the frontier of robot
+      learning at NTU.
+      <b>Learning for control:</b> EVOLVER (T-RO), FORESEER (IJRR).
+      <b>Control for learning:</b> feedback neural ODEs (ICLR Oral), PhyFilter
+      (npj Robotics), ODE policy.
+  - title: Efficient policies and world models
+    color: "#0e7490"
+    body: >-
+      Generative policies built for real-time control: single-step inference
+      (FLASH at NeurIPS, Δ-Flow), action-to-action transport (A2A at RSS) and
+      multimodality only when it matters (MARS). Feedback world models that
+      correct predictions online (NeurIPS) and a world-model survey (IJRR).
+  - title: Proven on real robots, across morphologies
+    color: "#0e7490"
+    body: >-
+      Worked with %ROBOTS% robot platforms, from agile quadrotors and grasping
+      drones to robot arms, dual-arm systems, a quadruped and a humanoid.
+      ODE policy was tested on 14 real-world tasks across single-arm, dual-arm,
+      dexterous and humanoid robots.
+  - title: Research leadership and open source
+    color: "#1e3a5f"
+    body: >-
+      Project lead of ODE policy; corresponding author on %CORR% recent papers;
+      Associate Editor of IEEE RA-L; ICCA 2024 Best Student Paper. Guest lecture
+      at NUS, invited talks at NJU and SIMTech &amp; ARTC. Code released for ODE
+      policy, FLASH, PhyFilter, EVOLVER and more.
+
+expertise:
+  - area: Robot learning
+    items: imitation learning, reinforcement learning, flow matching and diffusion policies, world models, vision-language-action models, sim-to-real
+  - area: Control and planning
+    items: disturbance observers, agile flight control, uncertainty prediction, trajectory optimization, feedback for learned dynamics
+  - area: Robots
+    items: quadrotors, grasping drones, robot arms, dual-arm systems, dexterous hands, quadruped, humanoid
