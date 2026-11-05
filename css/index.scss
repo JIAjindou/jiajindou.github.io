@@ -195,6 +195,20 @@
     line-height: 1.5;
 }
 
+// Downloads: whole cards are links. Acknowledgments: a short, readable paragraph.
+#downloads { scroll-margin-top: 70px; }
+
+.download-card,
+.download-card:hover {
+    color: inherit;
+}
+
+.ack-text {
+    margin-top: 1em;
+    max-width: 46em;
+    line-height: 1.75;
+}
+
 // Talks & Media — timeline.
 .timeline {
     list-style: none;

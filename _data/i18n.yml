@@ -18,8 +18,8 @@ en:
   og_description: "Postdoc at NTU MARS Lab working on robot learning, world models, generative policies, and uncertainty prediction."
   hello: "Hello, I'm Jindou Jia"
   nav_home: Home
-  nav_research: Research
   nav_cv: CV
+  nav_downloads: Downloads
   news: News
   show_more: Show more
   platforms: Robotic Platforms
@@ -46,6 +46,14 @@ en:
   gif: GIF
   talks: "Talks &amp; Media"
   service: Professional Service
+  downloads: Downloads
+  acknowledgments: Acknowledgments
+  ack: >-
+    Over the years, a few people have left a deep mark on how I work and think:
+    Prof. [Kexin Guo](https://shi.buaa.edu.cn/guokexin1/zh_CN/index/191336/list/index.htm),
+    Prof. [Jianfei Yang](https://marsyang.site/), and Weihua Zhao, CEO of
+    [Taiyi](https://skymagic.show/). Much of what I know about doing research, and
+    about getting hard things done, I picked up from watching them. Thank you.
   globe_btn: "🌍 Where are my visitors?"
 
 zh:
@@ -64,8 +72,8 @@ zh:
   og_description: "南洋理工大学 MARS 实验室博士后，研究机器人学习、世界模型、生成式策略与不确定性预测。"
   hello: "你好，我是贾金豆"
   nav_home: 首页
-  nav_research: 研究
   nav_cv: 简历
+  nav_downloads: 下载
   news: 新闻动态
   show_more: 显示更多
   platforms: 机器人平台
@@ -92,6 +100,9 @@ zh:
   gif: 动图
   talks: 报告与媒体
   service: 学术服务
+  downloads: 资料下载
+  acknowledgments: 致谢
+  ack: 这些年，有几位老师和前辈对我影响很深：[郭克信](https://shi.buaa.edu.cn/guokexin1/zh_CN/index/191336/list/index.htm)教授、[杨剑飞](https://marsyang.site/)教授，以及[太一科技](https://skymagic.show/) CEO Weihua Zhao。怎么做科研、怎么把难事做成，很多都是看着这几位学来的。谢谢你们。
   globe_btn: "🌍 访客都来自哪里？"
   months: { Jan: 1, Feb: 2, Mar: 3, Apr: 4, May: 5, Jun: 6, Jul: 7, Aug: 8, Sep: 9, Oct: 10, Nov: 11, Dec: 12 }
   pub_awards: { "Oral Presentation": 口头报告, "First Prize of Outstanding Paper": 优秀论文一等奖 }

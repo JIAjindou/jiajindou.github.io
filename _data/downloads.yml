@@ -1,0 +1,23 @@
+# Homepage "Downloads" section, linked from the nav. `name` is the file name it
+# saves as; *_zh fields are used on the Chinese page.
+
+- title: CV
+  title_zh: 英文简历
+  desc: English, PDF
+  desc_zh: English，PDF
+  file: /files/Jindou_Jia_CV.pdf
+  name: Jindou_Jia_CV.pdf
+
+- title: CV (Chinese)
+  title_zh: 中文简历
+  desc: 中文, PDF
+  desc_zh: 中文，PDF
+  file: /files/Jindou_Jia_CV_zh.pdf
+  name: 贾金豆_简历.pdf
+
+- title: PhD Research
+  title_zh: PhD Research
+  desc: Overview of my Ph.D. work, PDF
+  desc_zh: 博士阶段研究概述，英文 PDF
+  file: /files/Jindou_Jia_PhD_Research.pdf
+  name: Jindou_Jia_PhD_Research.pdf
