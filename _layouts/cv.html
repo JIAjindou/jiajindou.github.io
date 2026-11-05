@@ -1,0 +1,267 @@
+{%- comment -%}
+  CV page. cv.html (lang: en) and zh/cv.html (lang: zh) both use this layout;
+  the text comes from _data/cv.yml and *_zh fields in the data files. Its print
+  styles (css/cv.scss) are what tools/build_cv_pdf.py turns into the PDFs.
+{%- endcomment -%}
+{%- assign lang = page.lang | default: "en" -%}
+{%- assign t = site.data.i18n[lang] -%}
+{%- assign cv = site.data.cv[lang] -%}
+{%- assign zh = false -%}{%- if lang == "zh" -%}{%- assign zh = true -%}{%- endif -%}
+<!DOCTYPE html>
+<html lang="{{ t.html_lang }}">
+
+<head>
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+  {% include visit-ping.html %}
+
+  <meta content="width=device-width, initial-scale=1" name="viewport">
+  <title>{{ cv.page_title }}</title>
+  <link rel="canonical" href="{{ site.url }}{{ page.url }}">
+  <link rel="alternate" hreflang="en" href="{{ site.url }}/cv.html">
+  <link rel="alternate" hreflang="zh-CN" href="{{ site.url }}/zh/cv.html">
+  {% if site.google_analytics %}
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id={{ site.google_analytics }}"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', '{{ site.google_analytics }}');
+  </script>
+  {% endif %}
+
+  <link href="{{ '/css/fonts.css' | relative_url }}" rel="stylesheet">
+  <link href="{{ '/css/academicons.min.css' | relative_url }}" rel="stylesheet">
+  <link href="{{ '/css/icons.css' | relative_url }}" rel="stylesheet">
+  <link href="{{ '/css/bulma.min.css' | relative_url }}" rel="stylesheet">
+  <link href="{{ '/css/cv.css' | relative_url }}?v={{ site.time | date: '%s' }}" rel="stylesheet">
+
+  <link rel="icon" href="{{ '/images/ICON.png' | relative_url }}" type="image/png">
+
+  {% if site.goatcounter %}
+  <!-- GoatCounter privacy-friendly analytics -->
+  <script>
+    // GoatCounter's gc.zgo.at is unreachable from mainland China. Load it only
+    // after the page has finished loading so a hung request never holds it up.
+    window.addEventListener('load', function () {
+      var s = document.createElement('script');
+      s.async = true;
+      s.src = 'https://gc.zgo.at/count.js';
+      s.setAttribute('data-goatcounter', 'https://{{ site.goatcounter }}.goatcounter.com/count');
+      document.body.appendChild(s);
+    });
+  </script>
+  {% endif %}
+</head>
+
+<body>
+
+  {% include nav.html active="cv" %}
+
+  {%- comment -%}
+    Paper order: accepted featured papers; other accepted papers; preprints, those
+    where I am first or co-first author before those where I am not (each with
+    featured papers first). Newest first within each group.
+  {%- endcomment -%}
+  {%- assign pub_years = site.data.publications | map: "year" | uniq | sort | reverse -%}
+  {%- assign pubs_selected = "" -%}
+  {%- assign pubs_accepted = "" -%}
+  {%- assign pre_lead_featured = "" -%}
+  {%- assign pre_lead = "" -%}
+  {%- assign pre_other_featured = "" -%}
+  {%- assign pre_other = "" -%}
+  {%- assign count_lead = 0 -%}
+  {%- assign count_corr = 0 -%}
+  {%- for pub_year in pub_years -%}
+    {%- for p in site.data.publications -%}
+      {%- if p.year == pub_year -%}
+        {%- capture row -%}{% include cv_publication.html publication=p %}{%- endcapture -%}
+        {%- assign lead_limit = p.equal_contri | default: 1 -%}
+        {%- assign is_lead = false -%}
+        {%- for a in p.authors limit: lead_limit -%}
+          {%- if site.data.authors[a].is_me -%}{%- assign is_lead = true -%}{%- endif -%}
+        {%- endfor -%}
+        {%- if is_lead -%}{%- assign count_lead = count_lead | plus: 1 -%}{%- endif -%}
+        {%- for a in p.corresponding_authors -%}
+          {%- if site.data.authors[a].is_me -%}{%- assign count_corr = count_corr | plus: 1 -%}{%- endif -%}
+        {%- endfor -%}
+        {%- if p.preprint -%}
+          {%- if is_lead and p.featured -%}{%- assign pre_lead_featured = pre_lead_featured | append: row -%}
+          {%- elsif is_lead -%}{%- assign pre_lead = pre_lead | append: row -%}
+          {%- elsif p.featured -%}{%- assign pre_other_featured = pre_other_featured | append: row -%}
+          {%- else -%}{%- assign pre_other = pre_other | append: row -%}
+          {%- endif -%}
+        {%- elsif p.featured -%}
+          {%- assign pubs_selected = pubs_selected | append: row -%}
+        {%- else -%}
+          {%- assign pubs_accepted = pubs_accepted | append: row -%}
+        {%- endif -%}
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endfor -%}
+  {%- assign count_robots = 0 -%}
+  {%- for st in site.data.roadmap.stages -%}
+    {%- if st.platforms -%}{%- assign count_robots = count_robots | plus: st.platforms.size -%}{%- endif -%}
+  {%- endfor %}
+
+  <main class="container is-max-desktop cv-page">
+    <header class="cv-header">
+      <img class="portrait-image" src="{{ '/images/cv_portrait.webp' | relative_url }}" alt="{{ cv.name }}" />
+      <div class="cv-id">
+        <h1 class="cv-name">{{ cv.name }}{% if cv.name_alt %}<span class="cv-name-alt">{{ cv.name_alt }}</span>{% endif %}</h1>
+        <p class="cv-headline">{{ cv.headline }}</p>
+        <p class="cv-contact">
+          <a href="mailto:{{ site.email }}"><i class="fas fa-envelope"></i>{{ site.email }}</a>
+          {%- assign url_parts = site.url | split: "//" %}
+          <a href="{{ site.url }}{{ t.home_url }}"><i class="fas fa-home"></i>{{ url_parts[1] }}</a>
+          <a href="https://github.com/{{ site.github_username }}"><i class="fab fa-github"></i>{{ site.github_username }}</a>
+          <a href="https://scholar.google.com/citations?user={{ site.google_scholar }}"><i class="ai ai-google-scholar"></i>{{ cv.scholar }}</a>
+        </p>
+      </div>
+      <a class="cv-download" href="{{ cv.pdf_file | relative_url }}?v={{ site.time | date: '%s' }}" download="{{ cv.pdf_name }}"><i class="fas fa-file-pdf"></i>{{ cv.download }}</a>
+    </header>
+
+    <p class="cv-summary">{{ cv.summary }}</p>
+
+    <div class="cv-stats">
+      <div class="cv-stat"><b>{{ site.data.publications.size }}</b><span>{{ cv.stats.papers }}</span></div>
+      <div class="cv-stat"><b>{{ count_lead }}</b><span>{{ cv.stats.lead }}</span></div>
+      <div class="cv-stat"><b>{{ count_corr }}</b><span>{{ cv.stats.corr }}</span></div>
+      <div class="cv-stat"><b>{{ count_robots }}</b><span>{{ cv.stats.robots }}</span></div>
+      <div class="cv-venues">{% for v in site.data.cv.venues %}<span>{{ v }}</span>{% endfor %}</div>
+    </div>
+
+    <section class="cv-strengths">
+      {%- for s in cv.strengths %}
+      <div class="cv-card" style="--c:{{ s.color }}">
+        <h3>{{ s.title }}</h3>
+        <p>{{ s.body | replace: "%CORR%", count_corr | replace: "%ROBOTS%", count_robots }}</p>
+      </div>
+      {%- endfor %}
+    </section>
+
+    <section class="cv-expertise">
+      {%- for e in cv.expertise %}
+      <p><b>{{ e.area }}</b><span>{{ e.items }}</span></p>
+      {%- endfor %}
+    </section>
+
+    <section class="cv-trajectory">
+      <h2>{{ cv.headings.trajectory }}</h2>
+      <div class="cv-trajectory-scroll">
+        <div class="cv-trajectory-inner">
+          <div class="cv-stages">
+            {%- for st in site.data.roadmap.stages %}
+            <div class="cv-stage">
+              <span class="cv-stage-idx">{{ st.index }}</span>
+              <span class="cv-stage-title">{% if zh %}{{ st.title_zh }}{% else %}{{ st.title }}{% endif %}</span>
+              <span class="cv-stage-years">{% if zh and st.years_zh %}{{ st.years_zh }}{% else %}{{ st.years }}{% endif %}</span>
+            </div>
+            {%- endfor %}
+          </div>
+          {% if zh %}{% include cv_ribbon_zh.svg %}{% else %}{% include cv_ribbon.svg %}{% endif %}
+          <div class="cv-robots">
+            {%- for st in site.data.roadmap.stages -%}
+              {%- for r in st.platforms %}
+            <img src="{{ '/images/hardware/' | relative_url }}{{ r }}" alt="" />
+              {%- endfor -%}
+            {%- endfor %}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="cv-two">
+      <div>
+        <h2>{{ cv.headings.experience }}</h2>
+        {%- for appt in site.data.appointments %}
+        <div class="cv-row">
+          <div class="cv-row-head"><b>{% if zh %}{{ appt.name_zh }}{% else %}{{ appt.name }}{% endif %}</b><span>{% if zh %}{{ appt.dates_zh }}{% else %}{{ appt.dates }}{% endif %}</span></div>
+          <div>{% if zh %}{{ appt.description_zh }}{% else %}{{ appt.description }}{% endif %}</div>
+        </div>
+        {%- endfor %}
+      </div>
+      <div>
+        <h2>{{ cv.headings.education }}</h2>
+        {%- for school in site.data.education %}
+        <div class="cv-row">
+          <div class="cv-row-head"><b>{% if zh %}{{ school.name_zh }}{% else %}{{ school.name }}{% endif %}</b><span>{% if zh %}{{ school.dates_zh }}{% else %}{{ school.dates }}{% endif %}</span></div>
+          <div>{% if zh %}{{ school.description_zh }}{% else %}{{ school.description }}{% endif %}</div>
+        </div>
+        {%- endfor %}
+      </div>
+    </section>
+
+    <div class="content">
+      <h2>{{ cv.headings.publications }}</h2>
+      <p class="cv-legend">{{ cv.legend }}</p>
+
+      <h3 class="cv-subhead">{{ cv.headings.selected }}</h3>
+      {{ pubs_selected }}
+
+      <h3 class="cv-subhead">{{ cv.headings.accepted }}</h3>
+      {{ pubs_accepted }}
+
+      <h3 class="cv-subhead">{{ cv.headings.preprints }}</h3>
+      {{ pre_lead_featured }}{{ pre_lead }}{{ pre_other_featured }}{{ pre_other }}
+
+      <h2>{{ cv.headings.awards }}</h2>
+      {% for job in site.data.employment %}
+      <div class="columns">
+        <div class="column is-four-fifths">
+          <b>{% if zh %}{{ job.company_zh }}{% else %}{{ job.company }}{% endif %}</b>{% if job.description %}<br />
+          {% if zh %}{{ job.description_zh }}{% else %}{{ job.description }}{% endif %}{% endif %}
+        </div>
+        <div class="column is-one-fifths has-text-right">
+          {{ job.dates }}
+          <br />
+          {% if zh %}{{ job.location_zh }}{% else %}{{ job.location }}{% endif %}
+        </div>
+      </div>
+      {% endfor %}
+
+      <h2>{{ cv.headings.talks }}</h2>
+      {% for talk in site.data.talks %}
+      {%- assign talk_title = talk.title -%}
+      {%- assign talk_host = talk.host -%}
+      {%- assign talk_date = talk.date -%}
+      {%- assign talk_type = talk.type -%}
+      {%- if zh -%}
+        {%- assign talk_title = talk.title_zh | default: talk.title -%}
+        {%- assign talk_host = talk.host_zh | default: talk.host -%}
+        {%- assign d = talk.date | split: " " -%}{%- assign mon = d[0] -%}{%- assign yr = d[1] -%}
+        {%- capture talk_date -%}{{ yr }}年{{ t.months[mon] }}月{%- endcapture -%}
+        {%- assign talk_type = t.talk_types[talk.type] | default: talk.type -%}
+      {%- endif %}
+      <div class="columns">
+        <div class="column is-four-fifths">
+          {% if talk.link %}<a href="{{ talk.link }}"><b>{{ talk_title }}</b></a>{% else %}<b>{{ talk_title }}</b>{% endif %}<br />
+          {{ talk_host }}
+        </div>
+        <div class="column is-one-fifths has-text-right">
+          {{ talk_date }}
+          <br />
+          {{ talk_type }}
+        </div>
+      </div>
+      {% endfor %}
+
+      <h2>{{ cv.headings.service }}</h2>
+      {% for item in site.data.service %}
+      <div class="columns">
+        <div class="column">
+          {% if zh %}<b>{{ item.role_zh }}</b>：{{ item.venue_zh | default: item.venue }}{% else %}<b>{{ item.role }}</b>, {{ item.venue }}{% endif %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </main>
+
+</body>
+
+</html>

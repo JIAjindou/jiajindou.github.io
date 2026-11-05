@@ -1,49 +1,79 @@
+# Awards and honors on the CV pages, most significant first. *_zh fields are
+# used on the Chinese page.
 - company: 2024 ICCA Best Student Paper Award
+  company_zh: IEEE ICCA 2024 最佳学生论文奖
   description: >-
     Title: <i>TRACE - Trajectory refinement with control error enables safe and accurate maneuvers.</i>
+  description_zh: >-
+    论文：<i>TRACE - Trajectory refinement with control error enables safe and accurate maneuvers.</i>
   dates: "2024"
   location: IEEE International Conference on Control and Automation
+  location_zh: IEEE 控制与自动化国际会议
 
 - company: 2019 CAC First Prize of Outstanding Paper
+  company_zh: 2019 中国自动化大会（CAC）优秀论文一等奖
   description: >-
     Title: <i>Dual-disturbance observers-based control of UAV subject to internal and external disturbances.</i>
+  description_zh: >-
+    论文：<i>Dual-disturbance observers-based control of UAV subject to internal and external disturbances.</i>
   dates: "2019"
   location: IEEE Chinese Automation Conference
+  location_zh: 中国自动化大会
 
 - company: Outstanding graduate of Beihang University
+  company_zh: 北京航空航天大学优秀毕业生
   dates: "2025"
   location: Beihang, China
-
-- company: Academic Excellence Fund for Doctoral Candidate
-  description: Funds, ≤1%, Project leader
-  dates: " 2024 - 2025"
-  location: Beihang, China
-
-- company: Outstanding Research Project of Shenyuan Honors College
-  description: Funds, Project leader
-  dates: " 2022 - 2024"
-  location: Beihang, China
-
-- company: Four-times Outstanding Academic Innovation Award  
-  dates: "2022 - 2023"
-  location: Beihang, China
-
-- company: Two-times First-class Scholarship
-  dates: "2021 - 2022"
-  location: Beihang, China
-
-- company: China Classification Society Scholarship
-  dates: "2017"
-  location: China Classification Society
-
-- company: First prize in Mathematical Contest in Modeling
-  dates: "2016"
-  location: Heilongjiang Province
-
-- company: First prize in the Chinese Mathematics Competitions
-  dates: "2016"
-  location: China
+  location_zh: 北京航空航天大学
 
 - company: National Scholarship
+  company_zh: 国家奖学金
   dates: "2016"
   location: China
+  location_zh: 中国
+
+- company: Academic Excellence Fund for Doctoral Candidate
+  company_zh: 博士研究生卓越学术基金
+  description: Funds, ≤1%, Project leader
+  description_zh: 基金资助，≤1%，项目负责人
+  dates: " 2024 - 2025"
+  location: Beihang, China
+  location_zh: 北京航空航天大学
+
+- company: Outstanding Research Project of Shenyuan Honors College
+  company_zh: 沈元荣誉学院优秀研究项目
+  description: Funds, Project leader
+  description_zh: 基金资助，项目负责人
+  dates: " 2022 - 2024"
+  location: Beihang, China
+  location_zh: 北京航空航天大学
+
+- company: Four-times Outstanding Academic Innovation Award
+  company_zh: 四次优秀学术创新奖
+  dates: "2022 - 2023"
+  location: Beihang, China
+  location_zh: 北京航空航天大学
+
+- company: Two-times First-class Scholarship
+  company_zh: 两次一等奖学金
+  dates: "2021 - 2022"
+  location: Beihang, China
+  location_zh: 北京航空航天大学
+
+- company: China Classification Society Scholarship
+  company_zh: 中国船级社奖学金
+  dates: "2017"
+  location: China Classification Society
+  location_zh: 中国船级社
+
+- company: First prize in Mathematical Contest in Modeling
+  company_zh: 数学建模竞赛一等奖
+  dates: "2016"
+  location: Heilongjiang Province
+  location_zh: 黑龙江省
+
+- company: First prize in the Chinese Mathematics Competitions
+  company_zh: 全国大学生数学竞赛一等奖
+  dates: "2016"
+  location: China
+  location_zh: 中国

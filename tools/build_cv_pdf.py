@@ -1,12 +1,12 @@
-"""Build files/Jindou_Jia_CV.pdf from the deployed CV page.
+"""Build files/Jindou_Jia_CV.pdf and files/Jindou_Jia_CV_zh.pdf from the deployed CV pages.
 
-Prints https://jiajindou.com/cv.html with headless Edge (or Chrome) using the
-page's own print styles, then adds page numbers and document info with PyMuPDF.
+Prints https://jiajindou.com/cv.html and /zh/cv.html with headless Edge (or Chrome)
+using the pages' own print styles, then adds page numbers and document info with PyMuPDF.
 The visit recorder and analytics are stripped first, so a build is not counted
 as a visit. Rerun this after the CV's content has changed and been deployed
 (publications, awards, education...), then commit the PDF.
 
-Usage:  python tools/build_cv_pdf.py [--css compiled.css] [--out path.pdf]
+Usage:  python tools/build_cv_pdf.py [--css compiled.css] [--out-dir files]
         --css swaps in a locally compiled stylesheet, to try print styles
         before deploying them.
 """
@@ -24,6 +24,8 @@ import pymupdf
 
 SITE = "https://jiajindou.com/"
 REPO = Path(__file__).resolve().parent.parent
+PAGES = [("cv.html", "Jindou_Jia_CV.pdf", "Jindou Jia - Curriculum Vitae"),
+         ("zh/cv.html", "Jindou_Jia_CV_zh.pdf", "贾金豆 - 简历")]
 BROWSERS = [
     r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe",
     r"C:\Program Files\Microsoft\Edge\Application\msedge.exe",
@@ -41,8 +43,8 @@ def find_browser():
     raise SystemExit("No Edge or Chrome found; add its path to BROWSERS.")
 
 
-def page_html(css_file):
-    req = urllib.request.Request(SITE + "cv.html", headers={"User-Agent": "Mozilla/5.0"})
+def page_html(path, css_file):
+    req = urllib.request.Request(SITE + path, headers={"User-Agent": "Mozilla/5.0"})
     html = urllib.request.urlopen(req, timeout=30).read().decode("utf-8")
     html, recorder = re.subn(r"<script>\s*window\.VISITOR_WORKER_URL[\s\S]*?</script>", "", html)
     if not recorder:
@@ -51,7 +53,7 @@ def page_html(css_file):
     html = html.replace("<head>", f'<head>\n<base href="{SITE}">', 1)
     if css_file:
         css = Path(css_file).read_text(encoding="utf-8")
-        html = re.sub(r'<link href="\./css/cv\.css[^"]*" rel="stylesheet">', lambda m: f"<style>{css}</style>", html)
+        html = re.sub(r'<link href="/css/cv\.css[^"]*" rel="stylesheet">', lambda m: f"<style>{css}</style>", html)
     return html
 
 
@@ -76,7 +78,7 @@ def print_pdf(html, pdf_path):
         raise SystemExit("The browser did not produce a PDF.")
 
 
-def finish(raw_path, out_path):
+def finish(raw_path, out_path, title):
     doc = pymupdf.open(raw_path)
     pages = len(doc)
     for i, page in enumerate(doc, 1):
@@ -85,7 +87,7 @@ def finish(raw_path, out_path):
         width = pymupdf.get_text_length(label, fontname="helv", fontsize=size)
         page.insert_text(((page.rect.width - width) / 2, page.rect.height - 24), label,
                          fontname="helv", fontsize=size, color=(0.45, 0.5, 0.56))
-    doc.set_metadata({"title": "Jindou Jia - Curriculum Vitae", "author": "Jindou Jia",
+    doc.set_metadata({"title": title, "author": "Jindou Jia",
                       "subject": "Curriculum Vitae", "keywords": "robot learning, world models, generative policies",
                       "creator": "jiajindou.com", "producer": ""})
     doc.save(out_path, garbage=4, deflate=True)
@@ -96,13 +98,15 @@ def finish(raw_path, out_path):
 def main():
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("--css", help="locally compiled cv.css to use instead of the deployed one")
-    ap.add_argument("--out", default=str(REPO / "files" / "Jindou_Jia_CV.pdf"))
+    ap.add_argument("--out-dir", default=str(REPO / "files"))
     args = ap.parse_args()
-    with tempfile.TemporaryDirectory() as tmp:
-        raw = Path(tmp) / "raw.pdf"
-        print_pdf(page_html(args.css), raw)
-        pages = finish(raw, args.out)
-    print(f"{args.out}: {pages} pages, {os.path.getsize(args.out) // 1024} KB")
+    for path, name, title in PAGES:
+        out = Path(args.out_dir) / name
+        with tempfile.TemporaryDirectory() as tmp:
+            raw = Path(tmp) / "raw.pdf"
+            print_pdf(page_html(path, args.css), raw)
+            pages = finish(raw, out, title)
+        print(f"{out}: {pages} pages, {os.path.getsize(out) // 1024} KB")
 
 
 if __name__ == "__main__":

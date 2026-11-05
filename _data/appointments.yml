@@ -1,14 +1,25 @@
+# *_zh fields are used on the Chinese CV page.
 - name: Nanyang Technological University
+  name_zh: 南洋理工大学
   description: >-
     Postdoc in the School of Mechanical and Aerospace Engineering, working with Prof. <a href="https://marsyang.site/">Jianfei Yang</a> at the <a href="http://marslab.tech">MARS</a> Lab.
+  description_zh: >-
+    博士后，机械与航空航天工程学院 <a href="http://marslab.tech">MARS</a> 实验室，合作导师<a href="https://marsyang.site/">杨剑飞</a>教授。
   dates: Nov 2025 - now
+  dates_zh: 2025.11 - 至今
 
 - name: Hangzhou Innovation Institute, Beihang University
+  name_zh: 北京航空航天大学杭州创新研究院
   description: >-
     Research Fellow.
+  description_zh: Research Fellow。
   dates: Jun 2025 - Nov 2025
+  dates_zh: 2025.06 - 2025.11
 
 - name: Shenzhen Taiyi Technology (<a href="https://skymagic.show/">SKYMAGIC</a>)
+  name_zh: 深圳太一科技（<a href="https://skymagic.show/">SKYMAGIC</a>）
   description: >-
     Drone control intern.
+  description_zh: 无人机控制实习生。
   dates: Aug 2021 & Aug 2022
+  dates_zh: 2021.08、2022.08

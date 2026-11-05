@@ -1,51 +1,111 @@
-# Content of the CV page's summary (cv.html). In strength bodies, %CORR% and
-# %ROBOTS% are filled in with counts computed from publications.yml / roadmap.yml.
-
-headline: Postdoctoral Researcher in Robot Learning, Nanyang Technological University
-
-summary: >-
-  Robot-learning researcher trained in control theory. I combine world models,
-  generative policies and uncertainty prediction with physical priors, so that
-  robots transfer reliably from training to environments they have never seen,
-  and I validate this work on real hardware.
+# Text of the CV pages (_layouts/cv.html), English and Chinese. In strength
+# bodies, %CORR% and %ROBOTS% are filled in with counts computed from
+# publications.yml and roadmap.yml. Every claim here must be backed by those
+# data files: this goes out to companies.
 
 venues: [T-RO, IJRR, NeurIPS, ICLR Oral, RSS, CoRL, ICRA, npj Robotics, R-AL]
 
-strengths:
-  - title: Control and learning, in both directions
-    color: "#1e3a5f"
-    body: >-
-      PhD in control science at Beihang University, now at the frontier of robot
-      learning at NTU.
-      <b>Learning for control:</b> EVOLVER (T-RO), FORESEER (IJRR).
-      <b>Control for learning:</b> feedback neural ODEs (ICLR Oral), PhyFilter
-      (npj Robotics), ODE policy.
-  - title: Efficient policies and world models
-    color: "#0e7490"
-    body: >-
-      Generative policies built for real-time control: single-step inference
-      (FLASH at NeurIPS, Δ-Flow), action-to-action transport (A2A at RSS) and
-      multimodality only when it matters (MARS). Feedback world models that
-      correct predictions online (NeurIPS) and a world-model survey (IJRR).
-  - title: Proven on real robots, across morphologies
-    color: "#0e7490"
-    body: >-
-      Worked with %ROBOTS% robot platforms, from agile quadrotors and grasping
-      drones to robot arms, dual-arm systems, a quadruped and a humanoid.
-      ODE policy was tested on 14 real-world tasks across single-arm, dual-arm,
-      dexterous and humanoid robots.
-  - title: Research leadership and open source
-    color: "#1e3a5f"
-    body: >-
-      Project lead of ODE policy; corresponding author on %CORR% recent papers;
-      Associate Editor of IEEE RA-L; ICCA 2024 Best Student Paper. Guest lecture
-      at NUS, invited talks at NJU and SIMTech &amp; ARTC. Code released for ODE
-      policy, FLASH, PhyFilter, EVOLVER and more.
+en:
+  page_title: Jindou Jia | CV
+  name: Jindou Jia
+  pdf_file: /files/Jindou_Jia_CV.pdf
+  pdf_name: Jindou_Jia_CV.pdf
+  download: Download PDF
+  scholar: Google Scholar
+  headline: Postdoctoral Researcher in Robot Learning, Nanyang Technological University
+  summary: >-
+    Robot-learning researcher trained in control theory, building robots that
+    transfer reliably from training to environments they have never seen.
+  stats:
+    papers: Papers
+    lead: First / co-first author
+    corr: Corresponding author
+    robots: Robot platforms
+  headings:
+    trajectory: Research Trajectory
+    experience: Experience
+    education: Education
+    publications: Publications
+    selected: Selected Publications
+    accepted: Other Peer-Reviewed Publications
+    preprints: Preprints
+    awards: Main Awards and Honors
+    talks: Talks and Media
+    service: Professional Service
+  legend: "<sup>*</sup> Equal contribution &nbsp; <sup>†</sup> Corresponding author"
+  strengths:
+    - title: Control and learning, both ways
+      color: "#1e3a5f"
+      body: >-
+        <b>Learning for control:</b> EVOLVER (T-RO), FORESEER (IJRR).<br />
+        <b>Control for learning:</b> feedback neural ODEs (ICLR Oral), PhyFilter
+        (npj Robotics), ODE policy.
+    - title: Efficient policies and world models
+      color: "#0e7490"
+      body: >-
+        Real-time generative policies: FLASH (NeurIPS), A2A (RSS),
+        <span class="cv-nowrap">Δ-Flow</span>, MARS. Feedback world models (NeurIPS) and a world-model survey (IJRR).
+    - title: Proven on real robots
+      color: "#0e7490"
+      body: >-
+        %ROBOTS% platforms, from quadrotors to arms, a quadruped and a humanoid.
+        ODE policy: 14 real-world tasks on single-arm, dual-arm, dexterous and
+        humanoid robots.
+    - title: Leadership and open source
+      color: "#1e3a5f"
+      body: >-
+        Project lead of ODE policy; corresponding author on %CORR% papers;
+        Associate Editor of IEEE RA-L; ICCA 2024 Best Student Paper; code released
+        for ODE policy, FLASH, PhyFilter and more.
+  expertise:
+    - area: Robot learning
+      items: imitation and reinforcement learning, flow matching and diffusion policies, world models, sim-to-real
+    - area: Control and planning
+      items: disturbance observers, agile flight control, uncertainty prediction, trajectory optimization
 
-expertise:
-  - area: Robot learning
-    items: imitation learning, reinforcement learning, flow matching and diffusion policies, world models, vision-language-action models, sim-to-real
-  - area: Control and planning
-    items: disturbance observers, agile flight control, uncertainty prediction, trajectory optimization, feedback for learned dynamics
-  - area: Robots
-    items: quadrotors, grasping drones, robot arms, dual-arm systems, dexterous hands, quadruped, humanoid
+zh:
+  page_title: 贾金豆 | 简历
+  name: 贾金豆
+  name_alt: Jindou Jia
+  pdf_file: /files/Jindou_Jia_CV_zh.pdf
+  pdf_name: 贾金豆_简历.pdf
+  download: 下载 PDF
+  scholar: Google Scholar
+  headline: 南洋理工大学博士后 · 机器人学习方向
+  summary: >-
+    控制理论出身的机器人学习研究者，致力于让机器人从训练环境可靠地迁移到从未见过的新环境。
+  stats:
+    papers: 篇论文
+    lead: 一作 / 共同一作
+    corr: 通讯作者
+    robots: 机器人平台
+  headings:
+    trajectory: 研究路线
+    experience: 工作经历
+    education: 教育背景
+    publications: 论文
+    selected: 代表论文
+    accepted: 其他已发表论文
+    preprints: 预印本
+    awards: 主要奖项与荣誉
+    talks: 报告与媒体
+    service: 学术服务
+  legend: "<sup>*</sup> 共同第一作者 &nbsp; <sup>†</sup> 通讯作者"
+  strengths:
+    - title: 控制与学习，双向打通
+      color: "#1e3a5f"
+      body: <b>学习赋能控制：</b>EVOLVER（T-RO）、FORESEER（IJRR）。<br /><b>控制赋能学习：</b>反馈神经 ODE（ICLR Oral）、PhyFilter（npj Robotics）、ODE policy。
+    - title: 高效策略与世界模型
+      color: "#0e7490"
+      body: 实时生成式策略：FLASH（NeurIPS）、A2A（RSS）、<span class="cv-nowrap">Δ-Flow</span>、MARS。反馈世界模型（NeurIPS）与世界模型综述（IJRR）。
+    - title: 多种真机验证
+      color: "#0e7490"
+      body: "%ROBOTS% 个机器人平台，从四旋翼到机械臂、四足和人形。ODE policy 在单臂、双臂、灵巧手和人形机器人上验证了 14 项真机任务。"
+    - title: 科研领导力与开源
+      color: "#1e3a5f"
+      body: ODE policy 项目负责人（Project lead）；%CORR% 篇论文通讯作者；IEEE RA-L 副编辑；ICCA 2024 最佳学生论文奖；开源 ODE policy、FLASH、PhyFilter 等代码。
+  expertise:
+    - area: 机器人学习
+      items: 模仿学习、强化学习、流匹配与扩散策略、世界模型、Sim-to-Real
+    - area: 控制与规划
+      items: 干扰观测器、敏捷飞行控制、不确定性预测、轨迹优化

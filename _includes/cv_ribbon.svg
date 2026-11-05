@@ -28,6 +28,6 @@
 <circle cx="642.9" cy="95.0" r="4.6" fill="#fff" stroke="#0e7490" stroke-width="1.7"/>
 <circle cx="785.7" cy="95.0" r="4.6" fill="#fff" stroke="#0e7490" stroke-width="1.7"/>
 <circle cx="928.6" cy="65.0" r="4.6" fill="#fff" stroke="#5b6b7f" stroke-width="1.7"/>
-<text x="228.3" y="14.0" fill="#1e3a5f" font-size="12.5" font-weight="600" letter-spacing="1.5" font-family="'Google Sans','Noto Sans',sans-serif">LEARNING FOR CONTROL</text>
-<text x="514.0" y="124.0" fill="#0e7490" font-size="12.5" font-weight="600" letter-spacing="1.5" font-family="'Google Sans','Noto Sans',sans-serif">CONTROL FOR LEARNING</text>
+<text x="228.3" y="14.0" fill="#1e3a5f" font-size="12.5" font-weight="600" letter-spacing="1.5" font-family="'Google Sans','Noto Sans','PingFang SC','Microsoft YaHei',sans-serif">LEARNING FOR CONTROL</text>
+<text x="514.0" y="124.0" fill="#0e7490" font-size="12.5" font-weight="600" letter-spacing="1.5" font-family="'Google Sans','Noto Sans','PingFang SC','Microsoft YaHei',sans-serif">CONTROL FOR LEARNING</text>
 </svg>

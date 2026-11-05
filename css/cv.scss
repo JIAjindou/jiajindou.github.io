@@ -11,10 +11,11 @@ $teal: #0e7490;
 $ink: #374151;
 $muted: #6b7280;
 $rule: #e2e8f0;
-$heading-font: 'Google Sans', 'Noto Sans', sans-serif;
+$cjk: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Source Han Sans SC', 'Noto Sans SC';
+$heading-font: 'Google Sans', 'Noto Sans', $cjk, sans-serif;
 
 body {
-    font-family: "Noto Sans", sans-serif;
+    font-family: 'Noto Sans', $cjk, sans-serif;
     color: $ink;
 }
 
@@ -49,6 +50,13 @@ body {
     font-weight: 700;
     line-height: 1.15;
     color: $navy;
+}
+
+.cv-name-alt {
+    margin-left: 0.5em;
+    font-size: 0.5em;
+    font-weight: 500;
+    color: $muted;
 }
 
 .cv-headline {
@@ -166,6 +174,10 @@ body {
     margin-top: 1rem;
 }
 
+.cv-nowrap {
+    white-space: nowrap;
+}
+
 .cv-card {
     padding: 0.8rem 1rem;
     border: 1px solid #e7ecf3;
@@ -271,17 +283,19 @@ body {
     height: auto;
 }
 
+// Two centred rows, so each robot can be large.
 .cv-robots {
     display: flex;
+    flex-wrap: wrap;
     align-items: flex-end;
-    justify-content: space-between;
-    gap: 0.2rem;
+    justify-content: center;
+    gap: 0.35rem 0;
     margin-top: 0.15rem;
 
     img {
-        flex: 0 1 7%;
-        min-width: 0;
-        max-height: 3.6rem;
+        width: 14%;
+        max-height: 5.2rem;
+        padding: 0 0.5rem;
         object-fit: contain;
     }
 }
@@ -524,6 +538,18 @@ body {
         break-inside: avoid;
     }
 
+    .cv-stage {
+        padding: 0 4pt;
+    }
+
+    html:lang(zh) .cv-stage {
+        padding: 0;
+    }
+
+    .cv-ribbon {
+        margin-top: 3pt;
+    }
+
     .cv-stage-idx {
         font-size: 6.5pt;
     }
@@ -536,8 +562,18 @@ body {
         font-size: 6.8pt;
     }
 
-    .cv-robots img {
-        max-height: 40pt;
+    .cv-robots {
+        gap: 3pt 0;
+
+        img {
+            max-height: 50pt;
+            padding: 0 5pt;
+        }
+    }
+
+    // The first page is the overview; papers start on the second.
+    .content {
+        break-before: page;
     }
 
     .cv-two {
@@ -559,6 +595,10 @@ body {
         margin-bottom: 0 !important;
         font-size: 8pt;
         break-after: avoid;
+    }
+
+    .content > h2:first-child {
+        margin-top: 0 !important;
     }
 
     .content h3.cv-subhead {

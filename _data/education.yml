@@ -1,18 +1,31 @@
+# *_zh fields are used on the Chinese CV page.
 - name: Beihang University
+  name_zh: 北京航空航天大学
   description: >-
     Ph.D. in Control Science and Control Engineering, advised by Prof. <a href="https://scholar.google.com/citations?user=IxO-SDwAAAAJ&hl=zh-CN">Lei Guo</a>,
     Prof. <a href="https://scholar.google.com/citations?user=6UgtuZ8AAAAJ&hl=zh-CN&oi=ao">Xiang Yu</a>, and
     Prof. <a href="https://scholar.google.com.sg/citations?user=c0MaejIAAAAJ&hl=en">Kexin Guo</a>.<br />
 
     Shenyuan Honors College (≤3%).
+  description_zh: >-
+    控制科学与工程 博士，师从<a href="https://scholar.google.com/citations?user=IxO-SDwAAAAJ&hl=zh-CN">郭雷</a>院士、<a href="https://scholar.google.com/citations?user=6UgtuZ8AAAAJ&hl=zh-CN&oi=ao">余翔</a>教授、<a href="https://scholar.google.com.sg/citations?user=c0MaejIAAAAJ&hl=en">郭克信</a>教授。<br />
+
+    沈元荣誉学院（≤3%）。
   dates: Fall 2020 - Spring 2025
+  dates_zh: 2020 - 2025
 
 - name: Beihang University
+  name_zh: 北京航空航天大学
   description: >-
     M.S. in Control Science and Control Engineering.
+  description_zh: 控制科学与工程 硕士。
   dates: Fall 2019 - Spring 2020
+  dates_zh: 2019 - 2020
 
 - name: Harbin Engineering University
+  name_zh: 哈尔滨工程大学
   description: >-
     B.S. in Automation. <br />
+  description_zh: 自动化 学士。
   dates: Fall 2015 - Spring 2019
+  dates_zh: 2015 - 2019

@@ -3,6 +3,7 @@
   the print styles (and so the PDF) hide it to keep the CV compact.
 {%- endcomment -%}
 {%- assign publication = include.publication -%}
+{%- assign row_lang = page.lang | default: "en" -%}
 {%- assign title_link = publication.link_web -%}
 {%- unless title_link -%}
   {%- if publication.arxiv -%}
@@ -35,6 +36,6 @@
   <div class="column is-one-fifths has-text-right">
     <span class="cv-venue-full">{{ publication.venue }}</span>
     <span class="cv-venue-badge{% if publication.preprint %} is-preprint{% endif %}">{{ publication.venue_short }}</span>
-    {% if publication.awards %}<div class="cv-pub-award">{{ publication.awards | join: ", " }}</div>{% endif %}
+    {% if publication.awards %}<div class="cv-pub-award">{% for award in publication.awards %}{{ site.data.i18n[row_lang].pub_awards[award] | default: award }}{% unless forloop.last %}, {% endunless %}{% endfor %}</div>{% endif %}
   </div>
 </div>

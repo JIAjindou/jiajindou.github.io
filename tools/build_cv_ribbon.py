@@ -1,5 +1,5 @@
-"""Generate _includes/cv_ribbon.svg: the CV's still, vector version of the
-homepage roadmap's particle ribbons, drawn from _data/roadmap.yml.
+"""Generate _includes/cv_ribbon.svg and cv_ribbon_zh.svg: the CV's still, vector
+version of the homepage roadmap's particle ribbons, drawn from _data/roadmap.yml.
 
 Seven equal columns, a node at each column's centre. Rerun after changing the
 roadmap's stages or tracks. Seeded, so the output only changes with the data.
@@ -77,14 +77,15 @@ for i, stage in enumerate(stages):
     y = MID + (track["side"] * OFF if track else 0)
     out.append(f'<circle cx="{cx[i]:.1f}" cy="{y:.1f}" r="4.6" fill="#fff" stroke="{color}" stroke-width="1.7"/>')
 
-for track in tracks:
-    first = next(i for i, s in enumerate(stages) if s["track"] == track["key"])
-    y = MID + track["side"] * (OFF + 25) + 4
-    out.append(f'<text x="{cx[first] + 14:.1f}" y="{y:.1f}" fill="{track["color"]}" font-size="12.5" '
-               f'font-weight="600" letter-spacing="1.5" font-family="\'Google Sans\',\'Noto Sans\',sans-serif">'
-               f'{track["name"].upper()}</text>')
-out.append("</svg>")
-
-path = REPO / "_includes" / "cv_ribbon.svg"
-path.write_text("\n".join(out) + "\n", encoding="utf-8", newline="\n")
-print(f"{path}: {path.stat().st_size // 1024} KB")
+FONT = "\'Google Sans\',\'Noto Sans\',\'PingFang SC\',\'Microsoft YaHei\',sans-serif"
+for suffix, label, size, spacing in (("", lambda t: t["name"].upper(), 12.5, 1.5),
+                                     ("_zh", lambda t: t["name_zh"], 14, 1)):
+    labels = []
+    for track in tracks:
+        first = next(i for i, s in enumerate(stages) if s["track"] == track["key"])
+        y = MID + track["side"] * (OFF + 25) + 4
+        labels.append(f'<text x="{cx[first] + 14:.1f}" y="{y:.1f}" fill="{track["color"]}" font-size="{size}" '
+                      f'font-weight="600" letter-spacing="{spacing}" font-family="{FONT}">{label(track)}</text>')
+    path = REPO / "_includes" / f"cv_ribbon{suffix}.svg"
+    path.write_text("\n".join(out + labels + ["</svg>"]) + "\n", encoding="utf-8", newline="\n")
+    print(f"{path}: {path.stat().st_size // 1024} KB")
