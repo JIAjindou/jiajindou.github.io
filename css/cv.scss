@@ -548,7 +548,11 @@ body {
         width: 87%;
     }
 
+    // A badge wider than the column grows to the left, over the title's free space.
     .content .cv-pub .column.is-one-fifths {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
         width: 13%;
         padding-left: 4pt;
     }

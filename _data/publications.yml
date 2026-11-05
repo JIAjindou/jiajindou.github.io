@@ -253,8 +253,8 @@
   year: 2026
   featured: true
   title: "Physics filtering favors the generalization of robot learning"
-  venue: npj Robotics (Nature), 2026
-  venue_short: npj Robotics'26
+  venue: Nature npj Robotics, 2026
+  venue_short: Nature npj Robotics'26
   description: "We propose PhyFilter, which enhances both generalization and interpretability of robot learning. PhyFilter operates by correcting learning outcomes according to readily accessible physical differential structure and real-time state feedback."
   link_web: https://www.nature.com/articles/s44182-026-00114-y
   project_page: https://scoardyy.github.io/PhyFilter/

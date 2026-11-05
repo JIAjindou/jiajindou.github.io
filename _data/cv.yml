@@ -1,7 +1,7 @@
 # Text of the CV pages (_layouts/cv.html), English and Chinese. Every claim here
 # must be backed by the site's data files: this goes out to companies.
 
-venues: [T-RO, IJRR, NeurIPS, ICLR Oral, RSS, CoRL, ICRA, npj Robotics, R-AL]
+venues: [T-RO, IJRR, NeurIPS, ICLR Oral, RSS, CoRL, ICRA, Nature npj Robotics, R-AL]
 
 en:
   page_title: Jindou Jia | CV
@@ -37,7 +37,7 @@ en:
       body: >-
         <b>Learning for control:</b> EVOLVER (T-RO), FORESEER (IJRR).<br />
         <b>Control for learning:</b> feedback neural ODEs (ICLR Oral), PhyFilter
-        (npj Robotics), ODE policy.
+        (Nature npj Robotics), ODE policy.
     - title: Efficient policies and world models
       color: "#0e7490"
       body: >-
@@ -80,7 +80,7 @@ zh:
   strengths:
     - title: 控制与学习，双向打通
       color: "#1e3a5f"
-      body: <b>学习赋能控制：</b>EVOLVER（T-RO）、FORESEER（IJRR）。<br /><b>控制赋能学习：</b>反馈神经 ODE（ICLR Oral）、PhyFilter（npj Robotics）、ODE policy。
+      body: <b>学习赋能控制：</b>EVOLVER（T-RO）、FORESEER（IJRR）。<br /><b>控制赋能学习：</b>反馈神经 ODE（ICLR Oral）、PhyFilter（Nature npj Robotics）、ODE policy。
     - title: 高效策略与世界模型
       color: "#0e7490"
       body: 实时生成式策略：FLASH（NeurIPS）、A2A（RSS）、<span class="cv-nowrap">Δ-Flow</span>、MARS。反馈世界模型（NeurIPS）与世界模型综述（IJRR）。

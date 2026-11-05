@@ -211,14 +211,14 @@
         <div class="platform-card">
           <div class="platform-image"><img src="{{ '/images/hardware/humanoid_2026arXiv.webp' | relative_url }}" loading="lazy" decoding="async" alt="Humanoid robot (2026 arXiv)"></div>
           <div class="platform-venues">
-            <a class="venue-badge" href="#pub-PhyFilter">2026 npj Robotics</a>
+            <a class="venue-badge" href="#pub-PhyFilter">2026 Nature npj Robotics</a>
             <a class="venue-badge" href="#pub-ADAPT">2026 CoRL</a>
           </div>
         </div>
         <div class="platform-card">
           <div class="platform-image"><img src="{{ '/images/hardware/quadruped_2026arXiv.webp' | relative_url }}" loading="lazy" decoding="async" alt="Quadruped robot (2026 arXiv)"></div>
           <div class="platform-venues">
-            <a class="venue-badge" href="#pub-PhyFilter">2026 npj Robotics</a>
+            <a class="venue-badge" href="#pub-PhyFilter">2026 Nature npj Robotics</a>
           </div>
         </div>
         <div class="platform-card">
@@ -250,7 +250,7 @@
         <div class="platform-card">
           <div class="platform-image"><img src="{{ '/images/hardware/drone_2026arXiv.webp' | relative_url }}" loading="lazy" decoding="async" alt="Drone (2026 arXiv)"></div>
           <div class="platform-venues">
-            <a class="venue-badge" href="#pub-PhyFilter">2026 npj Robotics</a>
+            <a class="venue-badge" href="#pub-PhyFilter">2026 Nature npj Robotics</a>
           </div>
         </div>
         <div class="platform-card">
@@ -327,7 +327,7 @@
       {%- comment -%} Years (desc) and a manual venue order: journals first, conferences next, arXiv last. {%- endcomment -%}
       {% assign year_list = site.data.publications | map: "year" | uniq | sort | reverse %}
       {% assign featured_count = site.data.publications | where: "featured", true | size %}
-      {% assign venue_order = "npj Robotics|IJRR|T-RO|ICLR|RSS|R-AL|CoRL|NeurIPS|T-AES|CEP|ICRA|ICUAS|CAC|arXiv" | split: "|" %}
+      {% assign venue_order = "Nature npj Robotics|IJRR|T-RO|ICLR|RSS|R-AL|CoRL|NeurIPS|T-AES|CEP|ICRA|ICUAS|CAC|arXiv" | split: "|" %}
 
       <div class="pub-layout">
         <aside class="pub-sidebar">

@@ -148,7 +148,7 @@ stages:
       policies (APEX).
     desc_zh: 控制赋能学习：用物理让学到的行为更可靠，包括物理过滤提升泛化（PhyFilter）、扰动感知的人形机器人训练（ADAPT），以及让学到的策略可以按动力学可行的方式执行（APEX）。
     works:
-      - { id: PhyFilter, name: PhyFilter, venue: "npj Robotics'26" }
+      - { id: PhyFilter, name: PhyFilter, venue: "Nature npj Robotics'26" }
       - { id: ADAPT, name: ADAPT, venue: "CoRL'26" }
       - { id: APEX, name: APEX, venue: "arXiv'26" }
     platforms:
