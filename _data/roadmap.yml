@@ -133,6 +133,7 @@ stages:
       - { id: TUCO, name: TUCO, venue: "arXiv'26" }
     platforms:
       - arm_2026arXiv_2026RSS.webp
+      - sharpa_2026arXiv.webp
 
   - key: physics
     index: "06"

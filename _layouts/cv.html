@@ -140,7 +140,7 @@
       {%- for s in cv.strengths %}
       <div class="cv-card" style="--c:{{ s.color }}">
         <h3>{{ s.title }}</h3>
-        <p>{{ s.body | replace: "%CORR%", count_corr | replace: "%ROBOTS%", count_robots }}</p>
+        <p>{{ s.body }}</p>
       </div>
       {%- endfor %}
     </section>
@@ -151,28 +151,14 @@
       {%- endfor %}
     </section>
 
-    <section class="cv-trajectory">
-      <h2>{{ cv.headings.trajectory }}</h2>
-      <div class="cv-trajectory-scroll">
-        <div class="cv-trajectory-inner">
-          <div class="cv-stages">
-            {%- for st in site.data.roadmap.stages %}
-            <div class="cv-stage">
-              <span class="cv-stage-idx">{{ st.index }}</span>
-              <span class="cv-stage-title">{% if zh %}{{ st.title_zh }}{% else %}{{ st.title }}{% endif %}</span>
-              <span class="cv-stage-years">{% if zh and st.years_zh %}{{ st.years_zh }}{% else %}{{ st.years }}{% endif %}</span>
-            </div>
-            {%- endfor %}
-          </div>
-          {% if zh %}{% include cv_ribbon_zh.svg %}{% else %}{% include cv_ribbon.svg %}{% endif %}
-          <div class="cv-robots">
-            {%- for st in site.data.roadmap.stages -%}
-              {%- for r in st.platforms %}
-            <img src="{{ '/images/hardware/' | relative_url }}{{ r }}" alt="" />
-              {%- endfor -%}
-            {%- endfor %}
-          </div>
-        </div>
+    <section class="cv-fleet">
+      <h2>{{ cv.headings.robots }}</h2>
+      <div class="cv-robots">
+        {%- for st in site.data.roadmap.stages -%}
+          {%- for r in st.platforms %}
+        <img src="{{ '/images/hardware/' | relative_url }}{{ r }}" alt="" />
+          {%- endfor -%}
+        {%- endfor %}
       </div>
     </section>
 
