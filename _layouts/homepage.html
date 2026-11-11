@@ -128,15 +128,22 @@
                 <span>Github</span>
               </a>
 
-              <a class="external-link button is-light" href="https://www.researchgate.net/profile/Jindou-Jia/research">
-                <span class="icon"><i class="fab fa-researchgate"></i></span>
-                <span>ResearchGate</span>
+              <a class="external-link button is-light"
+                href="https://www.alphaxiv.org/@jindou-jia" target="_blank" rel="noopener">
+                <span class="icon"><i class="alphaxiv-icon" aria-hidden="true">&alpha;</i></span>
+                <span>alphaXiv</span>
               </a>
 
               <a class="external-link button is-light"
                 href="https://www.linkedin.com/in/jindou-jia-01606631a/" target="_blank" rel="noopener">
                 <span class="icon"><i class="fab fa-linkedin"></i></span>
                 <span>LinkedIn</span>
+              </a>
+
+              <a class="external-link button is-light"
+                href="https://x.com/jdjia0508" target="_blank" rel="noopener">
+                <span class="icon"><i class="fab fa-x-twitter"></i></span>
+                <span>X</span>
               </a>
 
               <a class="external-link button is-light"
@@ -433,7 +440,7 @@
       <h2 class="title is-3">{{ t.downloads }}</h2>
       <div class="service-cards">
         {% for d in site.data.downloads %}
-        <a class="service-card download-card" href="{{ d.file | relative_url }}?v={{ site.time | date: '%s' }}" download="{{ d.name }}">
+        <a class="service-card download-card" href="{{ d.file | relative_url }}?v={{ site.time | date: '%s' }}" download="{{ d.name }}" data-dl>
           <span class="service-card-icon"><i class="fas fa-file-pdf"></i></span>
           <div class="service-card-body">
             <div class="service-card-role">{% if zh %}{{ d.title_zh }}{% else %}{{ d.title }}{% endif %}</div>

@@ -79,9 +79,63 @@ function fetchOwnerLog(key) {
         .then(function (log) {
             if (!log) return;
             try { sessionStorage.setItem('mv_key', key); } catch (e) {}
+            // The owner's own CV downloads in this browser are not counted
+            // (see the download counter in _includes/visit-ping.html).
+            try { localStorage.setItem('mv_owner', '1'); } catch (e) {}
             renderOwnerLog(log, key);
+            fetchDownloads(key);
         })
         .catch(function () {});
+}
+
+function ownerEsc(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+}
+
+function ownerTime(ts) {
+    return (ts || '').replace('T', ' ').replace(/\..*$/, '').replace('Z', ' UTC');
+}
+
+// Download counts (CV etc.) as a card above the visitor log. A Worker that
+// predates the /downloads endpoint answers 404, which shows a short note.
+function fetchDownloads(key) {
+    var url = window.VISITOR_WORKER_URL;
+    fetch(url.replace(/\/$/, '') + '/downloads?key=' + encodeURIComponent(key), { mode: 'cors' })
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(renderDownloads, function () { renderDownloads(null); });
+}
+
+function renderDownloads(d) {
+    var sec = document.getElementById('owner-panel');
+    if (!sec) return;
+    var card = document.createElement('div');
+    card.className = 'owner-card owner-downloads';
+    if (!d || !d.totals) {
+        card.innerHTML = '<div class="owner-head"><b>Downloads</b> ' +
+            '<span>Counter unavailable: the Worker code in Cloudflare needs updating.</span></div>';
+    } else {
+        var total = 0;
+        var chips = d.totals.map(function (t) {
+            total += t.n;
+            return '<span class="owner-chip">' + ownerEsc(t.file) + '<b>' + t.n + '</b></span>';
+        }).join('');
+        var rows = (d.recent || []).map(function (e) {
+            var place = [e.city, e.region, e.country].filter(Boolean).join(', ');
+            return '<tr><td>' + ownerTime(e.ts) + '</td><td>' + ownerEsc(e.file) + '</td><td>' +
+                ownerEsc(e.page || '—') + '</td><td>' + ownerEsc(place || '—') + '</td><td>' +
+                ownerEsc(e.ref || '—') + '</td><td>' + ownerBrowser(e.ua) + '</td></tr>';
+        }).join('');
+        card.innerHTML =
+            '<div class="owner-head"><b>Downloads</b> <span>(' + total + ' in total)</span></div>' +
+            '<div class="owner-chips">' + (chips || '<span>No downloads yet.</span>') + '</div>' +
+            (rows ? '<div class="owner-table-wrap is-short"><table class="owner-table"><thead><tr>' +
+                '<th>Time (UTC)</th><th>File</th><th>Page</th><th>Location</th><th>From</th><th>Browser</th>' +
+                '</tr></thead><tbody>' + rows + '</tbody></table></div>' : '');
+    }
+    var box = sec.querySelector('.container');
+    box.insertBefore(card, box.firstChild);
 }
 
 function ownerBrowser(ua) {
@@ -98,13 +152,9 @@ function renderOwnerLog(log, key) {
     var old = document.getElementById('owner-panel');
     if (old) old.remove();
 
-    var esc = function (s) {
-        return String(s).replace(/[&<>"']/g, function (c) {
-            return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
-        });
-    };
+    var esc = ownerEsc;
     var rows = log.map(function (e) {
-        var t = (e.ts || '').replace('T', ' ').replace(/\..*$/, '').replace('Z', ' UTC');
+        var t = ownerTime(e.ts);
         var place = [e.city, e.region, e.country].filter(Boolean).join(', ');
         var ref = e.ref ? e.ref.replace(/^https?:\/\//, '') : '—';
         // net = "IPv4|IPv6 · ISP · how the location was found" (no IP is stored)

@@ -20,6 +20,13 @@
  *                                  is added to D1 automatically on first use.
  *   POST /fix  {id,t,v4}           refine a just-recorded mainland IPv6 visit with
  *                                  the visitor's IPv4 address (see below).
+ *   POST /dl?f=<file.pdf>&p=<page>&ref=<referrer>
+ *                                  count one download (CV etc.), sent by the page
+ *                                  when a link marked data-dl is clicked.
+ *   GET  /downloads?key=<ADMIN_KEY>
+ *                                  {totals:[{file,n}], recent:[{ts,file,page,city,
+ *                                  region,country,ref,ua,net}]} (owner only)
+ *   The "downloads" table is created automatically on first use.
  *
  * Why /fix: mainland carriers do not register IPv6 by province, so every IP
  * database (ip2region, Cloudflare, ip-api…) puts China Unicom/Telecom IPv6 in
@@ -177,13 +184,51 @@ async function fixToken(env, id) {
   return [...new Uint8Array(sig).slice(0, 12)].map((b) => b.toString(16).padStart(2, "0")).join("");
 }
 
-// Adds the owner-log "net" column (IP version · ISP · geo source) on first use.
+// Adds the owner-log "net" column (IP version · ISP · geo source) and the
+// downloads table on first use.
 let schemaReady = false;
 async function ensureSchema(env) {
   if (schemaReady) return;
   try { await env.DB.prepare("ALTER TABLE visits ADD COLUMN net TEXT DEFAULT ''").run(); }
   catch (e) { /* column already exists */ }
+  await env.DB.prepare(
+    "CREATE TABLE IF NOT EXISTS downloads (id INTEGER PRIMARY KEY AUTOINCREMENT, ts TEXT NOT NULL, " +
+    "file TEXT NOT NULL, page TEXT DEFAULT '', city TEXT DEFAULT '', region TEXT DEFAULT '', " +
+    "country TEXT DEFAULT '', ref TEXT DEFAULT '', ua TEXT DEFAULT '', net TEXT DEFAULT '')"
+  ).run();
   schemaReady = true;
+}
+
+// Where a request comes from: Cloudflare's edge geolocation, or for mainland
+// China the ip2region table. The IP is used in memory only, never stored.
+async function locate(request) {
+  const cf = request.cf || {};
+  const ip = request.headers.get("CF-Connecting-IP") || "";
+  const latN = parseFloat(cf.latitude);
+  const lonN = parseFloat(cf.longitude);
+  let lat = Number.isFinite(latN) ? +latN.toFixed(1) : null;
+  let lon = Number.isFinite(lonN) ? +lonN.toFixed(1) : null;
+  let city = cf.city || "", region = cf.region || "", geo = "cf";
+  if (cf.country === "CN") {
+    try {
+      const hit = lookupCn(await loadCnip(), ip);
+      // A province-only hit that agrees with Cloudflare's province keeps
+      // Cloudflare's (possibly finer) city; otherwise the table wins.
+      const sameProvince = hit && !hit.precise &&
+        region.toLowerCase().includes(hit.region.toLowerCase());
+      if (hit && !sameProvince) {
+        city = hit.city; region = hit.region; lat = hit.lat; lon = hit.lon;
+        geo = hit.coarse ? "ip2region (IPv6, coarse)"
+          : hit.precise ? "ip2region" : "ip2region (province)";
+      }
+    } catch (e) {
+      geo = "cf (table unavailable)";
+    }
+  }
+  const isV6 = ip.includes(":");
+  const net = [isV6 ? "IPv6" : "IPv4", cf.asOrganization || "", geo]
+    .filter(Boolean).join(" · ").slice(0, 200);
+  return { lat, lon, city, region, country: cf.country || "", net, isV6 };
 }
 
 export default {
@@ -203,32 +248,7 @@ export default {
 
     // ── Record a visit — one atomic INSERT, no lost writes ────────────
     if (pathname === "/collect") {
-      const cf = request.cf || {};
-      const ip = request.headers.get("CF-Connecting-IP") || "";
-      const latN = parseFloat(cf.latitude);
-      const lonN = parseFloat(cf.longitude);
-      let lat = Number.isFinite(latN) ? +latN.toFixed(1) : null;
-      let lon = Number.isFinite(lonN) ? +lonN.toFixed(1) : null;
-      let city = cf.city || "", region = cf.region || "", geo = "cf";
-      if (cf.country === "CN") {
-        try {
-          const hit = lookupCn(await loadCnip(), ip);
-          // A province-only hit that agrees with Cloudflare's province keeps
-          // Cloudflare's (possibly finer) city; otherwise the table wins.
-          const sameProvince = hit && !hit.precise &&
-            region.toLowerCase().includes(hit.region.toLowerCase());
-          if (hit && !sameProvince) {
-            city = hit.city; region = hit.region; lat = hit.lat; lon = hit.lon;
-            geo = hit.coarse ? "ip2region (IPv6, coarse)"
-              : hit.precise ? "ip2region" : "ip2region (province)";
-          }
-        } catch (e) {
-          geo = "cf (table unavailable)";
-        }
-      }
-      const isV6 = ip.includes(":");
-      const net = [isV6 ? "IPv6" : "IPv4", cf.asOrganization || "", geo]
-        .filter(Boolean).join(" · ").slice(0, 200);
+      const loc = await locate(request);
       const ref = searchParams.get("ref") || "";
       const ua = request.headers.get("User-Agent") || "";
 
@@ -238,19 +258,19 @@ export default {
         "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1)"
       ).bind(
         new Date().toISOString(),
-        lat, lon,
-        city,
-        region,
-        cf.country || "",
+        loc.lat, loc.lon,
+        loc.city,
+        loc.region,
+        loc.country,
         refHostOf(ref),
         browserFromUA(ua),
         ua.slice(0, 300),
-        net
+        loc.net
       ).run();
 
       // Mainland IPv6: invite the page to send its IPv4 for a better location.
       const id = ins && ins.meta && ins.meta.last_row_id;
-      if (cf.country === "CN" && isV6 && id && env.ADMIN_KEY) {
+      if (loc.country === "CN" && loc.isV6 && id && env.ADMIN_KEY) {
         return json({ ok: 1, fix: id + "." + (await fixToken(env, id)) });
       }
       return new Response("ok", { headers: CORS });
@@ -280,6 +300,48 @@ export default {
       await env.DB.prepare("UPDATE visits SET lat = ?, lon = ?, city = ?, region = ?, net = ? WHERE id = ?")
         .bind(hit.lat, hit.lon, hit.city, hit.region, net, id).run();
       return json({ ok: 1, city: hit.city, region: hit.region });
+    }
+
+    // ── Count a download (CV etc.): one row per click, no IP ──────────
+    if (pathname === "/dl" && request.method === "POST") {
+      const file = searchParams.get("f") || "";
+      if (!/^[A-Za-z0-9_.-]{1,100}\.pdf$/.test(file)) return json({ error: "bad file" }, 400);
+      const ua = request.headers.get("User-Agent") || "";
+      if (browserFromUA(ua) === "Bot") return new Response("ok", { headers: CORS });
+      const loc = await locate(request);
+      await ensureSchema(env);
+      await env.DB.prepare(
+        "INSERT INTO downloads (ts, file, page, city, region, country, ref, ua, net) " +
+        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
+      ).bind(
+        new Date().toISOString(),
+        file,
+        (searchParams.get("p") || "").slice(0, 100),
+        loc.city,
+        loc.region,
+        loc.country,
+        refHostOf(searchParams.get("ref") || ""),
+        ua.slice(0, 300),
+        loc.net
+      ).run();
+      return new Response("ok", { headers: CORS });
+    }
+
+    // ── Download counts and log (owner only). No IP ───────────────────
+    if (pathname === "/downloads") {
+      const key = searchParams.get("key") || "";
+      if (!env.ADMIN_KEY || key !== env.ADMIN_KEY) {
+        return json({ error: "unauthorized" }, 401);
+      }
+      await ensureSchema(env);
+      const totals = await env.DB.prepare(
+        "SELECT file, COUNT(*) AS n FROM downloads GROUP BY file ORDER BY n DESC"
+      ).all();
+      const recent = await env.DB.prepare(
+        "SELECT ts, file, page, city, region, country, ref, ua, net FROM downloads " +
+        "ORDER BY id DESC LIMIT " + LOG_MAX
+      ).all();
+      return json({ totals: totals.results || [], recent: recent.results || [] });
     }
 
     // ── Globe coordinates (public) ────────────────────────────────────

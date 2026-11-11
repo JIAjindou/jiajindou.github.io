@@ -65,7 +65,9 @@ html[data-theme="dark"] {
         border-color: transparent;
     }
     .button.is-light:hover { background: var(--d-hover); color: var(--d-strong); }
-    .hero .buttons .fa-github { color: #e6edf3; }
+    .hero .buttons .fa-github,
+    .hero .buttons .fa-x-twitter { color: #e6edf3; }
+    .hero .buttons .alphaxiv-icon { color: #f07a8c; }
     .hero .buttons .fa-file { color: var(--d-accent); }
     .portrait {
         border-color: rgba(255, 255, 255, 0.06);
@@ -223,6 +225,9 @@ html[data-theme="dark"] {
     .owner-table th,
     .owner-table td { border-bottom-color: var(--d-border); }
     .owner-table tbody tr:hover { background: var(--d-surface-2); }
+    .owner-chip { background: var(--d-surface-2); }
+    .owner-chip b { color: var(--d-accent); }
+    .owner-table-wrap.is-short { border-top-color: var(--d-border); }
 }
 
 // Narrow screens show every robot in full colour.

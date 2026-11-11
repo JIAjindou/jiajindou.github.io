@@ -143,4 +143,34 @@ window.VISITOR_WORKER_URL = "{{ site.visitor_worker_url }}";
     return log;
   }
 })();
+
+// Download counter: a click on a link marked data-dl (CV, PhD research PDF)
+// posts the file name to the Worker; only the owner can read the counts
+// (#owner panel). Counted once per file per tab session, and never in a
+// browser where the owner panel has been opened.
+(function () {
+  function count(ev) {
+    try {
+      if (ev.type === 'auxclick' && ev.button !== 1) return;
+      var a = ev.target && ev.target.closest ? ev.target.closest('a[data-dl]') : null;
+      var url = window.VISITOR_WORKER_URL;
+      if (!a || !url) return;
+      var file = (a.getAttribute('href') || '').split(/[?#]/)[0].split('/').pop();
+      try {
+        if (localStorage.getItem('mv_owner')) return;
+        if (sessionStorage.getItem('mv_dl:' + file)) return;
+        sessionStorage.setItem('mv_dl:' + file, '1');
+      } catch (e) {}
+      var ref = '';
+      try { ref = document.referrer || ''; } catch (e) {}
+      var endpoint = url.replace(/\/$/, '') + '/dl?f=' + encodeURIComponent(file) +
+        '&p=' + encodeURIComponent(location.pathname) + '&ref=' + encodeURIComponent(ref);
+      if (!(navigator.sendBeacon && navigator.sendBeacon(endpoint)) && typeof fetch === 'function') {
+        fetch(endpoint, { method: 'POST', keepalive: true }).catch(function () {});
+      }
+    } catch (e) {}
+  }
+  document.addEventListener('click', count, true);
+  document.addEventListener('auxclick', count, true);
+})();
 </script>

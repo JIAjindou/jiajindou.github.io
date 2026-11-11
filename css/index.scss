@@ -14,8 +14,16 @@
 // Brand colors for the hero link-button icons.
 .hero .buttons .ai-google-scholar { color: #4285f4; }
 .hero .buttons .fa-github         { color: #24292f; }
-.hero .buttons .fa-researchgate   { color: #00ccbb; }
 .hero .buttons .fa-linkedin       { color: #0a66c2; }
+.hero .buttons .fa-x-twitter      { color: #000; }
+// alphaXiv has no icon font glyph: a bold alpha in the brand red.
+.hero .buttons .alphaxiv-icon {
+    color: #9a2036;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 1.2em;
+    line-height: 1;
+}
 .hero .buttons .fa-file           { color: #1e3a5f; }
 .hero .buttons .fa-book           { color: #ff2442; }
 
@@ -689,6 +697,27 @@ html:lang(zh) body {
     td:nth-child(3) { max-width: 240px; overflow: hidden; text-overflow: ellipsis; }
     tbody tr:hover { background: #fafbfc; }
 }
+
+// Owner panel: download counts card, above the visitor log.
+.owner-downloads { margin-bottom: 1rem; }
+
+.owner-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 0.8rem 1rem;
+    font-size: 0.85rem;
+}
+
+.owner-chip {
+    padding: 0.25em 0.8em;
+    border-radius: 999px;
+    background: #f1f5f9;
+
+    b { margin-left: 0.3em; color: #1e3a5f; }
+}
+
+.owner-table-wrap.is-short { max-height: 40vh; border-top: 1px solid #eee; }
 
 .visitor-counter {
     display: inline-block;

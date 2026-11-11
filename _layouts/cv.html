@@ -123,7 +123,7 @@
           <a href="https://scholar.google.com/citations?user={{ site.google_scholar }}"><i class="ai ai-google-scholar"></i>{{ cv.scholar }}</a>
         </p>
       </div>
-      <a class="cv-download" href="{{ cv.pdf_file | relative_url }}?v={{ site.time | date: '%s' }}" download="{{ cv.pdf_name }}"><i class="fas fa-file-pdf"></i>{{ cv.download }}</a>
+      <a class="cv-download" href="{{ cv.pdf_file | relative_url }}?v={{ site.time | date: '%s' }}" download="{{ cv.pdf_name }}" data-dl><i class="fas fa-file-pdf"></i>{{ cv.download }}</a>
     </header>
 
     <p class="cv-summary">{{ cv.summary }}</p>
